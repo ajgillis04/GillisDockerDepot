@@ -12,9 +12,8 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
    cd GillisDockerDepot
 
 2. Set Up the Environment:
+   Copy the .env File:
+   Manually copy your .env file to the cloned repository directory.
 
-Copy the .env File:
-Manually copy your .env file to the cloned repository directory.
-
-Set Up Secrets:
-Manually set up your secrets as required. Ensure they are securely stored and accessible.
+   Set Up Secrets:
+   Manually set up your secrets as required. Ensure they are securely stored and accessible.
