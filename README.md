@@ -10,15 +10,15 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
    git clone https://github.com/your-username/GillisDockerDepot.git
    cd GillisDockerDepot
 
-### Set Up the Environment:
+3. ### Set Up the Environment:
 
-1. **Create / Copy the `.env` File:**
+   **Create / Copy the `.env` File:**
      - Manually copy your `.env` file to the cloned repository directory.
 
-2. **Set Up Secrets:**
+   **Set Up Secrets:**
      - Manually set up your secrets as required in the `secrets` folder. Ensure they are securely stored and accessible.
 
-### Run Docker Compose:
-1. **Use Docker Compose to create and start the containers::**
+3. ### Run Docker Compose:
+   **Use Docker Compose to create and start the containers::**
    ```bash
    docker compose -p mediaserver -f docker-compose.yml up --detach
