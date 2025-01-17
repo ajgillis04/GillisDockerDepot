@@ -6,6 +6,15 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-username/GillisDockerDepot.git
    cd GillisDockerDepot
+
+2. Set Up the Environment:
+
+Copy the .env File:
+Manually copy your .env file to the cloned repository directory.
+
+Set Up Secrets:
+Manually set up your secrets as required. Ensure they are securely stored and accessible.
