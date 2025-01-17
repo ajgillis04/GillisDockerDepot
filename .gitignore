@@ -1,0 +1,19 @@
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.log
+
+# Secrets
+secrets/
