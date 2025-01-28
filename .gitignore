@@ -34,3 +34,6 @@ shared/
 appdata/
 !appdata/traefik2/rules/*.example.toml
 !appdata/traefik2/rules/*.example.yml
+
+#vscode
+.vscode/
