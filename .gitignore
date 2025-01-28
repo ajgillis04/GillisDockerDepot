@@ -1,3 +1,4 @@
+# Include specific files
 !.gitignore
 !README.md
 !CHANGELOG.md
@@ -21,13 +22,14 @@ temp/
 *.tmp
 
 # Secrets
-secrets/
+# Include specific example files
 !shared/*.example
+# Ignore everything else in the appdata directory
+secrets/
 
 # Include specific example files
 !appdata/traefik2/rules/*.example.toml
 !appdata/traefik2/rules/*.example.yml
-
 # Ignore everything else in the appdata directory
 appdata/
 
