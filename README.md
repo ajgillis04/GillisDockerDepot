@@ -12,8 +12,8 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 
 3. ### Set Up the Environment:
 
-   **Create / Copy the `.env` File:**
-     - Manually copy your `.env` file to the cloned repository directory.
+   **Create (.env.example) / Copy the `.env` File:**
+     - ensure there is a .env file in your root directory GillisDockerDepot
 
    **Set Up Secrets:**
      - Manually set up your secrets as required in the `secrets` folder. Ensure they are securely stored and accessible.
@@ -21,4 +21,4 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 3. **Run Docker Compose:**  
    **Use Docker Compose to create and start the containers:**  
    ```bash
-   docker compose -p mediaserver -f docker-compose.yml up --detach
+   docker compose -p mediaserver -f docker-compose-server<nun>.yaml up --detach
