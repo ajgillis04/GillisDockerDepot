@@ -4,7 +4,6 @@
 !LICENSE
 !.env.example
 
-
 # Environment variables
 .env
 
@@ -20,14 +19,9 @@ docker-compose.override.yml
 tmp/
 temp/
 *.tmp
-*.log
 
 # Secrets
 secrets/
-!shared/*.example
-
-# Secrets
-shared/
 !shared/*.example
 
 # Include specific example files
@@ -37,6 +31,5 @@ shared/
 # Ignore everything else in the appdata directory
 appdata/
 
-
-#vscode
+# Visual Studio Code settings
 .vscode/
