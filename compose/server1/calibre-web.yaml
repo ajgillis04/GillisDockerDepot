@@ -1,0 +1,42 @@
+# Calibre-web - A web-based e-book management system.
+# Default Username: admin
+# Default Password: admin123
+# Please change these
+
+services:
+  calibre-web:
+    container_name: calibre-web.${HOST_NAME}
+    hostname: calibre-web.${HOST_NAME}.local
+    image: linuxserver/calibre-web
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOCKER_MODS: linuxserver/mods:universal-calibre
+    networks:
+      - mediaserver
+    ports:
+      - "${CALIBRE_WEB_PORT}:8083"
+    volumes:
+      - ${DOCKERDIR}/calibre-web/config:/config
+      - ${MEDIASHARE}/Books:/database # Calibre database directory
+      - ${MEDIASHARE}/Books:/books # Calibre library directory
+      - ${USERDOWNLOAD}/Torrents:/downloads
+      - ${DOCKERDIR}/logs/calibre-web:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.calibre-web-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-web-rtr.rule=Host(`calibre-web.${DOMAINNAME}`)"
+      ## Middlewares
+      - "traefik.http.routers.calibre-web-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.calibre-web-rtr.service=calibre-web-svc"
+      - "traefik.http.services.calibre-web-svc.loadbalancer.server.port=8083"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

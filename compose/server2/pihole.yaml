@@ -1,0 +1,49 @@
+# Pi-hole - A network-wide ad blocker.
+
+# Notes:
+# This may need to change if you are running on windows or linux. Hence the commented variables etc
+# Windows: Suggested, ew-NetFirewallRule -DisplayName "Docker Desktop Backend" -Direction Inbound -Program "C:\program files\docker\docker\resources\com.docker.backend.exe" -Action Allow -Profile Private,Public
+#
+
+services:
+  pihole:
+    container_name: pihole.${HOST_NAME}
+    hostname: pihole.${HOST_NAME}.local
+    image: pihole/pihole
+ #   cap_add:
+ #     - NET_ADMIN
+ #   dns:
+ #     - 127.17.0.1
+ #     - 1.1.1.1
+ #     - 1.0.0.1
+    #network_mode: host
+    environment:
+      TZ: ${TZ}
+      DNSMASQ_LISTENING: all
+      FTLCONF_LOCAL_IPV4: 192.168.2.13
+      VIRTUAL_HOST: pihole.${HOST_NAME}
+      WEBPASSWORD_FILE: /run/secrets/pihole_password
+      PIHOLE_DNS_1: 127.17.0.1
+      #DHCP_ACTIVE: true
+      #DHCP_START: 192.168.1.50
+      #DHCP_END: 192.168.1.255
+      #DHCP_ROUTER: 192.168.1.1
+      TEMPERATUREUNIT: c
+    networks:
+      pihole_network:
+        ipv4_address: ${PIHOLE_IP}
+    ports:
+      - "54:53"
+      - "67:67/udp"
+      - "83:80/tcp"
+      - "446:443"
+    volumes:
+      - ${DOCKERDIR}/pihole:/etc/pihole
+      - ${DOCKERDIR}/pihole/dnsmasq.d:/etc/dnsmasq.d
+      - ${DOCKERDIR}/logs/pihole:/var/log
+      - ${DOCKERDIR}/logs/pihole/lighttpd:/var/log/lighttpd
+    restart: always
+    secrets:
+      - pihole_password
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

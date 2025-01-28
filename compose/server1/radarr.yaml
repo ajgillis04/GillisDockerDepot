@@ -1,0 +1,41 @@
+# Radarr - Automatic movie download and management tool.
+services:
+  radarr:
+    container_name: radarr.${HOST_NAME}
+    hostname: radarr.${HOST_NAME}.local
+    image: linuxserver/radarr
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+    networks:
+      - mediaserver
+    ports:
+      - "${RADARR_PORT}:7878"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/radarr/config:/config
+      - ${USERDOWNLOAD}/Torrents:/downloads
+      - ${MEDIASHARE}:/media
+      - ${DOCKERDIR}/logs/radarr:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers - Bypass
+      - "traefik.http.routers.radarr-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.radarr-rtr-bypass.priority=100"
+      ## HTTP Routers
+      - "traefik.http.routers.radarr-rtr.entrypoints=https"
+      - "traefik.http.routers.radarr-rtr.rule=Host(`radarr.${DOMAINNAME}`)"
+      - "traefik.http.routers.radarr-rtr.priority=99"
+      - "traefik.http.routers.radarr-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.radarr-rtr.service=radarr-svc"
+      - "traefik.http.routers.radarr-rtr-bypass.service=radarr-svc"
+      - "traefik.http.services.radarr-svc.loadbalancer.server.port=7878"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"

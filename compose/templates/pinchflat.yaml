@@ -1,0 +1,37 @@
+# PinchFlat - Your next YouTube media manager
+# If you download too much the container may ask you to authenticate yourself. 
+services:
+  pinchflat:
+    container_name: pinchflat.${HOST_NAME}
+    hostname: pinchflat.${HOST_NAME}.local
+    image: ghcr.io/kieraneglin/pinchflat
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+    networks:
+      - mediaserver
+    ports:
+      - "${PINCHFLAT_PORTS}:8945"
+    volumes:
+      - ${DOCKERDIR}/pinchflat/config:/config
+      - ${MEDIASHARE}/Videos/MusicVideos/Downloads:/downloads
+      - ${DOCKERDIR}/logs/pinchflat:/var/log
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.pinchflat-rtr.entrypoints=https"
+      - "traefik.http.routers.pinchflat-rtr.rule=Host(`pinchflat.${DOMAINNAME}`)"
+      - "traefik.http.routers.pinchflat-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.pinchflat-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services 
+      - "traefik.http.routers.pinchflat-rtr.service=pinchflat-svc"
+      - "traefik.http.services.pinchflat-svc.loadbalancer.server.port=8945"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

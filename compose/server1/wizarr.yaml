@@ -1,0 +1,35 @@
+# Wizarr - A centralized media server management tool.
+services:
+  wizarr:
+    container_name: wizarr.${HOST_NAME}
+    hostname: wizarr.${HOST_NAME}.local
+    image: ghcr.io/wizarrrr/wizarr
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+    networks:
+      - mediaserver
+    ports:
+      - "${WIZARR_PORT}:5690"
+    volumes:
+      - ${DOCKERDIR}/wizarr/config:/config
+      - ${DOCKERDIR}/wizarr/data/database:/data/database
+      - ${DOCKERDIR}/logs/wizarr:/var/log
+      - ${DOCKERDIR}/logs/wizarr/nginx:/var/log/nginx
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.wizarr-rtr.entrypoints=https"
+      - "traefik.http.routers.wizarr-rtr.rule=Host(`wizarr.${DOMAINNAME}`)"
+      - "traefik.http.routers.wizarr-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.wizarr-rtr.service=wizarr-svc"
+      - "traefik.http.services.wizarr-svc.loadbalancer.server.port=5690"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"

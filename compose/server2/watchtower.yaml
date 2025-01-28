@@ -1,0 +1,29 @@
+# Watchtower - Automatic updater for Docker containers.
+services:
+  watchtower:
+    container_name: watchtower.${HOST_NAME}
+    hostname: watchtower.${HOST_NAME}.local
+    image: containrrr/watchtower
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      WATCHTOWER_INCLUDE_RESTARTING: true
+      WATCHTOWER_LABEL_ENABLE: true
+      WATCHTOWER_NOTIFICATIONS: shoutrrr
+      WATCHTOWER_NOTIFICATION_TEMPLATE: '{{range .}}{{.Time.Format "12-01-2020 15:04:05"}} ({{.Level}}): {{.Message}}{{println}}{{end}}'
+      WATCHTOWER_NOTIFICATION_URL: discord://${DISCORD_TOKEN}@${DISCORD_ID}
+      WATCHTOWER_POLL_INTERVAL: 36000
+      WATCHTOWER_REMOVE_VOLUMES: true
+    networks:
+      - mediaserver
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $DOCKERDIR/watchtower/config:/config/
+      - ${DOCKERDIR}/logs/watchtower:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"

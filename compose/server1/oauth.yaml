@@ -1,0 +1,56 @@
+# OAuth - Authorization and authentication protocol services.
+
+# Notes:
+# SECRET: Generate a random secret with openssl rand -base64 32
+services:
+  oauth:
+    container_name: oauth.${HOST_NAME}
+    hostname: oauth.${HOST_NAME}.local
+    image: thomseddon/traefik-forward-auth
+    environment:
+      AUTH_HOST: oauth.${DOMAINNAME}      
+      CONFIG: /config
+      COOKIE_DOMAIN: ${DOMAINNAME}
+      DEFAULT_ACTION: auth
+      DEFAULT_PROVIDER: google
+      INSECURE_COOKIE: false
+      LIFETIME: 2678400 # 1 month
+      LOG_FORMAT: text
+      LOG_LEVEL: warn
+      URL_PATH: /_oauth
+      #PROVIDERS_GOOGLE_CLIENT_ID_FILE: /run/secrets/google_client_id
+      PROVIDERS_GOOGLE_CLIENT_ID: ${PROVIDERS_GOOGLE_CLIENT_ID}
+      #PROVIDERS_GOOGLE_CLIENT_SECRET_FILE: /run/secrets/google_client_secret
+      PROVIDERS_GOOGLE_CLIENT_SECRET: ${PROVIDERS_GOOGLE_CLIENT_SECRET}
+      #SECRET_FILE: /run/secrets/oauth_secret
+      SECRET: ${OAUTH_SECRET}
+    networks:
+      - mediaserver
+    ports:
+      - "${OAUTH_PORT}:4181"
+    volumes:
+      - ${DOCKERDIR}/oauth/config:/config
+      - ${DOCKERDIR}/logs/oauth:/var/log
+    restart: always
+    secrets:
+      - source: traefik_forward_auth
+        target: /config
+      - google_client_id
+      - google_client_secret
+      - oauth_secret
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.oauth-rtr.tls=true"
+      - "traefik.http.routers.oauth-rtr.entrypoints=https"
+      - "traefik.http.routers.oauth-rtr.rule=Host(`oauth.${DOMAINNAME}`)"
+      - "traefik.http.routers.oauth-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.oauth-rtr.service=oauth-svc"
+      - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"

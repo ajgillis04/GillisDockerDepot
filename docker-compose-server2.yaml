@@ -1,0 +1,124 @@
+# ***********************************************************************************
+# Created: Andy Gillis
+# Date:    Apr 20, 2020
+# Purpose: A Docker Compose to create containers
+# Clone:   git clone https://github.com/ajgillis04/GillisDockerDepot.git
+# Usage:   docker compose -p mediaserver -f docker-compose.yaml up --detach
+# Prereqs: Ensure Docker and Docker Compose are installed
+# Prereqs 2: You need to create a .env in your root folder with all $variables below
+# Prereqs 3: required a /secerts folder with all you sensative data
+# Help:    I relied heavily on https://www.smarthomebeginner.com/ at the begining
+# Notes:   Ensure permissions for Docker files and secrets
+#          chmod 700 ~/path/to/secrets
+#          chmod 600 ~/path/to/secrets/*
+#          make sure PUID and PGID match the system you are in with .env
+#          After services are brought online retreive api_keys and update .env/secrets
+# Usage: docker compose -p mediaserver -f docker-compose-server2.yaml up --detach
+# **********************************************************************************
+
+# *************************** NETWORKS ****************************************** 
+# You may customize the network subnet (172.30.0.0/24) below as you please.
+# Docker Compose version 3.5 or higher required to define networks this way. You no longer have to create manual.
+networks:
+  mediaserver:
+    name: mediaserver
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+    # external: true # use if not managing network with docker-compose.yaml
+  default:
+    driver: bridge
+ #   ipam:
+ #     config:
+ #       - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
+ #         gateway: 192.168.2.1        
+    # external: true # use if not managing network with docker-compose.yaml
+  pihole_network:
+    name: pihole_network
+    #driver: macvlan #does not work on windows
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
+          gateway: 192.168.2.1    
+    # external: true # use if not managing network with docker-compose.yaml
+  nextcloud-aio:
+    name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
+    driver: bridge
+    # external: true # use if not managing network with docker-compose.yaml
+
+# *************************** SECRETS ****************************************** 
+# Any secrets that are used across containers put here. All others in indivdiual yaml(s)
+secrets:
+  awl_cf_token:
+    file: ${SECRETSDIR}/awl_cf_token
+  cf_api_key:
+    file: ${SECRETSDIR}/    
+  cf_dns_api_token:
+    file: ${SECRETSDIR}/cf_dns_api_token
+  cf_email:
+    file: ${SECRETSDIR}/cf_email
+  cf_token:
+    file: ${SECRETSDIR}/cf_token
+  google_client_id:
+    file: ${SECRETSDIR}/google_client_id
+  google_client_secret:
+    file: ${SECRETSDIR}/google_client_secret
+  guac_mysql_user:
+    file: ${SECRETSDIR}/guac_mysql_user
+  guac_mysql_password:
+    file: ${SECRETSDIR}/guac_mysql_password
+  htpasswd:
+    file: ${SECRETSDIR}/htpasswd
+  maria_root_password:
+    file: ${SECRETSDIR}/maria_root_password
+#  maria_user:
+#    file: ${SECRETSDIR}/maria_user
+#  maria_user_password:
+#    file: ${SECRETSDIR}/maria_user_password
+  mineos_password:
+    file: ${SECRETSDIR}/mineos_password
+  oauth_secret:
+    file: ${SECRETSDIR}/oauth_secret
+  pia_password:
+    file: ${SECRETSDIR}/pia_password
+  pia_username:
+    file: ${SECRETSDIR}/pia_username
+  pihole_password:
+    file: ${SECRETSDIR}/pihole_password
+  photoprism_admin_password:
+    file: ${SECRETSDIR}/photoprism_admin_password
+  plex_claim:
+    file: ${SECRETSDIR}/plex_claim
+  plex_token:
+    file: ${SECRETSDIR}/plex_token
+  traefik_forward_auth:
+    file: ${SECRETSDIR}/traefik_forward_auth
+  tautulli_user:
+    file: ${SECRETSDIR}/tautulli_user
+  tautulli_user_pass:
+    file: ${SECRETSDIR}/tautulli_user_pass
+  transmission_pass:
+    file: ${SECRETSDIR}/transmission_pass
+  transmission_user:
+    file: ${SECRETSDIR}/transmission_user
+  vaultwarden_admin_token:
+    file: ${SECRETSDIR}/vaultwarden_admin_token
+
+# *************************** SERVICES ****************************************** 
+include:
+#  - ${COMPOSE_DIR}/cloudflare-ddns.yaml
+  - ${COMPOSE_DIR}/dozzle.yaml
+  - ${COMPOSE_DIR}/heimdallint.yaml
+  - ${COMPOSE_DIR}/mariadb.yaml
+  - ${COMPOSE_DIR}/oauth.yaml
+  - ${COMPOSE_DIR}/phpmyadmin.yaml
+#  - ${COMPOSE_DIR}/pihole.yaml
+#  - ${COMPOSE_DIR}/plex.yaml
+  - ${COMPOSE_DIR}/portainer.yaml
+#  - ${COMPOSE_DIR}/tdarr.yaml
+  - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
+  - ${COMPOSE_DIR}/traefik.yaml
+  - ${COMPOSE_DIR}/watchtower.yaml
+  - ${COMPOSE_DIR}/wireguard.yaml

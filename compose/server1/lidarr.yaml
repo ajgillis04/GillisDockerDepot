@@ -1,0 +1,44 @@
+# Lidarr - A music collection manager for Usenet and BitTorrent users.
+services:
+  lidarr:
+    container_name: lidarr.${HOST_NAME}
+    hostname: lidarr.${HOST_NAME}.local
+    image: linuxserver/lidarr
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    networks:
+      - mediaserver
+    ports:
+      - "${LIDARR_PORT}:8686"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/lidarr/config:/config
+      - ${USERDOWNLOAD}/Torrents:/downloads
+      - ${MEDIASHARE}/Music:/music
+      - ${DOCKERDIR}/logs/lidarr:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.lidarr-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.lidarr-rtr-bypass.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.lidarr-rtr-bypass.rule=Headers(`X-Api-Key`, `${LIDARR_API_KEY}`)"
+      - "traefik.http.routers.lidarr-rtr-bypass.priority=100"
+      - "traefik.http.routers.lidarr-rtr.entrypoints=https"
+      - "traefik.http.routers.lidarr-rtr.tls=true"
+      - "traefik.http.routers.lidarr-rtr.rule=Host(`lidarr.${DOMAINNAME}`)"
+      - "traefik.http.routers.lidarr-rtr.priority=99"
+      - "traefik.http.routers.lidarr-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.lidarr-rtr.service=lidarr-svc"
+      - "traefik.http.routers.lidarr-rtr-bypass.service=lidarr-svc"
+      - "traefik.http.services.lidarr-svc.loadbalancer.server.port=8686"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

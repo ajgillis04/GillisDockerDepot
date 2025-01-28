@@ -1,0 +1,44 @@
+# Calibre - An e-book management software.
+# Windows: Getting error on x11 look later
+
+services:
+  calibre:
+    container_name: calibre.${HOST_NAME}
+    hostname: calibre.${HOST_NAME}.local
+    image: ghcr.io/linuxserver/calibre
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      UMASK: 2
+    networks:
+      - mediaserver
+    ports:
+      - "${CALIBRE_PORT}:8080"
+      - "${CALIBRE_PORT2}:8081"
+      - "${CALIBRE_PORT3}:8181"
+    volumes:
+      - ${DOCKERDIR}/calibre/config:/config
+      - ${DOCKERDIR}/calibre/uploads:/uploads
+      - ${DOCKERDIR}/calibre/plugins:/plugins
+      - ${MEDIASHARE}/Books:/books
+      - ${USERDOWNLOAD}/Torrents:/downloads
+      - ${DOCKERDIR}/logs/calibre:/var/log
+      - ${DOCKERDIR}/logs/calibre/nginx:/var/log/nginx
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.calibre-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-rtr.rule=Host(`calibre.${DOMAINNAME}`)"
+      ## Middlewares
+      - "traefik.http.routers.calibre-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.calibre-rtr.service=calibre-svc"
+      - "traefik.http.services.calibre-svc.loadbalancer.server.port=8080"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

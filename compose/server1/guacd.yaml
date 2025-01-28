@@ -1,0 +1,16 @@
+# Guacd - The Guacamole proxy daemon.
+services:
+  guacd:
+    container_name: guacd.${HOST_NAME}
+    image: guacamole/guacd
+    hostname: guacd.${HOST_NAME}.local
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/guacd/config:/config
+      - ${DOCKERDIR}/logs/guacd:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

@@ -1,0 +1,35 @@
+# Chowdown - A self-hosted recipe management solution.
+services:
+  chowdown:
+    container_name: chowdown.${HOST_NAME}
+    hostname: chowdown.${HOST_NAME}.local
+    image: gregyankovoy/chowdown
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    networks:
+      - mediaserver
+    ports:
+      - "${CHOWDOWN_PORT}:4000"
+    volumes:
+      - ${DOCKERDIR}/chowdown/config:/config
+      - ${DOCKERDIR}/logs/chowdown:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.chowdown-rtr.entrypoints=https"
+      - "traefik.http.routers.chowdown-rtr.rule=Host(`chowdown.${DOMAINNAME}`)"
+      - "traefik.http.routers.chowdown-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.chowdown-rtr.middlewares=chain-oauth@file" # hardening to use traefik_forward_auth
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.chowdown-rtr.service=chowdown-svc"
+      - "traefik.http.services.chowdown-svc.loadbalancer.server.port=4000"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

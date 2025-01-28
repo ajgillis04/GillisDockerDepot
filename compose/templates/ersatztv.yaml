@@ -1,0 +1,43 @@
+# ErsatzTV - A pseudo-live channel server.
+# jasongdove/ersatztv-vaapi for AMD GPUs and Intel CPUs with QuickSync
+# use jasongdove/ersatztv for software transcoding
+# or jasongdove/ersatztv-nvidia for Nvidia transcoding
+
+services:
+  ersatztv:
+    container_name: ersatztv.${HOST_NAME}
+    hostname: ersatztv.${HOST_NAME}.local
+    image: jasongdove/ersatztv:develop-vaapi
+    devices:
+      #- /dev/dri:/dev/dri
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    networks:
+      - mediaserver
+    ports:
+      - "${ERSATZTV_PORT}:8409"
+    volumes:
+      - ${DOCKERDIR}/ersatztv:/root/.local/share/ersatztv
+      - ${MEDIASHARE}/Videos:/media:ro
+      - ${DOCKERDIR}/ersatztv/config:/config
+      - ${DOCKERDIR}/logs/ersatztv:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.ersatztv-rtr.entrypoints=https"
+      - "traefik.http.routers.ersatztv-rtr.rule=Host(`ersatztv.${DOMAINNAME}`)"
+      ## Middlewares
+      - "traefik.http.routers.ersatztv-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.ersatztv-rtr.service=ersatztv-svc"
+      - "traefik.http.services.ersatztv-svc.loadbalancer.server.port=8409"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

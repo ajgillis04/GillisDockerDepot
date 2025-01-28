@@ -1,0 +1,76 @@
+# Transmission-OpenVPN - A combination of Transmission and OpenVPN for secure torrenting.
+services:
+  transmission-openvpn:
+    container_name: transmission-openvpn.${HOST_NAME}
+    hostname: transmission-openvpn.${HOST_NAME}.local
+    image: haugene/transmission-openvpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    environment:
+      TZ: ${TZ}
+      CREATE_TUN_DEVICE: true
+      LOCAL_NETWORK: ${LOCAL_NETWORK}
+      OPENVPN_CONFIG: ca_toronto
+      OPENVPN_OPTS: '--inactive 3600 --ping 10 --ping-exit 60'
+      OPENVPN_USERNAME_FILE: /run/secrets/pia_username
+      OPENVPN_PASSWORD_FILE: /run/secrets/pia_password
+      #OPENVPN_PASSWORD: gj55JV2ggV
+      #OPENVPN_USERNAME: p2468491
+      OPENVPN_PROVIDER: PIA
+      PIA_OPENVPN_CONFIG_BUNDLE: openvpn
+      TRANSMISSION_DOWNLOAD_DIR: /downloads/Completed
+      TRANSMISSION_INCOMPLETE_DIR: /downloads/Incomplete
+      TRANSMISSION_INCOMPLETE_DIR_ENABLED: true
+      TRANSMISSION_RATIO_LIMIT: 0
+      TRANSMISSION_RATIO_LIMIT_ENABLED: true
+      TRANSMISSION_RPC_AUTHENTICATION_REQUIRED: true
+      TRANSMISSION_RPC_HOST_WHITELIST: "127.0.0.1,10.0.27.*,192.168.2.*"
+      TRANSMISSION_RPC_PASSWORD_FILE: /run/secrets/transmission_pass
+      TRANSMISSION_RPC_USERNAME_FILE: /run/secrets/transmission_user
+      TRANSMISSION_UMASK: 2
+      TRANSMISSION_WATCH_DIR: /downloads
+      TRANSMISSION_WATCH_DIR_ENABLED: true
+      UMASK_SET: 2
+    networks:
+      - mediaserver
+    ports:
+      - "${TRANSMISSION_PORT}:9091"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/transmission-openvpn/data:/data
+      - ${DOCKERDIR}/transmission-openvpn/config:/config
+      - ${USERDOWNLOAD}/Torrents:/downloads
+      - ${USERDOWNLOAD}/Torrents:/data/watch
+      - ${USERDOWNLOAD}/Torrents/Completed:/data/completed
+      - ${USERDOWNLOAD}/Torrents/Incomplete:/data/incomplete
+      - ${DOCKERDIR}/logs/transmission-openvpn:/var/log
+    restart: always
+    secrets:
+      - pia_username
+      - pia_password
+      - transmission_pass
+      - transmission_user
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.transmission-vpn-rtr.entrypoints=https"
+      - "traefik.http.routers.transmission-vpn-rtr.rule=Host(`trans.${DOMAINNAME}`)"
+      - "traefik.http.routers.transmission-vpn-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.transmission-vpn-rtr.service=transmission-vpn-svc"
+      - "traefik.http.services.transmission-vpn-svc.loadbalancer.server.port=9091"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m

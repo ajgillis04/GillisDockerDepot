@@ -1,0 +1,23 @@
+# Cloudflare-DDNSAWL - Advanced dynamic DNS updates with Cloudflare.
+services:
+  cloudflare-ddnsawl:
+    container_name: cloudflare-ddnsawl.${HOST_NAME}
+    hostname: cloudflare-ddnsawl.${HOST_NAME}.local
+    image: oznu/cloudflare-ddns
+    environment:
+      API_KEY_FILE: /run/secrets/awl_cf_token
+      PROXIED: 'true'
+      ZONE: ${SECONDDOMAINNAME}
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/cloudflare-ddnsawl/config:/config
+      - ${DOCKERDIR}/logs/cloudflare-ddnsawl:/var/log
+    restart: always
+    secrets:
+      - awl_cf_token
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

@@ -1,0 +1,23 @@
+# Cloudflare DDNS - Dynamic DNS update for Cloudflare.
+services:
+  cloudflare-ddns:
+    container_name: cloudflare_ddns.${HOST_NAME}
+    hostname: cloudflare_ddns.${HOST_NAME}.local
+    image: oznu/cloudflare-ddns
+    environment:
+      API_KEY_FILE: /run/secrets/cf_token
+      PROXIED: 'true'
+      ZONE: ${DOMAINNAME}
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/cloudflare-ddns/config:/config
+      - ${DOCKERDIR}/logs/cloudflare-ddns:/var/log
+    restart: always
+    secrets:
+      - cf_token
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

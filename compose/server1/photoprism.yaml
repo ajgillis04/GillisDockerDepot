@@ -1,0 +1,85 @@
+# PhotoPrism - An AI-powered open-source photo app.
+
+# # Notes:
+# 1. Ensure a user 'photoprism' is created in MariaDB.
+# 2. Create a database for 'photoprism' with appropriate permissions.
+# 3. Use the following SQL commands:
+#    docker exec -it mariadb /usr/bin/mariadb -u root -p
+#    CREATE DATABASE photoprism;
+#    CREATE USER 'photoprism_user'@'%' IDENTIFIED BY 'your_password';
+#    GRANT ALL PRIVILEGES ON photoprism.* TO 'photoprism_user'@'%';
+#    FLUSH PRIVILEGES;
+#    quit;
+
+services:
+  photoprism:
+    container_name: photoprism.${HOST_NAME}
+    hostname: photoprism.${HOST_NAME}.local
+    image: photoprism/photoprism
+    depends_on:
+      - mariadb
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}      
+      PHOTOPRISM_AUTH_MODE: password
+      PHOTOPRISM_ADMIN_PASSWORD_FILE: /run/secrets/photoprism_admin_password # Photoprims does not support secrets yet
+      #PHOTOPRISM_DATABASE_PASSWORD_FILE: /run/secrets/maria_root_password # Photoprims does not support secrets yet
+      PHOTOPRISM_ADMIN_PASSWORD: ${PHOTOPRISM_ADMIN_PASSWORD}
+      PHOTOPRISM_DATABASE_PASSWORD: ${PHOTOPRISM_DATABASE_PASSWORD}
+      PHOTOPRISM_DARKTABLE_PRESETS: false
+      PHOTOPRISM_DATABASE_DRIVER: mysql
+      PHOTOPRISM_DATABASE_NAME: photoprism
+      PHOTOPRISM_DATABASE_SERVER: mariadb.${HOST_NAME}:3306
+      PHOTOPRISM_DATABASE_USER: photoprism_user
+      PHOTOPRISM_DEBUG: false
+      PHOTOPRISM_DETECT_NSFW: false
+      PHOTOPRISM_DISABLE_CLASSIFICATION: false
+      PHOTOPRISM_DISABLE_FACES: false
+      PHOTOPRISM_DISABLE_SETTINGS: false
+      PHOTOPRISM_DISABLE_TENSORFLOW: false
+      PHOTOPRISM_DISABLE_TLS: true
+      PHOTOPRISM_DISABLE_WEBDAV: false
+      PHOTOPRISM_INIT: "update" # Update 3rd party tools
+      PHOTOPRISM_EXPERIMENTAL: false
+      PHOTOPRISM_HTTP_COMPRESSION: gzip
+      PHOTOPRISM_HTTP_PORT: ${PHOTOPRISM_PORT}
+      PHOTOPRISM_ORIGINALS_LIMIT: -1
+      PHOTOPRISM_PUBLIC: true
+      PHOTOPRISM_READONLY: false
+      PHOTOPRISM_SITE_URL: https://photos.${DOMAINNAME}/
+      PHOTOPRISM_UPLOAD_NSFW: true
+      PHOTOPRISM_SITE_AUTHOR: ${PHOTOPRISM_SITE_AUTHOR}
+      PHOTOPRISM_SITE_CAPTION: ${PHOTOPRISM_SITE_CAPTION}
+      PHOTOPRISM_SITE_DESCRIPTION: ${PHOTOPRISM_SITE_DESCRIPTION}
+      PHOTOPRISM_SITE_TITLE: ${PHOTOPRISM_SITE_TITLE}
+    networks:
+      - mediaserver
+    ports:
+      - "${PHOTOPRISM_PORT}:2342"
+    volumes:
+      - ${DOCKERDIR}/photoprism/config:/photoprism/config
+      - ${DOCKERDIR}/photoprism/storage:/photoprism/storage
+      - ${MEDIASHARE}/Photos:/photoprism/originals
+      - ${DOCKERDIR}/logs/photoprism:/var/log
+    restart: always
+    secrets:
+      - photoprism_admin_password
+      - maria_root_password
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.photoprism-rtr.entrypoints=https"
+      - "traefik.http.routers.photoprism-rtr.rule=Host(`photos.${DOMAINNAME}`)"
+      - "traefik.http.routers.photoprism-rtr.tls=true"
+      ## Middlewares
+      - "traefik.http.routers.photoprism-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services 
+      - "traefik.http.routers.photoprism-rtr.service=photoprism-svc"
+      - "traefik.http.services.photoprism-svc.loadbalancer.server.port=2342"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

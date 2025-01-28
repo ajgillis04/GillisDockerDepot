@@ -1,0 +1,35 @@
+# Heimdall - An application dashboard.
+services:
+  heimdall:
+    container_name: heimdall.${HOST_NAME}
+    hostname: heimdall.${HOST_NAME}.local
+    image: linuxserver/heimdall
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: 100 #can't be an admin group.
+    networks:
+      - mediaserver
+    ports:
+      - "${HEIMDALL_PORT}:80"
+    volumes:
+      - ${DOCKERDIR}/heimdall/config:/config
+      - ${DOCKERDIR}/logs/heimdall:/var/log
+      - ${DOCKERDIR}/logs/heimdall/nginx:/var/log/nginx    
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+    ## HTTP Routers
+      - "traefik.http.routers.heimdall-rtr.entrypoints=https"
+      - "traefik.http.routers.heimdall-rtr.rule=Host(`heimdall.${DOMAINNAME}`)"
+    ## Middlewares
+      - "traefik.http.routers.heimdall-rtr.middlewares=chain-oauth@file"
+    ## Docker Network
+      - "traefik.docker.network=mediaserver"
+    ## HTTP Services
+      - "traefik.http.routers.heimdall-rtr.service=heimdall-svc"
+      - "traefik.http.services.heimdall-svc.loadbalancer.server.port=80"
+    ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

@@ -17,3 +17,9 @@ temp/
 
 # Secrets
 secrets/
+
+# Secrets
+shared/
+
+# appdata
+appdata/

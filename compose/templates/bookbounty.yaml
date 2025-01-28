@@ -1,0 +1,43 @@
+# BookBounty - A system to manage and organize your e-books.
+services:
+  bookbounty:
+    container_name: bookbounty.${HOST_NAME}
+    hostname: bookbounty.${HOST_NAME}.local
+    image: thewicklowwolf/bookbounty
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      library_scan_on_completion: true
+      READARR_ADDRESS: http://${SERVER_IP}:8787
+      #FILE__READARR_API_KEY_FILE: /run/secrets/readarr_api_key # doesn't appear secrets are implemented yet
+      READARR_API_KEY: ${READARR_API_KEY}
+      selected_path_type: folder
+    networks:
+      - mediaserver
+    ports:
+      - "${BOOKBOUNTY_PORT}:5000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/bookbounty/config:/bookbounty/config
+      - ${USERDOWNLOAD}/Torrents/Completed/Books:/bookbounty/downloads
+      - ${DOCKERDIR}/logs/bookbounty:/var/log
+    restart: unless-stopped
+#    secrets:
+#      - readarr_api_key
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.bookbounty-rtr.entrypoints=https"
+      - "traefik.http.routers.bookbounty-rtr.rule=Host(`bookbounty.${DOMAINNAME}`)"
+      ## Middlewares
+      - "traefik.http.routers.bookbounty-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.bookbounty-rtr.service=bookbounty-svc"
+      - "traefik.http.services.bookbounty-svc.loadbalancer.server.port=5000"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
