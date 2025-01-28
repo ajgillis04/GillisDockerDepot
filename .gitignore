@@ -1,3 +1,10 @@
+!.gitignore
+!README.md
+!CHANGELOG.md
+!LICENSE
+!.env.example
+
+
 # Environment variables
 .env
 
@@ -17,9 +24,12 @@ temp/
 
 # Secrets
 secrets/
+!shared/*.example
 
 # Secrets
 shared/
+!shared/*.example
 
 # appdata
 appdata/
+!appdata/traefik2/rules/*.example
