@@ -30,10 +30,13 @@ secrets/
 shared/
 !shared/*.example
 
-# appdata
+# Include specific example files
 !appdata/traefik2/rules/*.example.toml
 !appdata/traefik2/rules/*.example.yml
+
+# Ignore everything else in the appdata directory
 appdata/
+
 
 #vscode
 .vscode/
