@@ -26,7 +26,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.phpmyadmin-rtr.entrypoints=https"
-      - "traefik.http.routers.phpmyadmin-rtr.rule=Host(`pma.${DOMAINNAME}`)"
+      - "traefik.http.routers.phpmyadmin-rtr.rule=Host(`pma${HOST_SUFFIX}.${DOMAINNAME}`)"
       - "traefik.http.routers.phpmyadmin-rtr.tls=true"
       ## Middlewares
       - "traefik.http.routers.phpmyadmin-rtr.middlewares=chain-oauth@file"

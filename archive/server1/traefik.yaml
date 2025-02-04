@@ -4,11 +4,6 @@ services:
     container_name: traefik.${HOST_NAME}
     hostname: traefik.${HOST_NAME}.local
     image: traefik:2.10
-    security_opt:
-      - no-new-privileges:true
-    restart: always
-    networks:
-      - mediaserver
     command:
       - --global.checkNewVersion=true
       - --global.sendAnonymousUsage=true
@@ -61,11 +56,14 @@ services:
         protocol: tcp
         published: 443
         target: 443
+    restart: always
     secrets:
       - cf_email
       - cf_api_key
       - cf_dns_api_token
       - htpasswd
+    security_opt:
+      - no-new-privileges:true
     volumes:
       - ${DOCKERDIR}/traefik2/config:/config
       - ${DOCKERDIR}/traefik2/rules:/rules

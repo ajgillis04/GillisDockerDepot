@@ -6,8 +6,8 @@ services:
     image: oznu/cloudflare-ddns
     environment:
       API_KEY_FILE: /run/secrets/cf_token
-      PROXIED: 'true'
-      ZONE: ${DOMAINNAME}
+      PROXIED: true
+      ZONE: ${DOMAINNAME}      
     networks:
       - mediaserver
     volumes:

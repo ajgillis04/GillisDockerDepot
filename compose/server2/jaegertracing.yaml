@@ -1,0 +1,38 @@
+﻿services:
+  jaegertracing:
+    container_name: jaegertracing.${HOST_NAME}
+    hostname: jaegertracing.${HOST_NAME}.local
+    image: jaegertracing/jaeger:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+    networks:
+      - mediaserver
+    ports:
+      - "${JAEGERTRACING_PORT}:16686"  # Replace JAEGERTRACING_PORT with the actual port you want to expose. Add JAEGERTRACING_PORT to your .env file.
+      - "14268:14268"  # Jaeger collector HTTP endpoint
+      - "6831:6831/udp"  # Jaeger agent UDP endpoint
+      - "6832:6832/udp"  # Jaeger agent UDP endpoint
+      - "5778:5778"  # Jaeger agent HTTP endpoint
+      - "9411:9411"    # Zipkin endpoint
+    volumes:
+      - ${DOCKERDIR}/jaegertracing/config:/config
+      - ${DOCKERDIR}/logs/jaegertracing:/var/log
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.jaegertracing-rtr.entrypoints=https"
+      - "traefik.http.routers.jaegertracing-rtr.rule=Host(`jaegertracing${HOST_SUFFIX}.${DOMAINNAME}`)"
+      - "traefik.http.routers.jaegertracing-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.jaegertracing-rtr.service=jaegertracing-svc"
+      - "traefik.http.services.jaegertracing-svc.loadbalancer.server.port=16686"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

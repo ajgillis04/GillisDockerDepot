@@ -23,7 +23,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.heimdallint-rtr.entrypoints=https"
-      - "traefik.http.routers.heimdallint-rtr.rule=Host(`heimdallint.${DOMAINNAME}`)"
+      - "traefik.http.routers.heimdallint-rtr.rule=Host(`heimdallint${HOST_SUFFIX}.${DOMAINNAME}`)"
       ## Middlewares
       - "traefik.http.routers.heimdallint-rtr.middlewares=chain-oauth@file"
       ## Docker Network      

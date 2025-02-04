@@ -23,7 +23,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.portainer-rtr.entrypoints=https"
-      - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.${DOMAINNAME}`)"
+      - "traefik.http.routers.portainer-rtr.rule=Host(`portainer${HOST_SUFFIX}.${DOMAINNAME}`)"
       - "traefik.http.routers.portainer-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"

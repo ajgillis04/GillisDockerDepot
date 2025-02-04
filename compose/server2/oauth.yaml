@@ -31,7 +31,7 @@ services:
     volumes:
       - ${DOCKERDIR}/oauth/config:/config
       - ${DOCKERDIR}/logs/oauth:/var/log
-    restart: always
+    restart: unless-stopped
     secrets:
       - source: traefik_forward_auth
         target: /config
@@ -45,7 +45,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.oauth-rtr.tls=true"
       - "traefik.http.routers.oauth-rtr.entrypoints=https"
-      - "traefik.http.routers.oauth-rtr.rule=Host(`oauth.${DOMAINNAME}`)"
+      - "traefik.http.routers.oauth-rtr.rule=Host(`oauth${HOST_SUFFIX}.${DOMAINNAME}`)"
       - "traefik.http.routers.oauth-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
