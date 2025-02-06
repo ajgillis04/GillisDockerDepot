@@ -20,7 +20,7 @@ services:
     environment:
       TZ: ${TZ}
       DNSMASQ_LISTENING: all
-      FTLCONF_LOCAL_IPV4: ${SERVER_IP} # Windows set to host IP
+      FTLCONF_LOCAL_IPV4: ${PIHOLE_IP} # Windows set to host IP
       #FTLCONF_LOCAL_IPV4: ${PIHOLE_IP} # Linux set container IP
       VIRTUAL_HOST: pihole.${HOST_NAME}
       WEBPASSWORD_FILE: /run/secrets/pihole_password
@@ -31,14 +31,14 @@ services:
       #DHCP_END: 192.168.2.255
       #DHCP_ROUTER: 192.168.2.1
       TEMPERATUREUNIT: c
- #   networks: #Use for linux
- #     pihole_network:
- #       ipv4_address: ${PIHOLE_IP}
-    ports:
-      - "53:53"
-      - "53:53/udp"
-      - "67:67/udp"
-      - "83:80/tcp"
+    networks: #Use for linux
+      pihole_network:
+        ipv4_address: ${PIHOLE_IP}
+ #   ports:
+ #     - "53:53"
+ #     - "53:53/udp"
+ #     - "67:67/udp"
+ #     - "80:80/tcp"
     volumes:
       - ${DOCKERDIR}/pihole:/etc/pihole
       - ${DOCKERDIR}/pihole/dnsmasq.d:/etc/dnsmasq.d

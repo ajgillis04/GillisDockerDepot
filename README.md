@@ -3,11 +3,18 @@
 
 A comprehensive repository for managing and orchestrating a diverse range of Docker containers. This setup includes services for media management, databases, networking, development tools, and more. Perfect for both development and production environments, leveraging Docker Compose for streamlined deployments and GitHub for version control.
 
+## Perquisites:
+   git
+      QNAP: opkg install git. Must have entware installed already
+      Windows: winget install --id Git.Git -e --source winget
+      Linux: sudo apt-get update
+             sudo apt-get install git
+
 ## Installation
 
 1. **Clone the repository:**
    ```bash   
-   git clone https://github.com/your-username/GillisDockerDepot.git  
+   git clone https://github.com/ajgillis04/GillisDockerDepot.git  
    cd GillisDockerDepot  
 
 3. ### Set Up the Environment:

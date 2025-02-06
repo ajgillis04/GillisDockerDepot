@@ -1,0 +1,35 @@
+﻿services:
+  orbital-sync:
+    container_name: orbital-sync.${HOST_NAME}
+    hostname: orbital-sync.${HOST_NAME}.local
+    image: # Replace with the Docker image name, e.g., amir20/dozzle
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    networks:
+      - mediaserver
+    ports:
+      - ${SERVICE_PORT}:80  # Replace SERVICE_PORT with the actual port you want to expose. Add SERVICE_PORT to your .env file.
+    volumes:
+      # Uncomment if needed
+      # - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKERDIR}/orbital-sync/config:/config
+      - ${DOCKERDIR}/logs/orbital-sync:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.orbital-sync-rtr.entrypoints=https"
+      ## Middlewares
+      - "traefik.http.routers.orbital-sync-rtr.rule=Host(orbital-sync${HOST_SUFFIX}.${DOMAINNAME})"
+      - "traefik.http.routers.orbital-sync-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.orbital-sync-rtr.service=orbital-sync-svc"
+      - "traefik.http.services.orbital-sync-svc.loadbalancer.server.port=80"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
