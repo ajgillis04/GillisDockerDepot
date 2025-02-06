@@ -15,7 +15,7 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
                   export LD_LIBRARY_PATH=/lib:$LD_LIBRARY_PATH  
                   export LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH  
       Windows: winget install --id Git.Git -e --source winget  
-      Linux:   ```bash 
+      Linux:
                ssh to server  
                sudo apt-get update  
                sudo apt-get install git  
