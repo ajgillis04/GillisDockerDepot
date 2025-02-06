@@ -41,8 +41,9 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
    **Create (.env.example) / Copy the `.env` File:**
      - ensure there is a .env file in your root directory GillisDockerDepot
      - Update all environment variables with your values or comment out with #
-         - example: HOST_NAME=yourservernamehere
-
+         - example: HOST_NAME=yourservernamehere  
+                    PUID=1000  
+                    PGID=1000  
    **Set Up Secrets:**
      - Manually set up your secrets as required in the `secrets` folder. Ensure they are securely stored and accessible.
         ```bash   
