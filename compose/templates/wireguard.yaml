@@ -1,4 +1,10 @@
-  # WireGuard - A modern VPN solution.
+# WireGuard - A modern VPN solution.
+
+# Note: Some helpful commands
+# See connections
+#  docker exec -it wireguard.${HOST_NAME} bash
+#  wg show
+
   services:
     wireguard:
       container_name: wireguard.${HOST_NAME}
@@ -11,11 +17,11 @@
         TZ: ${TZ}
         PGID: ${PGID}
         PUID: ${PUID}
-        ALLOWEDIPS: ${PIHOLE_PRI}, 192.168.2.0/24
+        ALLOWEDIPS: 0.0.0.0/0 # Can use other options but seemed to be split tunneling ${PIHOLE_PRI}, 192.168.2.0/24
         PEERDNS: ${PIHOLE_PRI}
         INTERNAL_SUBNET: 192.168.10.0
         #PEERS: 10
-        PEERS: "AndyPhone,AndyLaptop,AaronPhone,AaronLaptop,AndrewPhone,AndrewLaptop,MichellePhone,SelenaPhone,SelenaLaptop,ColinPhone"
+        PEERS: "Peer1,Mylaptop,MyPhone,etc"
         SERVERPORT: 51820
         SERVERURL: vpn.${DOMAINNAME}      
         #PERSISTENTKEEPALIVE_PEERS: all
