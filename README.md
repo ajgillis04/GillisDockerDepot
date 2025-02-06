@@ -8,7 +8,11 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
       QNAP:    Download and install, https://www.myqnap.org/product/entware-std/
                ssh to server
                sudo opkg install git.
+               sudo opkg install git-http
                sudo opkg install ca-certificates libcurl
+               might need to add these to .bashrc
+                  export LD_LIBRARY_PATH=/lib:$LD_LIBRARY_PATH
+                  export LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
       Windows: winget install --id Git.Git -e --source winget
       Linux:   ssh to server
                sudo apt-get update
@@ -18,7 +22,7 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 
 1. **Clone the repository:**
    ```bash   
-   git clone https://github.com/ajgillis04/GillisDockerDepot.git  
+   git clone git clone https://<your_token>@github.com/ajgillis04/GillisDockerDepot.git
    cd GillisDockerDepot  
 
 3. ### Set Up the Environment:
