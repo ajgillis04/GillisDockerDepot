@@ -4,14 +4,14 @@
 A comprehensive repository for managing and orchestrating a diverse range of Docker containers. This setup includes services for media management, databases, networking, development tools, and more. Perfect for both development and production environments, leveraging Docker Compose for streamlined deployments and GitHub for version control.
 
 ## Prerequisites:
-   git  
+   GIT is required  
       QNAP:    Download and install, https://www.myqnap.org/product/entware-std/  
                ssh to server  
-               ```bash 
-               sudo opkg install git  
-               sudo opkg install git-http  
-               sudo opkg install ca-certificates libcurl  
-               might need to add these to .bashrc  
+               ```bash   
+               sudo opkg install git
+               sudo opkg install git-http
+               sudo opkg install ca-certificates libcurl
+               Add these to .bashrc
                   export LD_LIBRARY_PATH=/lib:$LD_LIBRARY_PATH  
                   export LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH  
       Windows: winget install --id Git.Git -e --source winget  
