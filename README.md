@@ -5,9 +5,13 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 
 ## Perquisites:
    git
-      QNAP:    opkg install git. Must have entware installed already
+      QNAP:    Download and install, https://www.myqnap.org/product/entware-std/
+               ssh to server
+               sudo opkg install git.
+               sudo opkg install ca-certificates libcurl
       Windows: winget install --id Git.Git -e --source winget
-      Linux:   sudo apt-get update
+      Linux:   ssh to server
+               sudo apt-get update
                sudo apt-get install git
 
 ## Installation
