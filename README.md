@@ -17,12 +17,15 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
    export LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
 
 ### Windows
-1. Run the following command to install GIT:
+1. Run the following command to install GIT:  
+   ```bash
    winget install --id Git.Git -e --source winget
 
 ### Linux
-1. sudo apt-get update  
-2. sudo apt-get install git
+1. SSH to the server and run the following commands:
+   ```bash
+   sudo apt-get update  
+   sudo apt-get install git
 
 ## Installation
 
