@@ -45,6 +45,11 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 
    **Set Up Secrets:**
      - Manually set up your secrets as required in the `secrets` folder. Ensure they are securely stored and accessible.
+        ```bash   
+        cd GillisDockerDepot  
+        mkdir secrets  
+        chmod 700 /path/to/secrets  
+        chmod 600 /path/to/secrets/*  
 
 3. **Run Docker Compose:**  
    **Use Docker Compose to create and start the containers:**  
