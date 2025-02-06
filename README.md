@@ -13,7 +13,9 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
    sudo opkg install git
    sudo opkg install git-http
    sudo opkg install ca-certificates libcurl
-3. export LD_LIBRARY_PATH=/lib:$LD_LIBRARY_PATH  
+3. Add the following to .bashrc:
+   ```bash
+   export LD_LIBRARY_PATH=/lib:$LD_LIBRARY_PATH  
    export LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
 
 ### Windows
