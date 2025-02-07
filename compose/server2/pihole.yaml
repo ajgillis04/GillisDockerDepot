@@ -16,7 +16,7 @@ services:
  #     - 127.17.0.1
  #     - 1.1.1.1
  #     - 1.0.0.1
-    #network_mode: host
+    network_mode: host
     environment:
       TZ: ${TZ}
       DNSMASQ_LISTENING: all
@@ -31,9 +31,9 @@ services:
       #DHCP_END: 192.168.2.255
       #DHCP_ROUTER: 192.168.2.1
       TEMPERATUREUNIT: c
-    networks: #Use for linux
-      pihole_network:
-        ipv4_address: ${PIHOLE_IP}
+#    networks: #Use for linux
+#      pihole_network:
+#        ipv4_address: ${PIHOLE_IP}
  #   ports:
  #     - "53:53"
  #     - "53:53/udp"
