@@ -1,7 +1,9 @@
 # WireGuard - A modern VPN solution.
 
 # Note: Some helpful commands
-# wg show # see connections
+# See connections
+#  docker exec -it wireguard.${HOST_NAME} bash
+#  wg show
 
   services:
     wireguard:
