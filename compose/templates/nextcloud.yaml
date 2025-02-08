@@ -10,7 +10,7 @@ services:
   nextcloud:
     container_name: nextcloud-aio-mastercontainer # cannot use .${HOSTNAME} nextcloud-aio very picky on naming
     hostname: nextcloud.${HOST_NAME}.local
-    image: nextcloud/all-in-one
+    image: nextcloud/all-in-one:latest
     environment:
       APACHE_PORT: 11000
       APACHE_IP_BINDING: ${SERVER_IP}

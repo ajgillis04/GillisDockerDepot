@@ -3,7 +3,7 @@
     wireguard:
       container_name: wireguard.${HOST_NAME}
       hostname: wireguard.${HOST_NAME}.local
-      image: lscr.io/linuxserver/wireguard
+      image: lscr.io/linuxserver/wireguard:latest
       cap_add:
         - NET_ADMIN
   #      - SYS_MODULE

@@ -4,7 +4,7 @@ services:
   traefik-cloudflare-companion:
     container_name: traefik-cloudflare-companion.${HOST_NAME}
     hostname: traefik-cloudflare-companion.${HOST_NAME}.local
-    image: tiredofit/traefik-cloudflare-companion
+    image: tiredofit/traefik-cloudflare-companion:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}

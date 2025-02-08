@@ -3,7 +3,7 @@ services:
   lidarr:
     container_name: lidarr.${HOST_NAME}
     hostname: lidarr.${HOST_NAME}.local
-    image: linuxserver/lidarr
+    image: linuxserver/lidarr:latest
     environment:
       PUID: ${PUID}
       PGID: ${PGID}

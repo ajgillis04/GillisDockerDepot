@@ -18,7 +18,7 @@ services:
   tautulli:
     container_name: tautulli.${HOST_NAME}
     hostname: tautulli.${HOST_NAME}.local
-    image: linuxserver/tautulli
+    image: linuxserver/tautulli:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}

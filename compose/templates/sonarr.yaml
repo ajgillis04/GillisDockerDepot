@@ -3,7 +3,7 @@ services:
   sonarr:
     container_name: sonarr.${HOST_NAME}
     hostname: sonarr.${HOST_NAME}.local
-    image: linuxserver/sonarr
+    image: linuxserver/sonarr:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
