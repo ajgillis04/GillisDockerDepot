@@ -21,7 +21,7 @@ services:
     restart: always
     entrypoint: [
       "sh", "-c", 
-      "if [ ! -f /etc/apache2/apache2.conf ]; then cp -r /etc/apache2-default/* /etc/apache2; fi; exec apache2-foreground"
+      "if [ ! -f /etc/apache2/apache2.conf ]; then cp -r /etc/apache2/* /etc/apache2; fi; exec apache2-foreground"
     ]
     security_opt:
       - no-new-privileges:true
