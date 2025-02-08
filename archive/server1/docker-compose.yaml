@@ -774,36 +774,6 @@ services:
     labels:
     - "com.centurylinklabs.watchtower.enable=true"
 
-
-############################# MEDIA FILE MANAGEMENT
-# Bazarr - Subtitle Management
-  bazarr:
-    <<: *common-keys-core # See EXTENSION FIELDS at the top
-    image: lscr.io/linuxserver/bazarr:latest
-    container_name: bazarr
-    ports:
-      - "$BAZARR_PORT:6767"
-    volumes:
-      - $DOCKERDIR/bazarr/config:/config
-      - $MEDIASHARE/Videos/Movies:/movies #optional
-      - $MEDIASHARE/Videos/TV:/tv #optional
-      - $MEDIASHARE/Videos/:/Media
-    environment:
-      <<: *default-tz-puid-pgid
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers Auth
-      - "traefik.http.routers.bazarr-rtr.entrypoints=https"
-      - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.bazarr-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.bazarr-rtr.service=bazarr-svc"
-      - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
-      - "com.centurylinklabs.watchtower.enable=true"
-
 ############################# UTILITIES
 # Dozzle is a simple, lightweight application that provides you with a web based interface to monitor your Docker container logs live      
   dozzle:
@@ -1190,7 +1160,6 @@ services:
         PHOTOPRISM_DATABASE_NAME: "photoprism"
         PHOTOPRISM_DATABASE_USER: "photoprism"
         PHOTOPRISM_DATABASE_PASSWORD: /run/secrets/mysql_password
-        PHOTOPRISM_DATABASE_PASSWORD: "insecure"
         PHOTOPRISM_SITE_URL: "https://photos.$DOMAINNAME/"  # Public PhotoPrism URL
         PHOTOPRISM_SITE_TITLE: "GillisPhotoPrism"
         PHOTOPRISM_SITE_CAPTION: "Browse Your Life"
