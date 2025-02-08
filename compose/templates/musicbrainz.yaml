@@ -1,0 +1,35 @@
+﻿services:
+  musicbrainz:
+    container_name: musicbrainz.${HOST_NAME}
+    hostname: musicbrainz.${HOST_NAME}.local
+    image: # Replace with the Docker image name, e.g., amir20/dozzle
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    networks:
+      - mediaserver
+    ports:
+      - ${SERVICE_PORT}:80  # Replace SERVICE_PORT with the actual port you want to expose. Add SERVICE_PORT to your .env file.
+    volumes:
+      # Uncomment if needed
+      # - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKERDIR}/musicbrainz/config:/config
+      - ${DOCKERDIR}/logs/musicbrainz:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.musicbrainz-rtr.entrypoints=https"
+      ## Middlewares
+      - "traefik.http.routers.musicbrainz-rtr.rule=Host(musicbrainz${HOST_SUFFIX}.${DOMAINNAME})"
+      - "traefik.http.routers.musicbrainz-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.musicbrainz-rtr.service=musicbrainz-svc"
+      - "traefik.http.services.musicbrainz-svc.loadbalancer.server.port=80"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
