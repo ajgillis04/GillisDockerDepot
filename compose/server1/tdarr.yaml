@@ -15,7 +15,7 @@ services:
   tdarr:
     container_name: tdarr.${HOST_NAME}
     hostname: tdarr.${HOST_NAME}.local
-    image: haveagitgat/tdarr
+    image: haveagitgat/tdarr:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}

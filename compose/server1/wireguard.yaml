@@ -1,13 +1,15 @@
 # WireGuard - A modern VPN solution.
 
 # Note: Some helpful commands
-# wg show # see connections
+# See connections
+#  docker exec -it wireguard.${HOST_NAME} bash
+#  wg show
 
   services:
     wireguard:
       container_name: wireguard.${HOST_NAME}
       hostname: wireguard.${HOST_NAME}.local
-      image: lscr.io/linuxserver/wireguard
+      image: lscr.io/linuxserver/wireguard:latest
       cap_add:
         - NET_ADMIN
   #      - SYS_MODULE

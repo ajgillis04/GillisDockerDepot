@@ -6,7 +6,7 @@ services:
   vaultwarden:
     container_name: vaultwarden.${HOST_NAME}
     hostname: vaultwarden.${HOST_NAME}.local
-    image: vaultwarden/server
+    image: vaultwarden/server:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}

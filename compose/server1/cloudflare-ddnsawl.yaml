@@ -3,7 +3,7 @@ services:
   cloudflare-ddnsawl:
     container_name: cloudflare-ddnsawl.${HOST_NAME}
     hostname: cloudflare-ddnsawl.${HOST_NAME}.local
-    image: oznu/cloudflare-ddns
+    image: oznu/cloudflare-ddns:latest
     environment:
       API_KEY_FILE: /run/secrets/awl_cf_token
       PROXIED: 'true'

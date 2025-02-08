@@ -4,7 +4,7 @@ services:
   overseerr:
     container_name: overseerr.${HOST_NAME}
     hostname: overseerr.${HOST_NAME}.local
-    image: lscr.io/linuxserver/overseerr
+    image: lscr.io/linuxserver/overseerr:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}

@@ -4,7 +4,7 @@ services:
   mineos:
     container_name: mineos.${HOST_NAME}
     hostname: mineos.${HOST_NAME}.local
-    image: hexparrot/mineos
+    image: hexparrot/mineos:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
