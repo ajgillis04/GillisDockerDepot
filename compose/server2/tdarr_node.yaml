@@ -3,7 +3,7 @@ services:
   tdarr_node:
     container_name: tdarr_node.${HOST_NAME}
     hostname: tdarr_node.${HOST_NAME}.local
-    image: haveagitgat/tdarr_node
+    image: haveagitgat/tdarr_node:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}

@@ -15,7 +15,7 @@ services:
   photoprism:
     container_name: photoprism.${HOST_NAME}
     hostname: photoprism.${HOST_NAME}.local
-    image: photoprism/photoprism
+    image: photoprism/photoprism:latest
     depends_on:
       - mariadb
     environment:

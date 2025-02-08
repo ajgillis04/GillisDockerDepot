@@ -2,7 +2,7 @@
   orbital-sync:
     container_name: orbital-sync.${HOST_NAME}
     hostname: orbital-sync.${HOST_NAME}.local
-    image: # Replace with the Docker image name, e.g., amir20/dozzle
+    image: mattwebbio/orbital-sync:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}

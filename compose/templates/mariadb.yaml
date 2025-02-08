@@ -9,7 +9,7 @@ services:
   mariadb:
     container_name: mariadb.${HOST_NAME}
     hostname: mariadb.${HOST_NAME}.local
-    image: linuxserver/mariadb
+    image: linuxserver/mariadb:latest
     environment:      
       TZ: ${TZ}
       PUID: ${PUID}

@@ -3,7 +3,7 @@ services:
   prowlarr:
     container_name: prowlarr.${HOST_NAME}
     hostname: prowlarr.${HOST_NAME}.local
-    image: ghcr.io/linuxserver/prowlarr
+    image: ghcr.io/linuxserver/prowlarr:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}

@@ -2,7 +2,7 @@
   orbital-sync:
     container_name: orbital-sync.${HOST_NAME}
     hostname: orbital-sync.${HOST_NAME}.local
-    image: mattwebbio/orbital-sync
+    image: mattwebbio/orbital-sync:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}

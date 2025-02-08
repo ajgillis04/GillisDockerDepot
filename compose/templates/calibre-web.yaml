@@ -7,7 +7,7 @@ services:
   calibre-web:
     container_name: calibre-web.${HOST_NAME}
     hostname: calibre-web.${HOST_NAME}.local
-    image: linuxserver/calibre-web
+    image: linuxserver/calibre-web:latest
     environment:
       PUID: ${PUID}
       PGID: ${PGID}

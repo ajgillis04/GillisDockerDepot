@@ -3,7 +3,7 @@ services:
   phpmyadmin:
     container_name: phpmyadmin.${HOST_NAME}
     hostname: phpmyadmin.${HOST_NAME}.local
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
     links:
       - mariadb:db
     environment:

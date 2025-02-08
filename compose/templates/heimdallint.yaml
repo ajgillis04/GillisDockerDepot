@@ -3,7 +3,7 @@ services:
   heimdallint:
     container_name: heimdallint.${HOST_NAME}
     hostname: heimdallint.${HOST_NAME}.local
-    image: linuxserver/heimdall
+    image: linuxserver/heimdall:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}

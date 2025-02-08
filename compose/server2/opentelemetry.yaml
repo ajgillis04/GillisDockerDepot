@@ -2,7 +2,7 @@
   opentelemetry:
     container_name: opentelemetry.${HOST_NAME}
     hostname: opentelemetry.${HOST_NAME}.local
-    image: otel/opentelemetry-collector-contrib
+    image: otel/opentelemetry-collector-contrib:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}

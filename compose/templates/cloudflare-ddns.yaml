@@ -3,7 +3,7 @@ services:
   cloudflare-ddns:
     container_name: cloudflare-ddns.${HOST_NAME}
     hostname: cloudflare-ddns.${HOST_NAME}.local
-    image: oznu/cloudflare-ddns
+    image: oznu/cloudflare-ddns:latest
     environment:
       API_KEY_FILE: /run/secrets/cf_token
       PROXIED: 'true'

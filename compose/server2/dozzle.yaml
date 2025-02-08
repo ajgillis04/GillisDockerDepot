@@ -3,7 +3,7 @@ services:
   dozzle:
     container_name: dozzle.${HOST_NAME}
     hostname: dozzle.${HOST_NAME}.local
-    image: amir20/dozzle
+    image: amir20/dozzle:latest
     environment:
       DOZZLE_FILTER: status=running
       DOZZLE_LEVEL: info

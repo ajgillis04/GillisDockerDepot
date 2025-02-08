@@ -3,7 +3,7 @@ services:
   watchtower:
     container_name: watchtower.${HOST_NAME}
     hostname: watchtower.${HOST_NAME}.local
-    image: containrrr/watchtower
+    image: containrrr/watchtower:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}

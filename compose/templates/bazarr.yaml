@@ -3,7 +3,7 @@ services:
   bazarr:
     container_name: bazarr.${HOST_NAME}
     hostname: bazarr.${HOST_NAME}.local
-    image: lscr.io/linuxserver/bazarr
+    image: lscr.io/linuxserver/bazarr:latest
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
