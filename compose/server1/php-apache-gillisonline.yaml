@@ -3,7 +3,7 @@ services:
   php-apache-gillisonline:
     container_name: php-apache-gillisonline.${HOST_NAME}
     hostname: php-apache-gillisonline.${HOST_NAME}.local
-    image: php:8.0-apache
+    image: php:apache
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
