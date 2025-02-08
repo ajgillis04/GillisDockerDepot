@@ -16,7 +16,7 @@
       # - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERDIR}/musicbrainz/config:/config
       - ${DOCKERDIR}/logs/musicbrainz:/var/log
-    restart: always
+    restart: unless-stopped
     security_opt:
       - no-new-privileges:true
     labels:
