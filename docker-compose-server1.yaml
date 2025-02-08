@@ -130,7 +130,7 @@ include:
 #  - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
 #  - ${COMPOSE_DIR}/php-apache-awl.yaml
-#  - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
+  - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
 # - ${COMPOSE_DIR}/phpmyadmin.yaml
   - ${COMPOSE_DIR}/picard.yaml
 #  - ${COMPOSE_DIR}/pihole.yaml
