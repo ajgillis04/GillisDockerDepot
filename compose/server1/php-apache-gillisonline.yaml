@@ -13,11 +13,19 @@ services:
       - mediaserver
     ports:
       - "${GILLISONLINE_PORT}:80"
+      - "${GILLISONLINEHTTPS_PORT}:443"
     volumes:
       - ${DOCKERDIR}/php-apache-gillisonline/apache2:/etc/apache2
       - ${DOCKERDIR}/php-apache-gillisonline/var/www/html:/var/www/html
-      - ${DOCKERDIR}/logs/php-apache-gillisonline:/var/log
+      - ${DOCKERDIR}/logs/php-apache-gillisonline:/var/log/apache2
     restart: always
+    entrypoint: >
+      sh -c "
+      if [ ! -f /etc/apache2/apache2.conf ]; then
+        cp -r /etc/apache2-default/* /etc/apache2;
+      fi
+      exec apache2-foreground
+      "
     security_opt:
       - no-new-privileges:true
     labels:
