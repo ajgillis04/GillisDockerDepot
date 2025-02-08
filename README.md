@@ -58,3 +58,17 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
    **Use Docker Compose to create and start the containers:**  
    ```bash
    docker compose -p mediaserver -f docker-compose-server<nun>.yaml up --detach
+
+## Noteable GIT commands
+   
+1. **Pull changes:**
+   ```bash   
+      git pull
+
+2. **Committ changes:**
+   ```bash   
+   git status
+   git add .
+   git commit -m "Your descriptive commit message here"
+   git push https://yourgitapitoken@github.com/ajgillis04/GillisDockerDepot.git
+
