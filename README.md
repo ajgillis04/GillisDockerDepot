@@ -17,6 +17,7 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
    ```bash
    export LD_LIBRARY_PATH=/lib:$LD_LIBRARY_PATH  
    export LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
+   source ~/.bashrc
 
 ### Windows
 1. Run the following command to install GIT:  

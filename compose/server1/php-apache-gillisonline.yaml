@@ -8,12 +8,13 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+      APACHE_CONFDIR: /etc/apache2
     networks:
       - mediaserver
     ports:
       - "${GILLISONLINE_PORT}:80"
     volumes:
-      - ${DOCKERDIR}/php-apache-gillisonline/apache2:/usr/local/etc/php
+      - ${DOCKERDIR}/php-apache-gillisonline/apache2:/etc/apache2
       - ${DOCKERDIR}/php-apache-gillisonline/var/www/html:/var/www/html
       - ${DOCKERDIR}/logs/php-apache-gillisonline:/var/log
     restart: always
