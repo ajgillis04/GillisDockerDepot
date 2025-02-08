@@ -19,7 +19,7 @@ x-environment: &default-tz-puid-pgid
   PUID: $PUID
   PGID: $PGID
 
-x-environment: &default-tz  
+x-environment-tz: &default-tz  
   TZ: $TZ
 
 # Keys common to some of the core services that we always to automatically restart on failure
