@@ -9,7 +9,7 @@ services:
   pihole:
     container_name: pihole.${HOST_NAME}
     hostname: pihole.${HOST_NAME}.local
-    image: pihole/pihole
+    image: pihole/pihole:latest
  #   cap_add:
  #     - NET_ADMIN
  #   dns:

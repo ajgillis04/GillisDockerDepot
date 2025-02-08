@@ -17,7 +17,7 @@ services:
   guacamole:
     container_name: guacamole.${HOST_NAME}
     hostname: guacamole.${HOST_NAME}.local
-    image: guacamole/guacamole
+    image: guacamole/guacamole:latest
     environment:
       GUACAMOLE_HOME: /config
       GUACD_HOSTNAME: guacamole.${HOST_NAME}

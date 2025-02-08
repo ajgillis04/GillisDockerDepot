@@ -10,7 +10,7 @@ services:
   php-apache-awl:
     container_name: php-apache-awl.${HOST_NAME}
     hostname: php-apache-awl.${HOST_NAME}.local
-    image: php:8.0-apache
+    image: php:8.2.27-apache
     environment:
       PUID: ${PUID}
       PGID: ${PGID}

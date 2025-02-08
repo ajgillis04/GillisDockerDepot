@@ -3,7 +3,7 @@ services:
   bookbounty:
     container_name: bookbounty.${HOST_NAME}
     hostname: bookbounty.${HOST_NAME}.local
-    image: thewicklowwolf/bookbounty
+    image: thewicklowwolf/bookbounty:latest
     environment:
       PUID: ${PUID}
       PGID: ${PGID}

@@ -3,7 +3,7 @@ services:
   chowdown:
     container_name: chowdown.${HOST_NAME}
     hostname: chowdown.${HOST_NAME}.local
-    image: gregyankovoy/chowdown
+    image: gregyankovoy/chowdown:latest
     environment:
       PUID: ${PUID}
       PGID: ${PGID}

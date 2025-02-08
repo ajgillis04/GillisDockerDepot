@@ -3,7 +3,7 @@ services:
   radarr:
     container_name: radarr.${HOST_NAME}
     hostname: radarr.${HOST_NAME}.local
-    image: linuxserver/radarr
+    image: linuxserver/radarr:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
