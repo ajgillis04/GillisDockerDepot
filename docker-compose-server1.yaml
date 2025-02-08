@@ -124,6 +124,7 @@ include:
 #  - ${COMPOSE_DIR}/lidarr.yaml
 #  - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/mineos.yaml
+#  - ${COMPOSE_DIR}/musicbrainz.yaml
 #  - ${COMPOSE_DIR}/nextcloud.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
 #  - ${COMPOSE_DIR}/overseerr.yaml
@@ -150,3 +151,4 @@ include:
   - ${COMPOSE_DIR}/watchtower.yaml
   - ${COMPOSE_DIR}/wireguard.yaml
   - ${COMPOSE_DIR}/wizarr.yaml
+
