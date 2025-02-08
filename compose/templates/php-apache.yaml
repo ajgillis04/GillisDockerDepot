@@ -3,7 +3,7 @@ services:
   php-apache:
     container_name: php-apache.${HOST_NAME}
     hostname: php-apache.${HOST_NAME}.local
-    image: php:8.2.27-apache
+    image: php:apache
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
