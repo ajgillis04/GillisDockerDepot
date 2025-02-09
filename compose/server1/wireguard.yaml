@@ -21,7 +21,7 @@
         PEERDNS: ${PIHOLE_PRI}
         INTERNAL_SUBNET: 192.168.10.0
         #PEERS: 10
-        PEERS: "AndyPhone,AndyLaptop,AaronPhone,AaronLaptop,AndrewPhone,AndrewLaptop,MichellePhone,SelenaPhone,SelenaLaptop,ColinPhone"
+        PEERS: "AndyPhone,AndyLaptop,AaronPhone,AaronLaptop,AndrewPhone,AndrewLaptop,MichellePhone,SelenaPhone,SelenaLaptop,ColinPhone,AndyTest"
         SERVERPORT: 51820
         SERVERURL: vpn.${DOMAINNAME}      
         #PERSISTENTKEEPALIVE_PEERS: all
