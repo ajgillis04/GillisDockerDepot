@@ -8,7 +8,7 @@ volumes:
 
 services:
   nextcloud:
-    container_name: nextcloud-aio-mastercontainer # cannot use .${HOSTNAME} nextcloud-aio very picky on naming
+    container_name: nextcloud-aio-mastercontainer # cannot use .${HOST_NAME} nextcloud-aio very picky on naming
     hostname: nextcloud.${HOST_NAME}.local
     image: nextcloud/all-in-one:latest
     environment:

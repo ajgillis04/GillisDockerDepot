@@ -9,8 +9,6 @@
 # QSV
 # docker run --device=/dev/dri:/dev/dri ghcr.io/haveagitgat/tdarr_node:latest /bin/bash -e -c 'ffmpeg -hwaccel qsv -f lavfi -i color=c=black:s=256x256:d=1:r=30 -c:v:0 hevc_qsv -f null /dev/null'
 
-
-
 services:
   tdarr:
     container_name: tdarr.${HOST_NAME}
@@ -21,10 +19,10 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
       inContainer: true # Tell tdarr its running in docker
-      serverIP: tdarr.${HOST_NAME}.local
+      serverIP: ${SERVER_IP}
       serverPort: ${TDARR_SERVER_PORT}
       webUIPort: ${TDARR_WEBUI_PORT}
-      internalNode: true
+      internalNode: true # turn on node as well as server
       nodeName: tdarr_node.${HOST_NAME} 
       nodeID: tdarr_node.${HOST_NAME}
       # NVIDIA_DRIVER_CAPABILITIES: all # Nvidia transcoding
