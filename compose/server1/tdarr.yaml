@@ -19,7 +19,7 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
       inContainer: true # Tell tdarr its running in docker
-      serverIP: ${SERVER_IP}
+      serverIP: 0.0.0.0
       serverPort: ${TDARR_SERVER_PORT}
       webUIPort: ${TDARR_WEBUI_PORT}
       internalNode: true # turn on node as well as server
