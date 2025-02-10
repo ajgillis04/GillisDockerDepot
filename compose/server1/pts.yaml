@@ -4,7 +4,7 @@ services:
   pts:
     container_name: pts.${HOST_NAME}
     hostname: pts.${HOST_NAME}.local
-    image: phoronix/pts:latest
+    image: ghcr.io/phoronix-test-suite/phoronix-test-suite:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
@@ -21,18 +21,13 @@ services:
     restart: always
     security_opt:
       - no-new-privileges:true
-    command: ["/usr/bin/phoronix-test-suite", "start-phoromatic-server"]  # <-- Start web gui Phoromatic automatically
+    command: ["phoronix-test-suite", "start-phoromatic-server"]  # Start Phoromatic webui automatically
     labels:
       - "traefik.enable=true"
-      ## HTTP Routers
       - "traefik.http.routers.pts-rtr.entrypoints=https"
-      ## Middlewares
       - "traefik.http.routers.pts-rtr.rule=Host(benchmark${HOST_SUFFIX}.${DOMAINNAME})"
       - "traefik.http.routers.pts-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
       - "traefik.docker.network=mediaserver"
-      ## HTTP Services
       - "traefik.http.routers.pts-rtr.service=pts-svc"
       - "traefik.http.services.pts-svc.loadbalancer.server.port=8888"
-      ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
