@@ -16,7 +16,7 @@
       # Uncomment if needed
       # - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERDIR}/musicbrainz/config:/config
-      - ${DOCKERDIR}/logs/musicbrainz:/var/log
+      - ${DOCKERDIR}/logs/musicbrainz:/var/lib/nginx/logs
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true

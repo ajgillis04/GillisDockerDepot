@@ -108,11 +108,11 @@ secrets:
 # *************************** SERVICES ****************************************** 
 include:
 #  - ${COMPOSE_DIR}/bazarr.yaml
-  - ${COMPOSE_DIR}/bookbounty.yaml #new
+  - ${COMPOSE_DIR}/bookbounty.yaml
 #  - ${COMPOSE_DIR}/calibre-web.yaml
 #  - ${COMPOSE_DIR}/calibre.yaml
 #  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
-  - ${COMPOSE_DIR}/chowdown.yaml #new
+  - ${COMPOSE_DIR}/chowdown.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
   - ${COMPOSE_DIR}/cloudflare-ddnsawl.yaml
   - ${COMPOSE_DIR}/dozzle.yaml
