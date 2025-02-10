@@ -1,0 +1,46 @@
+# Tdarr Node - A node instance for the Tdarr tool.
+services:
+  tdarr_node:
+    container_name: tdarr_node.${HOST_NAME}
+    hostname: tdarr_node.${HOST_NAME}.local
+    image: haveagitgat/tdarr_node:latest
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      inContainer: true # Tell tdarr its running in docker      
+      nodeID: tdarr_node.${HOST_NAME}
+      nodeIP: tdarr.${HOST_NAME}.local
+      nodePort: ${TDARR_NODE_PORT}
+      serverIP: ${TDARR_SERVERIP}
+      serverPort: ${TDARR_SERVER_PORT}
+      # NVIDIA_DRIVER_CAPABILITIES: all
+      # NVIDIA_VISIBLE_DEVICES: all
+    networks:
+      - mediaserver
+    ports:
+      - "${TDARR_NODE_PORT}:8267"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/tdarr_node/app/configs:/app/configs
+      - /dev/shm:/transcode # offload transcoding to memory
+      - ${MEDIASHARE}:/media
+      - ${DOCKERDIR}/logs/tdarr_node:/app/logs
+    # Hardware transcoding
+    # devices:
+    #  - /dev/dri:/dev/dri
+    # deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #      - driver: nvidia # Pick one
+    #      - driver: vaapi # Pick one
+    #      - driver: qsv # Pick one
+    #        count: all
+    #        capabilities: [gpu] 
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=false"
