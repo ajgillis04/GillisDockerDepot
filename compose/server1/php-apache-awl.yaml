@@ -15,6 +15,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+      SECONDDOMAINNAME: ${SECONDDOMAINNAME}
       APACHE_CONFDIR: /etc/apache2
     networks:
       - mediaserver

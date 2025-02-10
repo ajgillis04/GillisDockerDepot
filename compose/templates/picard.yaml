@@ -5,11 +5,12 @@ services:
     hostname: picard.${HOST_NAME}.local
     image: mikenye/picard:latest
     environment:
-      DISPLAY_HEIGHT: 1080
-      DISPLAY_WIDTH: 1920
+      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      DISPLAY_HEIGHT: 1080
+      DISPLAY_WIDTH: 1920
     networks:
       - mediaserver
     ports:

@@ -12,6 +12,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
       DOCKER_MODS: linuxserver/mods:universal-calibre
     networks:
       - mediaserver

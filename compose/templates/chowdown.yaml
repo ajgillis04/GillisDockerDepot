@@ -5,9 +5,10 @@ services:
     hostname: chowdown.${HOST_NAME}.local
     image: gregyankovoy/chowdown:latest
     environment:
+      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
     ports:

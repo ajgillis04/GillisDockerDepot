@@ -9,6 +9,7 @@ services:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
       USER_PASSWORD_FILE: /run/secrets/mineos_password
     networks:
       - mediaserver

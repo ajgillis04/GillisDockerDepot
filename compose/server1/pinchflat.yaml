@@ -9,6 +9,7 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
     ports:

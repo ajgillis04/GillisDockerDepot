@@ -5,6 +5,10 @@ services:
     hostname: traefik_certdumper.${HOST_NAME}.local
     image: ghcr.io/kereis/traefik-certs-dumper:edge
     environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      DOMAINNAME: ${DOMAINNAME}
       DOMAIN: ${DOMAINNAME}
     networks:
       - mediaserver

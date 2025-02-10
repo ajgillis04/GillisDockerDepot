@@ -2,14 +2,18 @@
 services:
   cloudflare-ddns:
 <<<<<<< HEAD
-    container_name: cloudflare_ddns.${HOST_NAME}
-    hostname: cloudflare_ddns.${HOST_NAME}.local
+    container_name: cloudflare-ddns.${HOST_NAME}
+    hostname: cloudflare-ddns.${HOST_NAME}.local
 =======
     container_name: cloudflare-ddns.${HOST_NAME}
     hostname: cloudflare-ddns.${HOST_NAME}.local
 >>>>>>> 5582466ff45c081fa05058715e176bcbef9bf4a6
     image: oznu/cloudflare-ddns:latest
     environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      DOMAIN: ${DOMAINNAME}
       API_KEY_FILE: /run/secrets/cf_token
       PROXIED: true
       ZONE: ${DOMAINNAME}      

@@ -5,9 +5,10 @@ services:
     hostname: bazarr.${HOST_NAME}.local
     image: lscr.io/linuxserver/bazarr:latest
     environment:
+      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
     ports:

@@ -5,6 +5,7 @@ services:
     hostname: dozzle.${HOST_NAME}.local
     image: amir20/dozzle:latest
     environment:
+      DOMAINNAME: ${DOMAINNAME}
       DOZZLE_FILTER: status=running
       DOZZLE_LEVEL: info
     networks:

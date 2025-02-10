@@ -8,6 +8,7 @@ services:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: '100' #can't be an admin group.
+      DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
     ports:

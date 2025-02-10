@@ -21,6 +21,7 @@ services:
       TZ: ${TZ}
       PUID: 0
       PGID: 0
+      DOMAINNAME: ${DOMAINNAME}
       UMASK: 002
       ADVERTISE_IP: "https://plex.${HOST_NAME}.${DOMAINNAME}:443,https://${SERVER_IP}:32400"
       ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks

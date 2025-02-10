@@ -21,7 +21,8 @@ services:
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}      
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}  
       PHOTOPRISM_AUTH_MODE: password
       PHOTOPRISM_ADMIN_PASSWORD_FILE: /run/secrets/photoprism_admin_password # Photoprims does not support secrets yet
       #PHOTOPRISM_DATABASE_PASSWORD_FILE: /run/secrets/maria_root_password # Photoprims does not support secrets yet

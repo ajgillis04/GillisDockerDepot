@@ -18,6 +18,7 @@ services:
       TZ: ${TZ}
       PGID: ${PGID}
       PUID: ${PUID}
+      DOMAINNAME: ${DOMAINNAME}
       inContainer: true # Tell tdarr its running in docker
       serverIP: 0.0.0.0
       serverPort: ${TDARR_SERVER_PORT}

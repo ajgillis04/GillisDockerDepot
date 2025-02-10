@@ -15,6 +15,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
     ports:

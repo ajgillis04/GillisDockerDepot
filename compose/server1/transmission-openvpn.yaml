@@ -13,6 +13,7 @@ services:
       - 1.0.0.1
     environment:
       TZ: ${TZ}
+      DOMAIN: ${DOMAINNAME}
       CREATE_TUN_DEVICE: true
       LOCAL_NETWORK: ${LOCAL_NETWORK}
       OPENVPN_CONFIG: ca_toronto

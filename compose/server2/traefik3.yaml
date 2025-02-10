@@ -28,6 +28,8 @@ services:
       - mediaserver
     environment:
       # COMMON
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
       TRAEFIK_GLOBAL_CHECKNEWVERSION: true
       TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: true
       

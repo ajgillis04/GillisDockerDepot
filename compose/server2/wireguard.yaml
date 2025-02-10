@@ -11,6 +11,7 @@
         TZ: ${TZ}
         PGID: ${PGID}
         PUID: ${PUID}
+        DOMAINNAME: ${DOMAINNAME}
         ALLOWEDIPS: ${PIHOLE_PRI}, 192.168.2.0/24
         PEERDNS: ${PIHOLE_PRI}
         INTERNAL_SUBNET: 192.168.10.0

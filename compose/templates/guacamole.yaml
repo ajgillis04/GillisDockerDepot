@@ -19,6 +19,10 @@ services:
     hostname: guacamole.${HOST_NAME}.local
     image: guacamole/guacamole:latest
     environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
       GUACAMOLE_HOME: /config
       GUACD_HOSTNAME: guacamole.${HOST_NAME}
       MYSQL_DATABASE: guacamole
@@ -26,9 +30,6 @@ services:
       MYSQL_PORT: 3306
       MYSQL_USER_FILE: /run/secrets/guac_mysql_user
       MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password
-      PUID: ${PUID}
-      PGID: ${PGID}
-      TZ: ${TZ}
     networks:
       - mediaserver
     ports:

@@ -7,6 +7,7 @@ services:
     links:
       - mariadb:db
     environment:
+      DOMAINNAME: ${DOMAINNAME}
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/maria_root_password
       PMA_ARBITRARY: 1
       PMA_PORT: ${DB_PORT}

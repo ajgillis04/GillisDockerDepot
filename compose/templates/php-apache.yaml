@@ -5,9 +5,10 @@ services:
     hostname: php-apache.${HOST_NAME}.local
     image: php:apache
     environment:
+      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
     ports:

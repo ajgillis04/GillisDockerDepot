@@ -9,9 +9,10 @@ services:
     hostname: calibre-web.${HOST_NAME}.local
     image: linuxserver/calibre-web:latest
     environment:
+      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
       DOCKER_MODS: linuxserver/mods:universal-calibre
     networks:
       - mediaserver

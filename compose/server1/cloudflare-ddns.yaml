@@ -7,6 +7,7 @@ services:
     environment:
       API_KEY_FILE: /run/secrets/cf_token
       PROXIED: 'true'
+      DOMAINNAME: ${DOMAINNAME}
       ZONE: ${DOMAINNAME}
     networks:
       - mediaserver

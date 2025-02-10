@@ -6,9 +6,10 @@ services:
     hostname: pinchflat.${HOST_NAME}.local
     image: ghcr.io/kieraneglin/pinchflat:latest
     environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
       TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
     ports:

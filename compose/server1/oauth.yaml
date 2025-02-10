@@ -8,6 +8,7 @@ services:
     hostname: oauth.${HOST_NAME}.local
     image: thomseddon/traefik-forward-auth:latest
     environment:
+      DOMAINNAME: ${DOMAINNAME}
       AUTH_HOST: oauth.${DOMAINNAME}      
       CONFIG: /config
       COOKIE_DOMAIN: ${DOMAINNAME}

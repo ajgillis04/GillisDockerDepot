@@ -5,9 +5,10 @@ services:
     hostname: bookbounty.${HOST_NAME}.local
     image: thewicklowwolf/bookbounty:latest
     environment:
+      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
       library_scan_on_completion: true
       READARR_ADDRESS: http://${SERVER_IP}:8787
       #FILE__READARR_API_KEY_FILE: /run/secrets/readarr_api_key # doesn't appear secrets are implemented yet

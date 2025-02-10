@@ -10,6 +10,7 @@ services:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
       UMASK: 2
     networks:
       - mediaserver
