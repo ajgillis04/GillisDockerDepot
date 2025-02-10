@@ -5,8 +5,10 @@
 !LICENSE
 !.env.example
 
-# Environment variables
+# Exclud Environment variables and personal websites
 .env
+php-apache-awl.yaml
+php-apache-gillisonline.yaml
 
 # Logs
 logs/

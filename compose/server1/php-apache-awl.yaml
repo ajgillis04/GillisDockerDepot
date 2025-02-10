@@ -5,6 +5,8 @@
 #       set the files to find /mnt/website/ -type f -exec chmod 644 {} \;
 #       Container set owner to chown -R root:root /var/www/html
 #       Container set files to find /var/www/html/ -type f -exec chmod 644 {} \;
+#       Copying the default config files before first run
+#       docker run --rm -v /share/Docker/GillisDockerDepot/appdata/php-apache/apache2:/apache2 httpd:2.4 bash -c 'cp -r /usr/local/apache2/conf/* /apache2/'
 
 services:
   php-apache-awl:
@@ -12,15 +14,20 @@ services:
     hostname: php-apache-awl.${HOST_NAME}.local
     image: php:apache
     environment:
+      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}
       SECONDDOMAINNAME: ${SECONDDOMAINNAME}
       APACHE_CONFDIR: /etc/apache2
     networks:
       - mediaserver
  #   ports:
- #     - "${AWL_PORT}:80"
+ #     - "${DOMAINNAME2_PORT}:80"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "7"
     volumes:
       - ${DOCKERDIR}/php-apache-gillisonline/apache2:/etc/apache2
       - ${DOCKERDIR}/php-apache-awl/var/www/html:/var/www/html
