@@ -2,7 +2,7 @@
   musicbrainz:
     container_name: musicbrainz.${HOST_NAME}
     hostname: musicbrainz.${HOST_NAME}.local
-    image: # Replace with the Docker image name, e.g., amir20/dozzle
+    image: linuxserver/musicbrainz:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
