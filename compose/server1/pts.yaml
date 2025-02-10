@@ -4,7 +4,7 @@ services:
   pts:
     container_name: pts.${HOST_NAME}
     hostname: pts.${HOST_NAME}.local
-    image: ghcr.io/phoronix-test-suite/phoronix-test-suite:latest
+    image: ghcr.io/phoronix-test-suite:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
