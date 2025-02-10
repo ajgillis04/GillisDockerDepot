@@ -1,5 +1,4 @@
 ﻿# This Docker image allows users to run benchmarks using the Phoronix Test Suite in a containerized environment
-version: "3.8"
 
 services:
   pts:
