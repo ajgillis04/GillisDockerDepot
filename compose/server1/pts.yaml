@@ -28,7 +28,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.pts-rtr.entrypoints=https"
       ## Middlewares
-      - "traefik.http.routers.pts-rtr.rule=Host(pts${HOST_SUFFIX}.${DOMAINNAME})"
+      - "traefik.http.routers.pts-rtr.rule=Host(benchmark${HOST_SUFFIX}.${DOMAINNAME})"
       - "traefik.http.routers.pts-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
