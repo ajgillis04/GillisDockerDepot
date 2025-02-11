@@ -138,7 +138,6 @@ include:
 #  - ${COMPOSE_DIR}/plex.yaml
   - ${COMPOSE_DIR}/portainer.yaml
 #  - ${COMPOSE_DIR}/prowlarr.yaml
-  - ${COMPOSE_DIR}/pts.yaml
 #  - ${COMPOSE_DIR}/radarr.yaml
 #  - ${COMPOSE_DIR}/readarr.yaml
 #  - ${COMPOSE_DIR}/sabnzbd.yaml
