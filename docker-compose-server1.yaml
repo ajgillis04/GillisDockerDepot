@@ -70,6 +70,8 @@ secrets:
     file: ${SECRETSDIR}/guac_mysql_password
   htpasswd:
     file: ${SECRETSDIR}/htpasswd
+  lidarr_api_key:
+    file: ${SECRETSDIR}/lidarr_api_key
   maria_root_password:
     file: ${SECRETSDIR}/maria_root_password
 #  maria_user:
@@ -92,6 +94,10 @@ secrets:
     file: ${SECRETSDIR}/plex_claim
   plex_token:
     file: ${SECRETSDIR}/plex_token
+  spotify_client_id:
+    file: ${SECRETSDIR}/spotify_client_id
+  spotify_client_secret:
+    file: ${SECRETSDIR}/spotify_client_secret
   traefik_forward_auth:
     file: ${SECRETSDIR}/traefik_forward_auth
   tautulli_user:
