@@ -14,7 +14,7 @@
       auto_start_delay: 60
       app_url: https://lidify${HOST_SUFFIX}.${DOMAINNAME}
       lidarr_address: http://localhost:8686 # Change this if Lidarr is not on the same server
-      lidarr_api_key_file: /secrets/lidarr_api_key
+      FILE__lidarr_api_key: /secrets/lidarr_api_key
       mode: Spotify
       metadata_profile_id: 1  # curl -X GET http://<lidarr-address>:8686/api/v1//metadataprofile -H "X-Api-Key: <api_key>" | jq '.[] | select(.name == "Your Metadata Profile Name") | {id, name}'
       root_folder_path: ${MEDIASHARE}/Music # Should match the root folder for music in Lidarr
