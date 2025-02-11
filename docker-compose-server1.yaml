@@ -122,6 +122,7 @@ include:
   - ${COMPOSE_DIR}/heimdall.yaml
   - ${COMPOSE_DIR}/heimdallint.yaml
 #  - ${COMPOSE_DIR}/lidarr.yaml
+  - ${COMPOSE_DIR}/lidify.yaml
 #  - ${COMPOSE_DIR}/mariadb.yaml
   - ${COMPOSE_DIR}/mineos.yaml
   - ${COMPOSE_DIR}/musicbrainz.yaml

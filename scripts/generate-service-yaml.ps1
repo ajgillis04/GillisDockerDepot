@@ -84,7 +84,7 @@ services:
   SERVICE_NAME:
     container_name: SERVICE_NAME.${HOST_NAME}
     hostname: SERVICE_NAME.${HOST_NAME}.local
-    image: # Replace with the Docker image name, e.g., amir20/dozzle
+    image: SERVICE_NAME:latest # Replace with the Docker image name, e.g., amir20/dozzle:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
@@ -93,7 +93,7 @@ services:
     networks:
       - mediaserver
     ports:
-      - ${SERVICE_PORT}:80  # Replace SERVICE_PORT with the actual port you want to expose. Add SERVICE_PORT to your .env file.
+      - ${SERVICE_NAME_PORT}:80  # Add SERVICE_NAME_PORT to your .env file.
     volumes:
       # Uncomment if needed
       # - /var/run/docker.sock:/var/run/docker.sock

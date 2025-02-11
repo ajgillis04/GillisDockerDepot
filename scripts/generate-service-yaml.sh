@@ -85,13 +85,11 @@ TEMPLATE_FILE_PATH="${OUTPUT_DIR}/${SERVICE_NAME}.yaml"
 echo "$TEMPLATE" > "$TEMPLATE_FILE_PATH"
 echo "File ${SERVICE_NAME}.yaml created in ${OUTPUT_DIR}"
 
-# Ask if the user wants to add it to a Docker Compose file
+# If compose path is provided, add the service to the Docker Compose file
 if [ -n "$COMPOSE_FILE" ]; then
-    read -p "Do you want to add this service to the Docker Compose file (${COMPOSE_FILE})? (yes/no) " ADD_TO_COMPOSE
-    if [ "$ADD_TO_COMPOSE" == "yes" ]; then
-        echo "$TEMPLATE_FILE_PATH" >> "$COMPOSE_FILE"
-        echo "Added ${TEMPLATE_FILE_PATH} to ${COMPOSE_FILE}"
-    else
-        echo "Did not add ${TEMPLATE_FILE_PATH} to ${COMPOSE_FILE}"
-    fi
+  echo "Adding ${SERVICE_NAME} service to the Docker Compose file (${COMPOSE_FILE})"
+  echo "$TEMPLATE" >> "$COMPOSE_FILE"
+  echo "Added ${SERVICE_NAME} service to ${COMPOSE_FILE}"
+else
+  echo "No Docker Compose file path provided. Compose file not updated."
 fi
