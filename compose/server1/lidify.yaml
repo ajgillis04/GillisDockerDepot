@@ -39,7 +39,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.lidify-rtr.entrypoints=https"
       ## Middlewares
-      - "traefik.http.routers.lidify-rtr.rule=Host(lidify.${DOMAINNAME})"
+      - "traefik.http.routers.lidify-rtr.rule=Host(`lidify.${DOMAINNAME}`)"
       - "traefik.http.routers.lidify-rtr.middlewares=chain-oauth@file"
       - "traefik.http.routers.lidify-rtr.tls=true"
       ## Docker Network
