@@ -9,12 +9,20 @@
       PGID: ${PGID}
       DOMAINNAME: ${DOMAINNAME}
       app_name: Lidify
+      auto_start: true
+      app_url: https://lidify${HOST_SUFFIX}.${DOMAINNAME}
       lidarr_address: http://localhost:8686 # Change this if Lidarr is not on the same server
       lidarr_api_key_file: /secrets/lidarr_api_key
       root_folder_path: ${MEDIASHARE}/Music # Should match the root folder for music in Lidarr
       mode: Spotify
       spotify_client_id_file: /secrets/spotify_client_id
       spotify_client_secret_file: /secrets/spotify_client_secret
+      quality_profile_id: 3 # curl -X GET http://<lidarr-address>:8686/api/v1/qualityProfile -H "X-Api-Key: <api_key>" | jq '.[] | select(.name == "Your Quality Profile Name") | {id, name}'
+      metadata_profile_id: 1  # curl -X GET http://<lidarr-address>:8686/api/v1//metadataprofile -H "X-Api-Key: <api_key>" | jq '.[] | select(.name == "Your Metadata Profile Name") | {id, name}'
+      search_for_missing_albums: false
+      dry_run_adding_to_lidarr: true # can change this later when everything is working
+      auto_start: true
+      auto_start_delay: 60
     networks:
       - mediaserver
     ports:
