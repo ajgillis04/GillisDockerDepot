@@ -107,7 +107,7 @@ secrets:
 
 # *************************** SERVICES ****************************************** 
 include:
-#  - ${COMPOSE_DIR}/bazarr.yaml
+  - ${COMPOSE_DIR}/bazarr.yaml
   - ${COMPOSE_DIR}/bookbounty.yaml
 #  - ${COMPOSE_DIR}/calibre-web.yaml
 #  - ${COMPOSE_DIR}/calibre.yaml
