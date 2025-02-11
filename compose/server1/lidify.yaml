@@ -1,4 +1,6 @@
-﻿services:
+﻿# Lidify is a self-hosted music management and recommendation application that helps you organize your music library and discover new artists based on your listening habits.
+
+services:
   lidify:
     container_name: lidify.${HOST_NAME}
     hostname: lidify.${HOST_NAME}.local
@@ -13,7 +15,7 @@
       auto_start: true
       auto_start_delay: 60
       app_url: https://lidify${HOST_SUFFIX}.${DOMAINNAME}
-      lidarr_address: http://localhost:8686 # Change this if Lidarr is not on the same server
+      lidarr_address: http://localhost:${LIDARR_PORT} # Change this if Lidarr is not on the same server
       lidarr_api_key: ${LIDARR_API_KEY}
       mode: Spotify
       metadata_profile_id: 1  # curl -X GET http://<lidarr-address>:8686/api/v1//metadataprofile -H "X-Api-Key: <api_key>" | jq '.[] | select(.name == "Your Metadata Profile Name") | {id, name}'
