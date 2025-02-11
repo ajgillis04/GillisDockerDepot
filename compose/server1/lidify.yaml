@@ -9,7 +9,7 @@
       PGID: ${PGID}
       DOMAINNAME: ${DOMAINNAME}
       APP_NAME: Lidify
-      LIDARR_ADDRESS: http://localhost:8686 # Change this if Lidarr is not on the same server
+      lidarr_address: http://localhost:8686 # Change this if Lidarr is not on the same server
       LIDARR_API_KEY_FILE: /secrets/lidarr_api_key
       ROOT_FOLDER_PATH: ${MEDIASHARE}/Music # Should match the root folder for music in Lidarr
       MODE: Spotify
