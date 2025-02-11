@@ -34,17 +34,17 @@ services:
     restart: always
     security_opt:
       - no-new-privileges:true    
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.lidify-rtr.entrypoints=https"
-      ## Middlewares
-      - "traefik.http.routers.lidify-rtr.rule=Host(lidify${HOST_SUFFIX}.${DOMAINNAME})"
-      - "traefik.http.routers.lidify-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.lidify-rtr.service=lidify-svc"
-      - "traefik.http.services.lidify-svc.loadbalancer.server.port=5000"
-      ## Watchtower enabled?
-      - "com.centurylinklabs.watchtower.enable=true"
+labels:
+     - "traefik.enable=true"
+     # HTTP Routers
+     - "traefik.http.routers.lidify-rtr.entrypoints=https"
+     - "traefik.http.routers.lidify-rtr.rule=Host(`lidify.gillisonline.com`)"
+     - "traefik.http.routers.lidify-rtr.middlewares=chain-oauth@file"
+     # Docker Network
+     - "traefik.docker.network=mediaserver"
+     # HTTP Services
+     - "traefik.http.routers.lidify-rtr.service=lidify-svc"
+     - "traefik.http.services.lidify-svc.loadbalancer.server.port=5000"
+     # Watchtower enabled?
+     - "com.centurylinklabs.watchtower.enable=true"
+
