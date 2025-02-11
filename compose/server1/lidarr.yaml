@@ -5,9 +5,9 @@ services:
     hostname: lidarr.${HOST_NAME}.local
     image: linuxserver/lidarr:latest
     environment:
+      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
