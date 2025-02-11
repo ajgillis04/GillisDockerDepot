@@ -10,12 +10,12 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       DOMAINNAME: ${DOMAINNAME}
-      dry_run_adding_to_lidarr: true # can change this later when everything is working
+      dry_run_adding_to_lidarr: false # can change this later when everything is working
       app_name: Lidify
       auto_start: true
       auto_start_delay: 60
       app_url: https://lidify${HOST_SUFFIX}.${DOMAINNAME}
-      lidarr_address: http://localhost:${LIDARR_PORT} # Change this if Lidarr is not on the same server
+      lidarr_address: http://${SERVER_IP}:${LIDARR_PORT} # Change this if Lidarr is not on the same server
       lidarr_api_key: ${LIDARR_API_KEY}
       mode: Spotify
       metadata_profile_id: 1  # curl -X GET http://<lidarr-address>:8686/api/v1//metadataprofile -H "X-Api-Key: <api_key>" | jq '.[] | select(.name == "Your Metadata Profile Name") | {id, name}'
