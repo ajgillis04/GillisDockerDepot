@@ -38,7 +38,7 @@ labels:
      - "traefik.enable=true"
      # HTTP Routers
      - "traefik.http.routers.lidify-rtr.entrypoints=https"
-     - "traefik.http.routers.lidify-rtr.rule=Host(`lidify.gillisonline.com`)"
+     - "traefik.http.routers.lidify-rtr.rule=Host(`lidify.${DOMAINNAME}.com`)"
      - "traefik.http.routers.lidify-rtr.middlewares=chain-oauth@file"
      # Docker Network
      - "traefik.docker.network=mediaserver"
