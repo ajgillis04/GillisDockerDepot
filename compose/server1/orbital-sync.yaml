@@ -1,0 +1,35 @@
+﻿services:
+  orbital-sync:
+    container_name: orbital-sync.${HOST_NAME}
+    hostname: orbital-sync.${HOST_NAME}.local
+    image: mattwebbio/orbital-sync:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      PRIMARY_HOST_BASE_URL: http://${PIHOLE_PRI}
+      PRIMARY_HOST_PASSWORD_FILE: /run/secrets/pihole_password
+      SECONDARY_HOSTS_1_BASE_URL: http://${PIHOLE_SECONDARY}
+      SECONDARY_HOSTS_1_PASSWORD_FILE: /run/secrets/pihole_password
+      SYNC_V5_STATIC_DHCP_LEASES: true
+      SYNC_V5_AUDIT_LOG: true
+      INTERVAL_MINUTES: 60
+      UPDATE_GRAVITY: true
+      NOTIFY_ON_SUCCESS: true
+      NOTIFY_ON_FAILURE: true
+      NOTIFY_VIA_SHOOUTR: true
+      SHOOUTR_CHANNEL: ${DISCORD_TOKEN}
+      SHOOUTR_TOKEN: ${DISCORD_ID}
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/orbital-sync/config:/config
+      - ${DOCKERDIR}/logs/orbital-sync:/var/log
+    restart: always
+    secrets:
+      - pihole_password
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
