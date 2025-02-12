@@ -133,7 +133,7 @@ include:
   - ${COMPOSE_DIR}/mineos.yaml
   - ${COMPOSE_DIR}/musicbrainz.yaml
 #  - ${COMPOSE_DIR}/nextcloud.yaml
-  - ${COMPOSE_DIR}/oauth.yaml
+#  - ${COMPOSE_DIR}/oauth.yaml
 #  - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
@@ -152,7 +152,7 @@ include:
 #  - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
 #  - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
-  - ${COMPOSE_DIR}/traefik.yaml
+#  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
