@@ -86,11 +86,10 @@ services:
       TRAEFIK_ENTRYPOINTS_HTTPS_FORWARDEDHEADERS_TRUSTEDIPS: ${CLOUDFLARE_IPS},${LOCAL_NETWORK}
       
       # ENVIRONMENT VARIABLES
-      TZ: ${TZ}
       CF_DNS_API_TOKEN_FILE: /run/secrets/cf_dns_api_token
-      HTPASSWD_FILE: /run/secrets/basic_auth_credentials
-      DOMAINNAME: ${DOMAINNAME}
+      HTPASSWD_FILE: /run/secrets/basic_auth_credentials      
       # SECONDDOMAINNAME: ${SECONDDOMAINNAME}
+      
     ports:
       - target: 80
         published: 80
