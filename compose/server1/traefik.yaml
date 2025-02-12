@@ -72,6 +72,7 @@ services:
       # TLS & CERTIFICATES
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS: true
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_OPTIONS: tls-opts@file
+      # Testing comment next line while testing
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_CERTRESOLVER: dns-cloudflare
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_DOMAINS[0]_MAIN: ${DOMAINNAME}
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_DOMAINS[0]_SANS: "*.${DOMAINNAME}"
@@ -79,7 +80,7 @@ services:
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROVIDER: cloudflare
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_RESOLVERS: 1.1.1.1:53,1.0.0.1:53
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROPAGATION_DELAYBEFORECHECKS: 90
-       # Testing Let's Encrypt Staging Server disable after testing
+      # Testing Let's Encrypt Staging Server disable after testing
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
       
       # FORWARDED HEADERS
@@ -89,7 +90,7 @@ services:
       CF_DNS_API_TOKEN_FILE: /run/secrets/cf_dns_api_token
       HTPASSWD_FILE: /run/secrets/basic_auth_credentials      
       # SECONDDOMAINNAME: ${SECONDDOMAINNAME}
-      
+
     ports:
       - target: 80
         published: 80
