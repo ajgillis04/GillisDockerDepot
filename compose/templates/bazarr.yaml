@@ -5,9 +5,9 @@ services:
     hostname: bazarr.${HOST_NAME}.local
     image: lscr.io/linuxserver/bazarr:latest
     environment:
-      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
@@ -19,12 +19,12 @@ services:
       - ${DOCKERDIR}/logs/bazarr:/var/log
     restart: always
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges:true   
     labels:
       - "traefik.enable=true"
       ## HTTP Routers - Bypass
       - "traefik.http.routers.bazarr-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.bazarr-rtr-bypass.rule=Headers(`X-Api-Key`, `${BAZARR_API_KEY}`)"
+      - "traefik.http.routers.bazarr-rtr-bypass.rule=Host(`bazarr.${DOMAINNAME}`) && Header(`traefik-auth-bypass-key`, `${TRAEFIK_AUTH_BYPASS_KEY}`)"                                                                                                                          
       - "traefik.http.routers.bazarr-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.bazarr-rtr.entrypoints=https"
@@ -39,3 +39,4 @@ services:
       - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+

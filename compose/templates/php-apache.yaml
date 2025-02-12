@@ -29,7 +29,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.php-apache-rtr.entrypoints=https"
-      - "traefik.http.routers.php-apache-rtr.rule=Host(`www.${DOMAINNAME}`, `${DOMAINNAME}`)"
+      - "traefik.http.routers.php-apache-rtr.rule=Host(`www.${DOMAINNAME}`) || Host(`${DOMAINNAME}`)"
       - "traefik.http.routers.php-apache-rtr.tls=true"
       ## Middlewares
       - "traefik.http.routers.php-apache-rtr.middlewares=chain-no-auth@file"

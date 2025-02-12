@@ -21,17 +21,15 @@ services:
       - ${DOCKERDIR}/logs/lidarr:/var/log
     restart: always
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges:true    
     labels:
       - "traefik.enable=true"
-      ## HTTP Routers
+      ## HTTP Routers - Bypass
       - "traefik.http.routers.lidarr-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.lidarr-rtr-bypass.tls=true"
-      ## Middlewares
-      - "traefik.http.routers.lidarr-rtr-bypass.rule=Headers(`X-Api-Key`, `${LIDARR_API_KEY}`)"
+      - "traefik.http.routers.lidarr-rtr-bypass.rule=Host(`lidarr.${DOMAINNAME}`) && Header(`traefik-auth-bypass-key`, `${TRAEFIK_AUTH_BYPASS_KEY}`)"
       - "traefik.http.routers.lidarr-rtr-bypass.priority=100"
+      ## HTTP Routers
       - "traefik.http.routers.lidarr-rtr.entrypoints=https"
-      - "traefik.http.routers.lidarr-rtr.tls=true"
       - "traefik.http.routers.lidarr-rtr.rule=Host(`lidarr.${DOMAINNAME}`)"
       - "traefik.http.routers.lidarr-rtr.priority=99"
       - "traefik.http.routers.lidarr-rtr.middlewares=chain-oauth@file"
@@ -43,3 +41,4 @@ services:
       - "traefik.http.services.lidarr-svc.loadbalancer.server.port=8686"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+

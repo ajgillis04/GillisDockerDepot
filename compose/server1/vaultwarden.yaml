@@ -34,7 +34,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers - Bypass
       - "traefik.http.routers.vaultwarden-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.vaultwarden-rtr-bypass.rule=Host(`vault.${DOMAINNAME}`) && HeadersRegexp(`traefik-auth-bypass-key`, `${TRAEFIK_AUTH_BYPASS_KEY}`)"
+      - "traefik.http.routers.vaultwarden-rtr-bypass.rule=Host(`vault.${DOMAINNAME}`) && Header(`traefik-auth-bypass-key`, `${TRAEFIK_AUTH_BYPASS_KEY}`)"
       - "traefik.http.routers.vaultwarden-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.vaultwarden-rtr.entrypoints=https"
