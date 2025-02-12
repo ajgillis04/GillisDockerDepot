@@ -38,8 +38,7 @@ services:
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
-      - "traefik.http.routers.mineos-rtr.service=mineos-svc"
-      - "traefik.http.services.mineos-svc.loadbalancer.server.scheme=https"
+      - "traefik.http.routers.mineos-rtr.service=mineos-svc"      
       - "traefik.http.services.mineos-svc.loadbalancer.server.port=8443"
        ## Watchtower enabled?cd      
       - "com.centurylinklabs.watchtower.enable=true"
