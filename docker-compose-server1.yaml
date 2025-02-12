@@ -52,8 +52,8 @@ networks:
 secrets:
   awl_cf_token:
     file: ${SECRETSDIR}/awl_cf_token
-  cf_api_key:
-    file: ${SECRETSDIR}/    
+  basic_auth_credentials:
+    file: ${SECRETSDIR}/basic_auth_credentials
   cf_dns_api_token:
     file: ${SECRETSDIR}/cf_dns_api_token
   cf_email:
