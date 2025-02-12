@@ -107,7 +107,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.SERVICE_NAME-rtr.entrypoints=https"
       ## Middlewares
-      - "traefik.http.routers.SERVICE_NAME-rtr.rule=Host(SERVICE_NAME${HOST_SUFFIX}.${DOMAINNAME})"
+      - "traefik.http.routers.SERVICE_NAME-rtr.rule=Host(`SERVICE_NAME${HOST_SUFFIX}.${DOMAINNAME}`)"
       - "traefik.http.routers.SERVICE_NAME-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"

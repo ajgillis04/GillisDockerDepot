@@ -23,7 +23,7 @@
       ## HTTP Routers
       - "traefik.http.routers.musicbrainz-rtr.entrypoints=https"
       ## Middlewares
-      - "traefik.http.routers.musicbrainz-rtr.rule=Host(musicbrainz${HOST_SUFFIX}.${DOMAINNAME})"
+      - "traefik.http.routers.musicbrainz-rtr.rule=Host(`musicbrainz${HOST_SUFFIX}.${DOMAINNAME}`)"
       - "traefik.http.routers.musicbrainz-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
