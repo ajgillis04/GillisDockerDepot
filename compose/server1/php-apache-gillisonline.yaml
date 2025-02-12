@@ -41,7 +41,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.gillisonline-rtr.entrypoints=https"
-      - "traefik.http.routers.gillisonline-rtr.rule=Host(`www.${DOMAINNAME}`, `${DOMAINNAME}`)"
+      - "traefik.http.routers.gillisonline-rtr.rule=Host(`www.${DOMAINNAME}`) || Host(`${DOMAINNAME}`)"
       - "traefik.http.routers.gillisonline-rtr.tls=true"
       ## Middlewares
       - "traefik.http.routers.gillisonline-rtr.middlewares=chain-no-auth@file"
