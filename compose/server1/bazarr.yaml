@@ -23,8 +23,8 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers - Bypass
-      - "traefik.http.routers.bazarr-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.bazarr-rtr-bypass.rule=Headers(`X-Api-Key`, `${BAZARR_API_KEY}`)"
+      - "traefik.http.routers.bazarr-rtr-bypass.entrypoints=https"      
+      - "traefik.http.routers.bazarr-rtr-bypass.rule=HeadersRegexp(`X-Api-Key`, `${BAZARR_API_KEY}`)"
       - "traefik.http.routers.bazarr-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.bazarr-rtr.entrypoints=https"

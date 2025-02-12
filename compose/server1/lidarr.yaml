@@ -28,7 +28,7 @@ services:
       - "traefik.http.routers.lidarr-rtr-bypass.entrypoints=https"
       - "traefik.http.routers.lidarr-rtr-bypass.tls=true"
       ## Middlewares
-      - "traefik.http.routers.lidarr-rtr-bypass.rule=Headers(`X-Api-Key`, `${LIDARR_API_KEY}`)"
+      - "traefik.http.routers.lidarr-rtr-bypass.rule=HeadersRegexp(`X-Api-Key`, `${LIDARR_API_KEY}`)"      
       - "traefik.http.routers.lidarr-rtr-bypass.priority=100"
       - "traefik.http.routers.lidarr-rtr.entrypoints=https"
       - "traefik.http.routers.lidarr-rtr.tls=true"
