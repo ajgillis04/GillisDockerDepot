@@ -33,7 +33,7 @@ services:
       - "traefik.http.routers.mineos-rtr.rule=Host(`mineos.${DOMAINNAME}`)"
       - "traefik.http.routers.mineos-rtr.tls=true"
       ## Middlewares
-      - "traefik.http.routers.mineos-rtr.middlewares=chain-oauth@file"
+#      - "traefik.http.routers.mineos-rtr.middlewares=chain-oauth@file"
 #      - "traefik.http.middlewares.add-mineos.addPrefix.prefix=/admin"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
