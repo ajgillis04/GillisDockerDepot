@@ -1,0 +1,596 @@
+name: mediaserver
+services:
+  cloudflare-ddns:
+    container_name: cloudflare-ddns.GillisNAS
+    environment:
+      API_KEY_FILE: /run/secrets/cf_token
+      PROXIED: "true"
+      ZONE: gillisonline.com
+    hostname: cloudflare-ddns.GillisNAS.local
+    image: oznu/cloudflare-ddns:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    networks:
+      mediaserver: null
+    restart: always
+    secrets:
+      - source: cf_token
+        target: /run/secrets/cf_token
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/cloudflare-ddns/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/cloudflare-ddns
+        target: /var/log
+        bind:
+          create_host_path: true
+  cloudflare-ddnsawl:
+    container_name: cloudflare-ddnsawl.GillisNAS
+    environment:
+      API_KEY_FILE: /run/secrets/awl_cf_token
+      PROXIED: "true"
+      ZONE: awlconstruction.ca
+    hostname: cloudflare-ddnsawl.GillisNAS.local
+    image: oznu/cloudflare-ddns:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    networks:
+      mediaserver: null
+    restart: always
+    secrets:
+      - source: awl_cf_token
+        target: /run/secrets/awl_cf_token
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/cloudflare-ddnsawl/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/cloudflare-ddnsawl
+        target: /var/log
+        bind:
+          create_host_path: true
+  dozzle:
+    container_name: dozzle.GillisNAS
+    environment:
+      DOZZLE_FILTER: status=running
+      DOZZLE_LEVEL: info
+    hostname: dozzle.GillisNAS.local
+    image: amir20/dozzle:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.dozzle-rtr.entrypoints: https
+      traefik.http.routers.dozzle-rtr.middlewares: chain-oauth@file
+      traefik.http.routers.dozzle-rtr.rule: Host(`dozzle.gillisonline.com`)
+      traefik.http.routers.dozzle-rtr.service: dozzle-svc
+      traefik.http.services.dozzle-svc.loadbalancer.server.port: "8080"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 8080
+        published: "8083"
+        protocol: tcp
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/dozzle/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/dozzle
+        target: /var/log
+        bind:
+          create_host_path: true
+  heimdall:
+    container_name: heimdall.GillisNAS
+    environment:
+      PGID: "100"
+      PUID: "1004"
+      TZ: America/Toronto
+    hostname: heimdall.GillisNAS.local
+    image: linuxserver/heimdall:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.heimdall-rtr.entrypoints: https
+      traefik.http.routers.heimdall-rtr.middlewares: chain-oauth@file
+      traefik.http.routers.heimdall-rtr.rule: Host(`heimdall.gillisonline.com`)
+      traefik.http.routers.heimdall-rtr.service: heimdall-svc
+      traefik.http.services.heimdall-svc.loadbalancer.server.port: "80"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "85"
+        protocol: tcp
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/heimdall/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/heimdall
+        target: /var/log
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/heimdall/nginx
+        target: /var/log/nginx
+        bind:
+          create_host_path: true
+  heimdallint:
+    container_name: heimdallint.GillisNAS
+    environment:
+      PGID: "100"
+      PUID: "1004"
+      TZ: America/Toronto
+    hostname: heimdallint.GillisNAS.local
+    image: linuxserver/heimdall:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.heimdallint-rtr.entrypoints: https
+      traefik.http.routers.heimdallint-rtr.middlewares: chain-oauth@file
+      traefik.http.routers.heimdallint-rtr.rule: Host(`heimdallint.gillisonline.com`)
+      traefik.http.routers.heimdallint-rtr.service: heimdallint-svc
+      traefik.http.services.heimdallint-svc.loadbalancer.server.port: "80"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "86"
+        protocol: tcp
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/heimdallint/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/heimdallint
+        target: /var/log
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/heimdallint/nginx
+        target: /var/log/nginx
+        bind:
+          create_host_path: true
+  php-apache-gillisonline:
+    container_name: php-apache-gillisonline.GillisNAS
+    entrypoint:
+      - sh
+      - -c
+      - if [ ! -f /etc/apache2/apache2.conf ]; then cp -r /etc/apache2/* /etc/apache2; fi; exec apache2-foreground
+    environment:
+      APACHE_CONFDIR: /etc/apache2
+      PGID: "0"
+      PUID: "1004"
+      TZ: America/Toronto
+    hostname: php-apache-gillisonline.GillisNAS.local
+    image: php:apache
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.gillisonline-rtr.entrypoints: https
+      traefik.http.routers.gillisonline-rtr.middlewares: chain-no-auth@file
+      traefik.http.routers.gillisonline-rtr.rule: Host(`www.gillisonline.com`, `gillisonline.com`)
+      traefik.http.routers.gillisonline-rtr.service: gillisonline-svc
+      traefik.http.routers.gillisonline-rtr.tls: "true"
+      traefik.http.services.gillisonline-svc.loadbalancer.server.port: "80"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "81"
+        protocol: tcp
+      - mode: ingress
+        target: 443
+        published: "447"
+        protocol: tcp
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/php-apache-gillisonline/apache2
+        target: /etc/apache2
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/php-apache-gillisonline/var/www/html
+        target: /var/www/html
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/php-apache-gillisonline
+        target: /var/log/apache2
+        bind:
+          create_host_path: true
+  picard:
+    container_name: picard.GillisNAS
+    environment:
+      DISPLAY_HEIGHT: "1080"
+      DISPLAY_WIDTH: "1920"
+      PGID: "0"
+      PUID: "1004"
+      TZ: America/Toronto
+    hostname: picard.GillisNAS.local
+    image: mikenye/picard:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.picard-rtr.entrypoints: https
+      traefik.http.routers.picard-rtr.middlewares: chain-oauth@file
+      traefik.http.routers.picard-rtr.rule: Host(`picard.gillisonline.com`)
+      traefik.http.routers.picard-rtr.service: picard-svc
+      traefik.http.routers.picard-rtr.tls: "true"
+      traefik.http.services.picard-svc.loadbalancer.server.port: "5800"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 5800
+        published: "5800"
+        protocol: tcp
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/picard/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Media/Music
+        target: /Music
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Media/Videos/MusicVideos
+        target: /MusicVideos
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/picard
+        target: /var/log
+        bind:
+          create_host_path: true
+  pinchflat:
+    container_name: pinchflat.GillisNAS
+    environment:
+      PGID: "0"
+      PUID: "1004"
+      TZ: America/Toronto
+    hostname: pinchflat.GillisNAS.local
+    image: ghcr.io/kieraneglin/pinchflat:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.pinchflat-rtr.entrypoints: https
+      traefik.http.routers.pinchflat-rtr.middlewares: chain-oauth@file
+      traefik.http.routers.pinchflat-rtr.rule: Host(`pinchflat.gillisonline.com`)
+      traefik.http.routers.pinchflat-rtr.service: pinchflat-svc
+      traefik.http.routers.pinchflat-rtr.tls: "true"
+      traefik.http.services.pinchflat-svc.loadbalancer.server.port: "8945"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 8945
+        published: "8945"
+        protocol: tcp
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/pinchflat/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Media/Videos/MusicVideos/Downloads
+        target: /downloads
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/pinchflat
+        target: /var/log
+        bind:
+          create_host_path: true
+  portainer:
+    command:
+      - -H
+      - unix:///var/run/docker.sock
+    container_name: portainer.GillisNAS
+    environment:
+      TZ: America/Toronto
+    hostname: portainer.GillisNAS.local
+    image: portainer/portainer-ce:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.portainer-rtr.entrypoints: https
+      traefik.http.routers.portainer-rtr.middlewares: chain-oauth@file
+      traefik.http.routers.portainer-rtr.rule: Host(`portainer.gillisonline.com`)
+      traefik.http.routers.portainer-rtr.service: portainer-svc
+      traefik.http.services.portainer-svc.loadbalancer.server.port: "9000"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 9000
+        published: "9000"
+        protocol: tcp
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/portainer/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/portainer/data
+        target: /data
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/portainer
+        target: /var/log
+        bind:
+          create_host_path: true
+  tdarr:
+    container_name: tdarr.GillisNAS
+    environment:
+      PGID: "0"
+      PUID: "1004"
+      TZ: America/Toronto
+      inContainer: "true"
+      internalNode: "true"
+      nodeID: tdarr_node.GillisNAS
+      nodeName: tdarr_node.GillisNAS
+      serverIP: tdarr.GillisNAS.local
+      serverPort: "8266"
+      webUIPort: "8265"
+    hostname: tdarr.GillisNAS.local
+    image: haveagitgat/tdarr:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.tdarr-rtr.entrypoints: https
+      traefik.http.routers.tdarr-rtr.middlewares: chain-oauth@file
+      traefik.http.routers.tdarr-rtr.rule: Host(`tdarr.gillisonline.com`)
+      traefik.http.routers.tdarr-rtr.service: tdarr-svc
+      traefik.http.routers.tdarr-rtr.tls: "true"
+      traefik.http.services.tdarr-svc.loadbalancer.server.port: "8265"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 8265
+        published: "8265"
+        protocol: tcp
+      - mode: ingress
+        target: 8266
+        published: "8266"
+        protocol: tcp
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/tdarr/app/server
+        target: /app/server
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/tdarr/app/configs
+        target: /app/configs
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/tdarr/transcode
+        target: /transcode
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Media
+        target: /media
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/tdarr
+        target: /app/logs
+        bind:
+          create_host_path: true
+  watchtower:
+    container_name: watchtower.GillisNAS
+    environment:
+      PGID: "0"
+      PUID: "1004"
+      TZ: America/Toronto
+      WATCHTOWER_INCLUDE_RESTARTING: "true"
+      WATCHTOWER_LABEL_ENABLE: "true"
+      WATCHTOWER_NOTIFICATION_TEMPLATE: '{{range .}}{{.Time.Format "12-01-2020 15:04:05"}} ({{.Level}}): {{.Message}}{{println}}{{end}}'
+      WATCHTOWER_NOTIFICATION_URL: discord://S9rbXrofURSkOp6CVmO0YBrIt2R5VyDFXteZwDjacDrjoA8bPWDN8SDgPlWPYFjOSLVn@1329585347360718948
+      WATCHTOWER_NOTIFICATIONS: shoutrrr
+      WATCHTOWER_POLL_INTERVAL: "36000"
+      WATCHTOWER_REMOVE_VOLUMES: "true"
+    hostname: watchtower.GillisNAS.local
+    image: containrrr/watchtower:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    networks:
+      mediaserver: null
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/watchtower/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/watchtower
+        target: /var/log
+        bind:
+          create_host_path: true
+  wireguard:
+    cap_add:
+      - NET_ADMIN
+    container_name: wireguard.GillisNAS
+    environment:
+      ALLOWEDIPS: 0.0.0.0/0
+      INTERNAL_SUBNET: 192.168.10.0
+      LOG_CONFS: "true"
+      PEERDNS: 192.168.2.12
+      PEERS: AndyPhone,AndyLaptop,AaronPhone,AaronLaptop,AndrewPhone,AndrewLaptop,MichellePhone,SelenaPhone,SelenaLaptop,ColinPhone
+      PGID: "0"
+      PUID: "1004"
+      SERVERPORT: "51820"
+      SERVERURL: vpn.gillisonline.com
+      TZ: America/Toronto
+    hostname: wireguard.GillisNAS.local
+    image: lscr.io/linuxserver/wireguard:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    network_mode: host
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/wireguard/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/wireguard/lib/modules
+        target: /lib/modules
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/wireguard
+        target: /var/log
+        bind:
+          create_host_path: true
+  wizarr:
+    container_name: wizarr.GillisNAS
+    environment:
+      PGID: "0"
+      PUID: "1004"
+      TZ: America/Toronto
+    hostname: wizarr.GillisNAS.local
+    image: ghcr.io/wizarrrr/wizarr:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.docker.network: mediaserver
+      traefik.enable: "true"
+      traefik.http.routers.wizarr-rtr.entrypoints: https
+      traefik.http.routers.wizarr-rtr.middlewares: chain-oauth@file
+      traefik.http.routers.wizarr-rtr.rule: Host(`wizarr.gillisonline.com`)
+      traefik.http.routers.wizarr-rtr.service: wizarr-svc
+      traefik.http.services.wizarr-svc.loadbalancer.server.port: "5690"
+    networks:
+      mediaserver: null
+    ports:
+      - mode: ingress
+        target: 5690
+        published: "5690"
+        protocol: tcp
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/wizarr/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/wizarr/data/database
+        target: /data/database
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/wizarr
+        target: /var/log
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /share/Docker/GillisDockerDepot/appdata/logs/wizarr/nginx
+        target: /var/log/nginx
+        bind:
+          create_host_path: true
+networks:
+  mediaserver:
+    name: mediaserver
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+secrets:
+  awl_cf_token:
+    name: mediaserver_awl_cf_token
+    file: /share/Docker/GillisDockerDepot/secrets/awl_cf_token
+  cf_token:
+    name: mediaserver_cf_token
+    file: /share/Docker/GillisDockerDepot/secrets/cf_token
