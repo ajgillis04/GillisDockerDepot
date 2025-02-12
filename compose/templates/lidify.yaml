@@ -10,27 +10,25 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       DOMAINNAME: ${DOMAINNAME}
-      dry_run_adding_to_lidarr: false # can change this later when everything is working
       app_name: Lidify
       auto_start: true
-      auto_start_delay: 60
       app_url: https://lidify${HOST_SUFFIX}.${DOMAINNAME}
-      lastfm_api_key: ${LASTFM_API_KEY}
-      lastfm_api_secret: ${LASTFM_API_SECRET}
+      last_fm_api_key: ${LASTFM_API_KEY}
+      last_fm_api_secret: ${LASTFM_API_SECRET}
       lidarr_address: http://${SERVER_IP}:${LIDARR_PORT} # Change this if Lidarr is not on the same server
       lidarr_api_key: ${LIDARR_API_KEY}
-      mode: Last.fm
-      metadata_profile_id: 1  # curl -X GET http://<lidarr-address>:8686/api/v1//metadataprofile -H "X-Api-Key: <api_key>" | jq '.[] | select(.name == "Your Metadata Profile Name") | {id, name}'
+      mode: LastFM
+      metadata_profile_id: 1  # curl -X GET "http://[IP_ADDRESS]:8686/api/v1/metadata" -H "X-Api-Key: [YOUR_API_KEY]" | jq '.[] | select(.name == "Kodi (XBMC) / Emby") | {id, name}'
       root_folder_path: ${MEDIASHARE}/Music # Should match the root folder for music in Lidarr
-      search_for_missing_albums: false
-      quality_profile_id: 3 # curl -X GET http://<lidarr-address>:8686/api/v1/qualityProfile -H "X-Api-Key: <api_key>" | jq '.[] | select(.name == "Your Quality Profile Name") | {id, name}'
+      quality_profile_id: 2 # curl -X GET "http://[IP_ADDRESS]:8686/api/v1/qualityProfile" -H "X-Api-Key: [YOUR_API_KEY]" | jq '.[] | select(.name == "HQ") | {id, name}'
+
     networks:
       - mediaserver
     ports:
       - ${LIDIFY_PORT}:5000
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/lidify/config:/lidify/config
-      - ${DOCKERDIR}/logs/lidify:/var/log
     restart: always
     security_opt:
       - no-new-privileges:true    
