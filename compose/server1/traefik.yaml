@@ -3,16 +3,16 @@
 # Notes:
 # Make sure acme.json is created before first run
 #   New-Item -ItemType File -Path "C:\path\to\your\docker\directory\acme.json" -Force
-#   mkdir traefik3
-#   mkdir traefik3/acme
-#   mkdir traefik3/rules
-#   touch acme/acme.json
-#   chmod 600 acme/acme.json
-#   mkdir path/to/logs/traefik
-#   touch path/to/logs/traefik.log
-#   touch path/to/logs/access.log
+#   mkdir traefik
+#   mkdir traefik/acme
+#   mkdir traefik/rules
+#   touch traefik/acme/acme.json
+#   chmod 600 traefik/acme/acme.json
+#   mkdir ${DOCKERDIR}/logs/traefik
+#   touch ${DOCKERDIR}/logs/traefik/traefik.log
+#   touch ${DOCKERDIR}/logs/traefik//access.log
 #   if testing find line below and uncomment
-#    --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
+#    -TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
 #
 #   Check logs/traefik.log and logs/access.log for errors and connections.
 
@@ -53,7 +53,7 @@ services:
       # LOGGING
       TRAEFIK_LOG: true
       TRAEFIK_LOG_FILEPATH: /logs/traefik.log
-      TRAEFIK_LOG_LEVEL: DEBUG
+      TRAEFIK_LOG_LEVEL: DEBUG # DEBUG, INFO, WARN, ERROR, FATAL, PANIC. Set debug for testing
       
       # ACCESS LOG
       TRAEFIK_ACCESSLOG: true
@@ -79,6 +79,8 @@ services:
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROVIDER: cloudflare
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_RESOLVERS: 1.1.1.1:53,1.0.0.1:53
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROPAGATION_DELAYBEFORECHECKS: 90
+       # Testing Let's Encrypt Staging Server disable after testing
+      TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
       
       # FORWARDED HEADERS
       TRAEFIK_ENTRYPOINTS_HTTPS_FORWARDEDHEADERS_TRUSTEDIPS: ${CLOUDFLARE_IPS},${LOCAL_NETWORK}
