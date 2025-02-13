@@ -25,14 +25,14 @@ networks:
     ipam:
       config:
         - subnet: 172.30.0.0/24
-    # external: true # use if not managing network with docker-compose.yaml
+    external: true # use if not managing network with docker-compose.yaml
   default:
     driver: bridge
  #   ipam:
  #     config:
  #       - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
  #         gateway: 192.168.2.1        
-    # external: true # use if not managing network with docker-compose.yaml
+    external: true # use if not managing network with docker-compose.yaml
   pihole_network:
     name: pihole_network
     #driver: macvlan #does not work on windows
@@ -41,7 +41,7 @@ networks:
       config:
         - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
           gateway: 192.168.2.1    
-    # external: true # use if not managing network with docker-compose.yaml
+    external: true # use if not managing network with docker-compose.yaml
   nextcloud-aio:
     name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
     driver: bridge
