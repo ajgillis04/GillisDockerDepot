@@ -132,7 +132,7 @@ include:
 #  - ${COMPOSE_DIR}/mariadb.yaml
   - ${COMPOSE_DIR}/mineos.yaml
   - ${COMPOSE_DIR}/musicbrainz.yaml
-#  - ${COMPOSE_DIR}/nextcloud.yaml
+  - ${COMPOSE_DIR}/nextcloud.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
 #  - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
