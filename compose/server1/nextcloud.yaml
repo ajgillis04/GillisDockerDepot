@@ -1,4 +1,14 @@
 # Nextcloud - An open-source cloud storage solution.
+# Nextcloud is a finicky beast if you get into trouble if you get in trouble with it start over
+# docker stop $(docker ps -a -q --filter name=nextcloud)
+# docker rm $(docker ps -a -q --filter name=nextcloud)
+# docker volume rm $(docker volume ls -q --filter name=nextcloud)
+# docker network rm $(docker network ls -q --filter name=nextcloud)
+# sudo rm -rf /share/CACHEDEV1_DATA/Container/container-station-data/lib/docker/volumes/nextcloud/_data
+# sudo rm -rf /share/CACHEDEV1_DATA/Container/container-station-data/lib/docker/volumes/nextcloud
+
+
+
 
 # *************************** VOLUMES ******************************************
 # This volume is required to make nextcloud_aio_mastercontainer work
@@ -30,7 +40,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
       - ${DOCKERDIR}/nextcloud/config:/var/www/html/config
-      - ${DOCKERDIR}/nextcloud/homes:/homes
+      - /share/homes:/homes
       - ${NEXTCLOUD_EXSTORAGE}:/exstorage
       - ${SHAREDDIR}:/shared
       - ${DOCKERDIR}/logs/nextcloud:/var/www/html/data/nextcloud.log
