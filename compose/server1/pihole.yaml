@@ -25,10 +25,13 @@ services:
       FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,local
       FTLCONF_debug_api: true
       TAIL_FTL_LOG: '1' # or '0' to disable
-      DHCP_ACTIVE: true
-      DHCP_START: 192.168.2.50
-      DHCP_END: 192.168.2.255
-      DHCP_ROUTER: 192.168.2.1
+      FTLCONF_dhcp_active: true      
+      FTLCONF_dhcp_start: 192.168.2.50
+      FTLCONF_dhcp_end: 192.168.2.255
+      FTLCONF_dhcp_router: 192.168.2.1
+      FTLCONF_dhcp_leaseTime: 30d
+      FTLCONF_dns_domain: local
+      FTLCONF_dhcp_ipv6: true
       TEMPERATUREUNIT: c
     networks:
       pihole_network:
@@ -40,6 +43,18 @@ services:
       - ${DOCKERDIR}/logs/pihole-FTL:/var/log/pihole-FTL
     restart: always
     secrets:
-      - pihole_password
+      - pihole_password    
     labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.pihole-rtr.entrypoints=https"
+      - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.${DOMAINNAME}`)"      
+      - "traefik.http.routers.pihole-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.pihole-rtr.service=pihole-svc"
+      - "traefik.http.routers.pihole-rtr-bypass.service=pihole-svc"
+      - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
+      ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"

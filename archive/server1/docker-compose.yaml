@@ -1378,38 +1378,38 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 # Pihole - Ad-blocker
-  pihole:
-    image: pihole/pihole:latest
-    container_name: pihole
-    restart: always
+ # pihole:
+ #   image: pihole/pihole:latest
+ #   container_name: pihole
+ #   restart: always
    #docker network create --driver=macvlan --gateway=192.168.2.1 --subnet=192.168.2.0/24 --ip-range=192.168.2.1/26 -o parent=eth0 pihole_network
-    networks:
-      pihole_network:
-        ipv4_address: 192.168.2.12
-    cap_add:
-      - NET_ADMIN
-    dns:
+ #   networks:
+ #     pihole_network:
+ #       ipv4_address: 192.168.2.12
+ #   cap_add:
+ #     - NET_ADMIN
+ #   dns:
 #      - 127.0.0.1
-      - 1.1.1.1
-    ports:
-      - "54:53/tcp"
-      - "54:53/udp"
-      - "67:67/udp"
-      - "83:80/tcp"
-      - "446:446/tcp"
-    volumes:
-       - $DOCKERDIR/pihole/dnsmasq.d:/etc/dnsmasq.d
-       - $DOCKERDIR/pihole:/etc/pihole
-    environment:
-      <<: *default-tz      
-      WEBPASSWORD_FILE: /run/secrets/pihole_password
-      ServerIP: 192.168.2.12
-      VIRTUAL_HOST: "pihole"
-      IPv6: "false"
-      DNSMASQ_LISTENING: 'all'      
-    secrets:
-      - pihole_password
-    labels:
+#      - 1.1.1.1
+#    ports:
+#      - "54:53/tcp"
+#      - "54:53/udp"
+#      - "67:67/udp"
+#      - "83:80/tcp"
+#      - "446:446/tcp"
+#    volumes:
+#       - $DOCKERDIR/pihole/dnsmasq.d:/etc/dnsmasq.d
+#       - $DOCKERDIR/pihole:/etc/pihole
+#    environment:
+#      <<: *default-tz      
+#      WEBPASSWORD_FILE: /run/secrets/pihole_password
+#      ServerIP: 192.168.2.12
+#      VIRTUAL_HOST: "pihole"
+#      IPv6: "false"
+#      DNSMASQ_LISTENING: 'all'      
+#    secrets:
+#      - pihole_password
+ #   labels:
 #       - "traefik.enable=true"
 #       - "traefik.docker.network=pihole_network" #try if container is on multiple networks or built on different network first time
       ## HTTP Routers
@@ -1423,7 +1423,7 @@ services:
 #       - "traefik.http.routers.pihole-rtr.service=pihole-svc"
 #       - "traefik.http.services.pihole-svc.loadbalancer.server.port=8443"   
 #       - "traefik.http.services.pihole-svc.loadbalancer.server.scheme=https" #add if cannot reach subdomain.domain.com needed for nextcloud and mienos
-      - "com.centurylinklabs.watchtower.enable=true"
+#      - "com.centurylinklabs.watchtower.enable=true"
 
 #Minecraft server builder
   mineos:
