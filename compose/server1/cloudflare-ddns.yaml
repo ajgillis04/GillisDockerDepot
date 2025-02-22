@@ -9,6 +9,7 @@ services:
       PROXIED: 'true'
       DOMAINNAME: ${DOMAINNAME}
       ZONE: ${DOMAINNAME}
+      CRON: '*/15 * * * *'
     networks:
       - mediaserver
     volumes:

@@ -8,6 +8,7 @@ services:
       API_KEY_FILE: /run/secrets/awl_cf_token
       PROXIED: 'true'
       ZONE: ${SECONDDOMAINNAME}
+      CRON: '*/15 * * * *'
     networks:
       - mediaserver
     volumes:
