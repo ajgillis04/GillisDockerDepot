@@ -14,6 +14,7 @@ services:
          # Required if you are using Pi-hole as your DHCP server, else not needed    
       - NET_ADMIN
       - SYS_TIME
+      - SYS_NICE
     environment:
       TZ: ${TZ}      
       VIRTUAL_HOST: pihole.${HOST_NAME}
