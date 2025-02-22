@@ -1,8 +1,11 @@
-﻿services:
+﻿#https://login.tailscale.com/a/1699afd001794f
+
+services:
   tailscale:
     container_name: tailscale.${HOST_NAME}
     hostname: tailscale.${HOST_NAME}.local
     image: tailscale/tailscale:latest
+    network_mode: host
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -11,8 +14,8 @@
       PUID: ${PUID}
       PGID: ${PGID}
       DOMAINNAME: ${DOMAINNAME}
-    networks:
-      - mediaserver      
+    #networks:
+    #  - mediaserver      
     volumes:
       - /dev/net/tun:/dev/net/tun
       - ${DOCKERDIR}/tailscale/var/lib:/var/lib      
