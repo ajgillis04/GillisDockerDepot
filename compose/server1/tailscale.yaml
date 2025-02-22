@@ -1,0 +1,25 @@
+﻿services:
+  tailscale:
+    container_name: tailscale.${HOST_NAME}
+    hostname: tailscale.${HOST_NAME}.local
+    image: tailscale/tailscale:latest
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
+    networks:
+      - mediaserver      
+    volumes:
+      - /dev/net/tun:/dev/net/tun
+      - ${DOCKERDIR}/tailscale/var/lib:/var/lib      
+      - ${DOCKERDIR}/logs/tailscale:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

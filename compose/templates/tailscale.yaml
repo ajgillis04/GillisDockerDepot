@@ -1,0 +1,36 @@
+﻿services:
+  tailscale:
+    container_name: tailscale.${HOST_NAME}
+    hostname: tailscale.${HOST_NAME}.local
+    image: tailscale:latest # Replace with the Docker image name, e.g., amir20/dozzle:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
+    networks:
+      - mediaserver
+    ports:
+      - ${tailscale_PORT}:80  # Add tailscale_PORT to your .env file.
+    volumes:
+      # Uncomment if needed
+      # - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKERDIR}/tailscale/config:/config
+      - ${DOCKERDIR}/logs/tailscale:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.tailscale-rtr.entrypoints=https"
+      ## Middlewares
+      - "traefik.http.routers.tailscale-rtr.rule=Host(`tailscale${HOST_SUFFIX}.${DOMAINNAME}`)"
+      - "traefik.http.routers.tailscale-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.tailscale-rtr.service=tailscale-svc"
+      - "traefik.http.services.tailscale-svc.loadbalancer.server.port=80"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
