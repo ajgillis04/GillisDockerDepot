@@ -15,6 +15,7 @@ services:
       - NET_ADMIN
       - SYS_TIME
       - SYS_NICE
+      - CAP_NET_RAW
     environment:
       TZ: ${TZ}      
       HOSTNAME: pihole.${HOST_NAME}
@@ -35,8 +36,8 @@ services:
     volumes:
       - ${DOCKERDIR}/pihole/etc:/etc/pihole
       - ${DOCKERDIR}/pihole/dnsmasq.d:/etc/dnsmasq.d
-      - ${DOCKERDIR}/logs/pihole:/var/log
-      - ${DOCKERDIR}/logs/pihole/lighttpd:/var/log/lighttpd
+      - ${DOCKERDIR}/logs/pihole:/var/log/pihole
+      - ${DOCKERDIR}/logs/pihole-FTL:/var/log/pihole-FTL
     restart: always
     secrets:
       - pihole_password
