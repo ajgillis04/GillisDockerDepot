@@ -30,7 +30,7 @@ services:
       FTLCONF_dhcp_end: 192.168.2.254
       FTLCONF_dhcp_router: 192.168.2.1
       FTLCONF_dhcp_leaseTime: 30d
-      #FTLCONF_dns_domain: local
+      FTLCONF_dns_domain: local
       FTLCONF_dhcp_ipv6: true
       TEMPERATUREUNIT: c
     networks:
