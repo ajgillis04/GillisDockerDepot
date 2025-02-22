@@ -16,8 +16,8 @@ services:
       - SYS_TIME
     environment:
       TZ: ${TZ}      
-      VIRTUAL_HOST: pihole.${HOST_NAME}      
-      FTLCONF_webserver_api_password_file: /run/secrets/pihole_password
+      VIRTUAL_HOST: pihole.${HOST_NAME}
+      FTLCONF_webserver_api_password_FILE: /run/secrets/pihole_password
       FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
       FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,local
       FTLCONF_debug_api: true
