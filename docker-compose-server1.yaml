@@ -35,13 +35,16 @@ networks:
     external: true # use if not managing network with docker-compose.yaml
   pihole_network:
     name: pihole_network
-    #driver: macvlan #does not work on windows
-    driver: bridge
+    #driver: bridge
+    driver: macvlan #does not work on windows    
+    driver_opts:
+      parent: eth4  # Replace with your actual network interface
     ipam:
       config:
-        - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
-          gateway: 192.168.2.1    
-    external: true # use if not managing network with docker-compose.yaml
+        - subnet: 192.168.2.0/24
+          gateway: 192.168.2.1
+          ip_range: 192.168.2.12/32
+    external: true # use if not managing network with docker-compose.yaml    
   nextcloud-aio:
     name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
     driver: bridge
@@ -140,7 +143,7 @@ include:
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
 # - ${COMPOSE_DIR}/phpmyadmin.yaml
   - ${COMPOSE_DIR}/picard.yaml
-#  - ${COMPOSE_DIR}/pihole.yaml
+  - ${COMPOSE_DIR}/pihole.yaml
   - ${COMPOSE_DIR}/pinchflat.yaml
 #  - ${COMPOSE_DIR}/plex.yaml
   - ${COMPOSE_DIR}/portainer.yaml
