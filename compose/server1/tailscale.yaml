@@ -24,8 +24,7 @@ services:
       - ${DOCKERDIR}/logs/tailscale:/var/log
     restart: always
     security_opt:
-      - no-new-privileges:true
-    command: tailscaled --state=/var/lib/tailscale/tailscaled.state ${TS_EXTRA_ARGS}
+      - no-new-privileges:true    
     labels:
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
