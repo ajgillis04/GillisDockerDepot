@@ -24,7 +24,10 @@ services:
       SERVERPORT: 51820
       SERVERURL: vpn.${DOMAINNAME}      
       LOG_CONFS: true
-    network_mode: host 
+    #network_mode: host 
+    networks:
+      pihole_network:
+        ipv4_address: 192.168.2.14
     volumes:
       - ${DOCKERDIR}/wireguard/config:/config
       - ${DOCKERDIR}/wireguard/lib/modules:/lib/modules
