@@ -17,7 +17,7 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
       DOMAIN: ${DOMAINNAME}
-      ALLOWEDIPS: 0.0.0.0/0
+      ALLOWEDIPS: 0.0.0.0/0,192.168.2.0/24
       PEERDNS: ${PIHOLE_PRI}
       INTERNAL_SUBNET: 192.168.10.0
       PEERS: "AndyPhone,AndyLaptop,AaronPhone,AaronLaptop,AndrewPhone,AndrewLaptop,MichellePhone,SelenaPhone,SelenaLaptop,ColinPhone,AndyTest"
