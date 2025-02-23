@@ -160,6 +160,6 @@ include:
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
-#  - ${COMPOSE_DIR}/wireguard.yaml
+  - ${COMPOSE_DIR}/wireguard.yaml
   - ${COMPOSE_DIR}/wizarr.yaml
 
