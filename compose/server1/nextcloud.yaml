@@ -24,9 +24,9 @@ services:
     environment:
       APACHE_PORT: 11000
       APACHE_IP_BINDING: ${SERVER_IP}
-      NEXTCLOUD_DATADIR: /homes
-      NEXTCLOUD_MOUNT: /exstorage # Allows the Nextcloud container to access the chosen directory on the host
-      NEXTCLOUD_TRUSTED_CACERTS_DIR: /shared
+      NEXTCLOUD_DATADIR: ${NEXTCLOUD_HOMES}\nextcloud # all user folders and data will be kept here
+      NEXTCLOUD_MOUNT: ${NEXTCLOUD_EXSTORAGE} # Allows the Nextcloud container to access the chosen directory on the host
+      NEXTCLOUD_TRUSTED_CACERTS_DIR: ${SHAREDDIR} # CA certificates in this directory will be trusted by the OS of the nexcloud container (Useful e.g. for LDAPS) See See
       SKIP_DOMAIN_VALIDATION: true
     networks:
       - nextcloud-aio
@@ -39,9 +39,3 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
-      - ${DOCKERDIR}/nextcloud/config:/var/www/html/config
-      - /share/homes:/homes
-      - ${NEXTCLOUD_EXSTORAGE}:/exstorage
-      - ${SHAREDDIR}:/shared
-      - ${DOCKERDIR}/logs/nextcloud:/var/www/html/data/nextcloud.log
-      - ${DOCKERDIR}/logs/nextcloud/supervisord:/var/log/supervisord
