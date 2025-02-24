@@ -9,6 +9,7 @@
 .env
 php-apache-awl.yaml
 php-apache-gillisonline.yaml
+create_users_nextcloud.sh
 
 # Logs
 logs/
