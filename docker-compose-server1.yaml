@@ -43,12 +43,12 @@ networks:
       config:
         - subnet: 192.168.2.0/24
           gateway: 192.168.2.1
-          ip_range: 192.168.2.12/32
+          ip_range: 192.168.2.12/28
     external: true # use if not managing network with docker-compose.yaml    
   nextcloud-aio:
     name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
     driver: bridge
-    # external: true # use if not managing network with docker-compose.yaml
+    external: true # use if not managing network with docker-compose.yaml
 
 # *************************** SECRETS ****************************************** 
 # Any secrets that are used across containers put here. All others in indivdiual yaml(s)
@@ -160,6 +160,6 @@ include:
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
-#  - ${COMPOSE_DIR}/wireguard.yaml
+  - ${COMPOSE_DIR}/wireguard.yaml
   - ${COMPOSE_DIR}/wizarr.yaml
 
