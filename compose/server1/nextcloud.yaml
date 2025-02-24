@@ -12,7 +12,7 @@
 volumes:
   nextcloud_aio_mastercontainer:
     name: nextcloud_aio_mastercontainer # This line is not allowed to be changed
-    #external: true
+    external: true
     
 services:
   nextcloud:

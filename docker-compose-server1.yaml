@@ -48,7 +48,7 @@ networks:
   nextcloud-aio:
     name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
     driver: bridge
-    external: true # use if not managing network with docker-compose.yaml
+    #external: true # If you create outside the docker compose file you need to use this
 
 # *************************** SECRETS ****************************************** 
 # Any secrets that are used across containers put here. All others in indivdiual yaml(s)
