@@ -51,7 +51,7 @@ services:
       - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.${DOMAINNAME}`)"      
       - "traefik.http.routers.pihole-rtr.middlewares=chain-oauth@file"
       ## Docker Network
-      - "traefik.docker.network=mediaserver"
+      - "traefik.docker.network=pihole_network"
       ## HTTP Services
       - "traefik.http.routers.pihole-rtr.service=pihole-svc"
       - "traefik.http.routers.pihole-rtr-bypass.service=pihole-svc"
