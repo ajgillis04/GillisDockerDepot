@@ -24,8 +24,8 @@ for username in $users; do
   fi
   
   # Set permissions for Photos directory on the host
-  chown -R www-data:www-data "$user_dir/Photos"
-  chmod -R 775 "$user_dir/Photos"
+  sudo chown -R www-data:www-data "$user_dir/Photos"
+  sudo chmod -R 775 "$user_dir/Photos"
   echo "Set permissions for Photos directory for user: $username"
 done
 
