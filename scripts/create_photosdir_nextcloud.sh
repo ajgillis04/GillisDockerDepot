@@ -2,9 +2,8 @@
 
 # Script: create_photosdir_nextcloud.sh
 # Purpose: This script creates a 'Photos' directory for each user in the '/share/homes' directory and sets appropriate permissions.
-# Reason: Ensures that the Nextcloud service, running under the 'www-data' user, can access and upload photos for each user.
+# Reason: Ensures that the Nextcloud service, running under the 'www-data' user within the container, can access and upload photos for each user.
 # Usage: Run this script on the NAS to automatically set up 'Photos' directories with the correct permissions for each user.
-# Pre-requisites: chmod +x /path/to/create_photosdir_nextcloud.sh
 # Note: If the script was edited on a Windows system, use 'dos2unix' to convert it before running on the NAS.
 
 # Base directory for user homes
@@ -23,10 +22,13 @@ for username in $users; do
     echo "Created Photos directory for user: $username"
   fi
   
-  # Set permissions for Photos directory
+  # Set permissions for Photos directory on the host
   chown -R www-data:www-data "$user_dir/Photos"
   chmod -R 775 "$user_dir/Photos"
   echo "Set permissions for Photos directory for user: $username"
 done
+
+# Set permissions within the Nextcloud container
+docker exec -it nextcloud-aio-nextcloud bash -c 'for user_dir in /share/homes/*; do if [ -d "$user_dir/Photos" ]; then chown -R www-data:www-data "$user_dir/Photos"; chmod -R 775 "$user_dir/Photos"; echo "Set permissions for Photos directory in $user_dir"; fi; done'
 
 echo "Script completed successfully."
