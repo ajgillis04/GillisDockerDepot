@@ -7,6 +7,9 @@
 #       Container set files to find /var/www/html/ -type f -exec chmod 644 {} \;
 #       Copying the default config files before first run
 #       docker run --rm -v /share/Docker/GillisDockerDepot/appdata/php-apache/apache2:/apache2 httpd:2.4 bash -c 'cp -r /usr/local/apache2/conf/* /apache2/'
+#       sudo chmod -R 775 /share/Docker/GillisDockerDepot/appdata/php-apache-awl/var/www/html
+#       sudo chown -R GilAdmin:everyone /share/Docker/GillisDockerDepot/appdata/php-apache-awl/var/www/html
+#       docker exec -it nextcloud-aio-nextcloud bash -c 'chown -R www-data:www-data /share/Docker/GillisDockerDepot/appdata/php-apache-awl/var/www/html; chmod -R 775 /share/Docker/GillisDockerDepot/appdata/php-apache-awl/var/www/html; echo "Set permissions for website directory in /share/Docker/GillisDockerDepot/appdata/php-apache-awl/var/www/html"'
 
 services:
   php-apache-awl:
