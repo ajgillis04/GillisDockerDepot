@@ -10,6 +10,7 @@
 php-apache-awl.yaml
 php-apache-gillisonline.yaml
 create_users_nextcloud.sh
+create_shares_nextcloud.sh
 
 # Logs
 logs/
