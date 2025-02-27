@@ -45,16 +45,16 @@ services:
     secrets:
       - pihole_password    
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.pihole-rtr.entrypoints=https"
-      - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.${DOMAINNAME}`)"      
-      - "traefik.http.routers.pihole-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=pihole_network"
-      ## HTTP Services
-      - "traefik.http.routers.pihole-rtr.service=pihole-svc"
-      - "traefik.http.routers.pihole-rtr-bypass.service=pihole-svc"
-      - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
-      ## Watchtower Enable
+   #   - "traefik.enable=true"
+   #   ## HTTP Routers
+   #   - "traefik.http.routers.pihole-rtr.entrypoints=https"
+   #   - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.${DOMAINNAME}`)"      
+   #   - "traefik.http.routers.pihole-rtr.middlewares=chain-oauth@file"
+   #   ## Docker Network
+   #   - "traefik.docker.network=pihole_network"
+   #   ## HTTP Services
+   #   - "traefik.http.routers.pihole-rtr.service=pihole-svc"
+   #   - "traefik.http.routers.pihole-rtr-bypass.service=pihole-svc"
+   #   - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
+   #   ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"

@@ -3,7 +3,6 @@
 # Date:    Apr 20, 2020
 # Purpose: A Docker Compose to create containers
 # Clone:   git clone https://github.com/ajgillis04/GillisDockerDepot.git
-# Usage:   docker compose -p mediaserver -f docker-compose.yaml up --detach
 # Prereqs: Ensure Docker and Docker Compose are installed
 # Prereqs 2: You need to create a .env in your root folder with all $variables below
 # Prereqs 3: required a /secerts folder with all you sensative data
@@ -13,7 +12,7 @@
 #          chmod 600 ~/path/to/secrets/*
 #          make sure PUID and PGID match the system you are in with .env
 #          After services are brought online retreive api_keys and update .env/secrets
-# Usage: docker compose -p mediaserver -f docker-compose-server2.yaml up --detach
+# Usage: docker compose -p mediaserver -f docker-compose-server1.yaml up --detach
 # **********************************************************************************
 
 # *************************** NETWORKS ****************************************** 
@@ -26,35 +25,37 @@ networks:
     ipam:
       config:
         - subnet: 172.30.0.0/24
-    # external: true # use if not managing network with docker-compose.yaml
+ #   external: true # use if not managing network with docker-compose.yaml
   default:
     driver: bridge
  #   ipam:
  #     config:
  #       - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
  #         gateway: 192.168.2.1        
-    # external: true # use if not managing network with docker-compose.yaml
+    external: true # use if not managing network with docker-compose.yaml
   pihole_network:
     name: pihole_network
-    #driver: macvlan #does not work on windows
-    driver: bridge
+    #driver: bridge
+    driver: macvlan #does not work on windows    
+    driver_opts:
+      parent: eth0  # Replace with your actual network interface
     ipam:
       config:
-        - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
-          gateway: 192.168.2.1    
-    # external: true # use if not managing network with docker-compose.yaml
-  nextcloud-aio:
-    name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
-    driver: bridge
-    # external: true # use if not managing network with docker-compose.yaml
+        - subnet: 192.168.2.0/24
+          gateway: 192.168.2.1          
+ #   external: true # use if not managing network with docker-compose.yaml    
+  #nextcloud-aio:
+  #  name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
+  #  driver: bridge
+    #external: true # If you create outside the docker compose file you need to use this
 
 # *************************** SECRETS ****************************************** 
 # Any secrets that are used across containers put here. All others in indivdiual yaml(s)
 secrets:
   awl_cf_token:
     file: ${SECRETSDIR}/awl_cf_token
-  cf_api_key:
-    file: ${SECRETSDIR}/    
+  basic_auth_credentials:
+    file: ${SECRETSDIR}/basic_auth_credentials
   cf_dns_api_token:
     file: ${SECRETSDIR}/cf_dns_api_token
   cf_email:
@@ -71,6 +72,8 @@ secrets:
     file: ${SECRETSDIR}/guac_mysql_password
   htpasswd:
     file: ${SECRETSDIR}/htpasswd
+  lidarr_api_key:
+    file: ${SECRETSDIR}/lidarr_api_key
   maria_root_password:
     file: ${SECRETSDIR}/maria_root_password
 #  maria_user:
@@ -93,6 +96,10 @@ secrets:
     file: ${SECRETSDIR}/plex_claim
   plex_token:
     file: ${SECRETSDIR}/plex_token
+  spotify_client_id:
+    file: ${SECRETSDIR}/spotify_client_id
+  spotify_client_secret:
+    file: ${SECRETSDIR}/spotify_client_secret
   traefik_forward_auth:
     file: ${SECRETSDIR}/traefik_forward_auth
   tautulli_user:
@@ -108,46 +115,50 @@ secrets:
 
 # *************************** SERVICES ****************************************** 
 include:
-  - ${COMPOSE_DIR}/bazarr.yaml
-  - ${COMPOSE_DIR}/bookbounty.yaml
-  - ${COMPOSE_DIR}/calibre-web.yaml
-  - ${COMPOSE_DIR}/calibre.yaml
-  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
-  - ${COMPOSE_DIR}/chowdown.yaml
-  - ${COMPOSE_DIR}/cloudflare-ddns.yaml
-  - ${COMPOSE_DIR}/cloudflare-ddnsawl.yaml
-  - ${COMPOSE_DIR}/dozzle.yaml
-  - ${COMPOSE_DIR}/ersatztv.yaml
-  - ${COMPOSE_DIR}/guacamole.yaml
-  - ${COMPOSE_DIR}/guacd.yaml
-  - ${COMPOSE_DIR}/heimdall.yaml
-  - ${COMPOSE_DIR}/heimdallint.yaml
-  - ${COMPOSE_DIR}/lidarr.yaml
-  - ${COMPOSE_DIR}/mariadb.yaml
-  - ${COMPOSE_DIR}/mineos.yaml
-  - ${COMPOSE_DIR}/nextcloud.yaml
-  - ${COMPOSE_DIR}/oauth.yaml
-  - ${COMPOSE_DIR}/overseerr.yaml
-  - ${COMPOSE_DIR}/photoprism.yaml
-  - ${COMPOSE_DIR}/php-apache-awl.yaml
-  - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
-  - ${COMPOSE_DIR}/phpmyadmin.yaml
-  - ${COMPOSE_DIR}/picard.yaml
+#   - ${COMPOSE_DIR}/bazarr.yaml
+#   - ${COMPOSE_DIR}/bookbounty.yaml
+#   - ${COMPOSE_DIR}/calibre-web.yaml
+#   - ${COMPOSE_DIR}/calibre.yaml
+#   - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
+#   - ${COMPOSE_DIR}/chowdown.yaml
+#   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
+#   - ${COMPOSE_DIR}/cloudflare-ddnsawl.yaml
+#   - ${COMPOSE_DIR}/dozzle.yaml
+#   - ${COMPOSE_DIR}/ersatztv.yaml
+#   - ${COMPOSE_DIR}/guacamole.yaml
+#   - ${COMPOSE_DIR}/guacd.yaml
+#   - ${COMPOSE_DIR}/heimdall.yaml
+#   - ${COMPOSE_DIR}/heimdallint.yaml
+#   - ${COMPOSE_DIR}/lidarr.yaml
+#   - ${COMPOSE_DIR}/lidify.yaml
+#   - ${COMPOSE_DIR}/mariadb.yaml
+#   - ${COMPOSE_DIR}/mineos.yaml
+#   - ${COMPOSE_DIR}/musicbrainz.yaml
+#   - ${COMPOSE_DIR}/nextcloud.yaml
+#   - ${COMPOSE_DIR}/oauth.yaml
+#   - ${COMPOSE_DIR}/overseerr.yaml
+#   - ${COMPOSE_DIR}/photoprism.yaml
+#   - ${COMPOSE_DIR}/php-apache-awl.yaml
+#   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
+#   - ${COMPOSE_DIR}/phpmyadmin.yaml
+#   - ${COMPOSE_DIR}/picard.yaml
   - ${COMPOSE_DIR}/pihole.yaml
-  - ${COMPOSE_DIR}/pinchflat.yaml
-  - ${COMPOSE_DIR}/plex.yaml
-  - ${COMPOSE_DIR}/portainer.yaml
-  - ${COMPOSE_DIR}/prowlarr.yaml
-  - ${COMPOSE_DIR}/radarr.yaml
-  - ${COMPOSE_DIR}/readarr.yaml
-  - ${COMPOSE_DIR}/sabnzbd.yaml
-  - ${COMPOSE_DIR}/sonarr.yaml
-  - ${COMPOSE_DIR}/tautulli.yaml
-  - ${COMPOSE_DIR}/tdarr.yaml
+#  - ${COMPOSE_DIR}/pinchflat.yaml
+#  - ${COMPOSE_DIR}/plex.yaml
+#  - ${COMPOSE_DIR}/portainer.yaml
+#  - ${COMPOSE_DIR}/prowlarr.yaml
+#  - ${COMPOSE_DIR}/radarr.yaml
+#  - ${COMPOSE_DIR}/readarr.yaml
+#  - ${COMPOSE_DIR}/sabnzbd.yaml
+#  - ${COMPOSE_DIR}/sonarr.yaml
+#  - ${COMPOSE_DIR}/tailscale.yaml
+#  - ${COMPOSE_DIR}/tautulli.yaml
+#  - ${COMPOSE_DIR}/tdarr.yaml
 #  - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
-  - ${COMPOSE_DIR}/traefik.yaml
-  - ${COMPOSE_DIR}/transmission-openvpn.yaml
-  - ${COMPOSE_DIR}/vaultwarden.yaml
+#  - ${COMPOSE_DIR}/traefik.yaml
+#  - ${COMPOSE_DIR}/transmission-openvpn.yaml
+#  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
-  - ${COMPOSE_DIR}/wireguard.yaml
-  - ${COMPOSE_DIR}/wizarr.yaml
+#  - ${COMPOSE_DIR}/wireguard.yaml
+#  - ${COMPOSE_DIR}/wizarr.yaml
+
