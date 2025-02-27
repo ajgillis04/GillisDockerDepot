@@ -25,7 +25,7 @@ networks:
     ipam:
       config:
         - subnet: 172.30.0.0/24
-    external: true # use if not managing network with docker-compose.yaml
+ #   external: true # use if not managing network with docker-compose.yaml
   default:
     driver: bridge
  #   ipam:
@@ -158,7 +158,7 @@ include:
 #  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
-#  - ${COMPOSE_DIR}/watchtower.yaml
+  - ${COMPOSE_DIR}/watchtower.yaml
 #  - ${COMPOSE_DIR}/wireguard.yaml
 #  - ${COMPOSE_DIR}/wizarr.yaml
 
