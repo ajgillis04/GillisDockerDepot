@@ -9,6 +9,7 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
       DOMAINNAME: ${DOMAINNAME}
+      SABNZBD_HOSTS: localhost,127.0.0.1,::1,sabnzbd.${DOMAINNAME}
     networks:
       - mediaserver
     ports:
