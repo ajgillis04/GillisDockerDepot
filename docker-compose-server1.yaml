@@ -147,9 +147,9 @@ include:
   - ${COMPOSE_DIR}/pinchflat.yaml
 #  - ${COMPOSE_DIR}/plex.yaml
   - ${COMPOSE_DIR}/portainer.yaml
-#  - ${COMPOSE_DIR}/prowlarr.yaml
-#  - ${COMPOSE_DIR}/radarr.yaml
-#  - ${COMPOSE_DIR}/readarr.yaml
+  - ${COMPOSE_DIR}/prowlarr.yaml
+  - ${COMPOSE_DIR}/radarr.yaml
+  - ${COMPOSE_DIR}/readarr.yaml
   - ${COMPOSE_DIR}/sabnzbd.yaml
 #  - ${COMPOSE_DIR}/sonarr.yaml
   - ${COMPOSE_DIR}/tailscale.yaml
