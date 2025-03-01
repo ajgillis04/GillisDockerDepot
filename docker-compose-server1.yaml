@@ -118,8 +118,8 @@ secrets:
 include:
   - ${COMPOSE_DIR}/bazarr.yaml
   - ${COMPOSE_DIR}/bookbounty.yaml
-#  - ${COMPOSE_DIR}/calibre-web.yaml
-#  - ${COMPOSE_DIR}/calibre.yaml
+  - ${COMPOSE_DIR}/calibre-web.yaml
+  - ${COMPOSE_DIR}/calibre.yaml
 #  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
   - ${COMPOSE_DIR}/chowdown.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
@@ -130,7 +130,7 @@ include:
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/heimdall.yaml
   - ${COMPOSE_DIR}/heimdallint.yaml
-#  - ${COMPOSE_DIR}/lidarr.yaml
+  - ${COMPOSE_DIR}/lidarr.yaml
   - ${COMPOSE_DIR}/lidify.yaml
 #  - ${COMPOSE_DIR}/mariadb.yaml
   - ${COMPOSE_DIR}/mineos.yaml
