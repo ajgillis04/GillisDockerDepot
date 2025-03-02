@@ -18,8 +18,8 @@ services:
       LOCAL_NETWORK: ${LOCAL_NETWORK}
       OPENVPN_CONFIG: ca_toronto
       OPENVPN_OPTS: '--inactive 3600 --ping 10 --ping-exit 60'
-      #OPENVPN_USERNAME: "**None**""
-      #OPENVPN_PASSWORD: "**None**"
+      OPENVPN_USERNAME_FILE: /run/secrets/pia_username
+      OPENVPN_PASSWORD_FILE: /run/secrets/pia_password
       OPENVPN_PROVIDER: PIA
       PIA_OPENVPN_CONFIG_BUNDLE: openvpn
       TRANSMISSION_DOWNLOAD_DIR: /downloads/Completed
@@ -43,19 +43,21 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/transmission-openvpn/data:/data
       - ${DOCKERDIR}/transmission-openvpn/config:/config
-      - ${SECRETSDIR}/openvpn-credentials.txt:/config/openvpn-credentials.txt
+      #- ${SECRETSDIR}/openvpn-credentials.txt:/config/openvpn-credentials.txt
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${USERDOWNLOAD}/Torrents:/data/watch
       - ${USERDOWNLOAD}/Torrents/Completed:/data/completed
       - ${USERDOWNLOAD}/Torrents/Incomplete:/data/incomplete
       - ${DOCKERDIR}/logs/transmission-openvpn:/var/log
     restart: always
-    security_opt:
-      - no-new-privileges:true
     secrets:
       - pia_username
       - pia_password
-      - rpc_creds
+      - transmission_pass
+      - transmission_user
+      - rpc_cred
+    security_opt:
+      - no-new-privileges:true
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
