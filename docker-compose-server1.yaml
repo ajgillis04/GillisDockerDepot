@@ -118,7 +118,7 @@ include:
 #  - ${COMPOSE_DIR}/bookbounty.yaml
   - ${COMPOSE_DIR}/calibre-web.yaml
   - ${COMPOSE_DIR}/calibre.yaml
-#  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
+  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
   - ${COMPOSE_DIR}/chowdown.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
   - ${COMPOSE_DIR}/cloudflare-ddnsawl.yaml
@@ -134,7 +134,7 @@ include:
 #  - ${COMPOSE_DIR}/mineos.yaml
 #  - ${COMPOSE_DIR}/musicbrainz.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
-#  - ${COMPOSE_DIR}/oauth.yaml
+  - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
   - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
@@ -153,7 +153,7 @@ include:
 #  - ${COMPOSE_DIR}/tailscale.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
-#  - ${COMPOSE_DIR}/traefik.yaml
+  - ${COMPOSE_DIR}/traefik.yaml
   - ${COMPOSE_DIR}/transmission-openvpn.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
