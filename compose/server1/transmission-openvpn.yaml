@@ -18,8 +18,8 @@ services:
       LOCAL_NETWORK: ${LOCAL_NETWORK}
       OPENVPN_CONFIG: ca_toronto
       OPENVPN_OPTS: '--inactive 3600 --ping 10 --ping-exit 60'
-      OPENVPN_USERNAME_FILE: /run/secrets/pia_username
-      OPENVPN_PASSWORD_FILE: /run/secrets/pia_password
+      OPENVPN_USERNAME: "**None**"
+      OPENVPN_PASSWORD: "**None**"
       OPENVPN_PROVIDER: PIA
       PIA_OPENVPN_CONFIG_BUNDLE: openvpn
       TRANSMISSION_DOWNLOAD_DIR: /downloads/Completed
@@ -31,8 +31,8 @@ services:
       TRANSMISSION_RPC_HOST_WHITELIST: "127.0.0.1,10.0.27.*,192.168.2.*"
       #TRANSMISSION_RPC_PASSWORD_FILE: /run/secrets/transmission_pass
       #TRANSMISSION_RPC_USERNAME_FILE: /run/secrets/transmission_user
-      OPENVPN_USERNAME: "**None**"
-      OPENVPN_PASSWORD: "**None**"
+      TRANSMISSION_RPC_USERNAME: "**None**"
+      TRANSMISSION_RPC_PASSWORD: "**None**"
       TRANSMISSION_UMASK: 2
       TRANSMISSION_WATCH_DIR: /downloads
       TRANSMISSION_WATCH_DIR_ENABLED: true
@@ -45,7 +45,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/transmission-openvpn/data:/data
       - ${DOCKERDIR}/transmission-openvpn/config:/config
-      #- ${SECRETSDIR}/openvpn-credentials.txt:/config/openvpn-credentials.txt
+      - ${SECRETSDIR}/openvpn-credentials.txt:/config/openvpn-credentials.txt
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${USERDOWNLOAD}/Torrents:/data/watch
       - ${USERDOWNLOAD}/Torrents/Completed:/data/completed
