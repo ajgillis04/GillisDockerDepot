@@ -14,7 +14,7 @@ services:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      FILE__MYSQL_ROOT_PASSWORD: /run/secrets/maria_root_password # bug #127 intial pass not working do password reset
+      FILE__MYSQL_ROOT_PASSWORD: /run/secrets/maria_root_password # bug #127 initial pass not working do password reset
       # Uncomment these lines if you plan to create a database and user initially
       # MYSQL_DATABASE: default
       # MYSQL_USER_FILE: /run/secrets/maria_user
