@@ -31,6 +31,8 @@ services:
       TRANSMISSION_RPC_HOST_WHITELIST: "127.0.0.1,10.0.27.*,192.168.2.*"
       #TRANSMISSION_RPC_PASSWORD_FILE: /run/secrets/transmission_pass
       #TRANSMISSION_RPC_USERNAME_FILE: /run/secrets/transmission_user
+      OPENVPN_USERNAME: **None**
+      OPENVPN_PASSWORD: **None**
       TRANSMISSION_UMASK: 2
       TRANSMISSION_WATCH_DIR: /downloads
       TRANSMISSION_WATCH_DIR_ENABLED: true
