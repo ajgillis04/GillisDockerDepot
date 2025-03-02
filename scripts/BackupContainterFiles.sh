@@ -2,6 +2,10 @@
 
 # If script does not run, encoding might be wrong. Run:
 # sed -i -e 's/\r$//' BackupContainterFiles.sh
+# chmod +x /scritps/BackupContainterFiles.sh
+# sudo ./scritps/BackupContainterFiles.sh
+# sudo crontab -e
+# 0 3 * * * /share/Backups/GillisNAS/ContainerNew/BackupContainterFiles.sh
 
 # Set the script to exit immediately if any command fails
 set -e
