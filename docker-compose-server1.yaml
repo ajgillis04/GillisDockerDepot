@@ -115,7 +115,7 @@ secrets:
 # *************************** SERVICES ****************************************** 
 include:
   - ${COMPOSE_DIR}/bazarr.yaml
-  - ${COMPOSE_DIR}/bookbounty.yaml
+#  - ${COMPOSE_DIR}/bookbounty.yaml
   - ${COMPOSE_DIR}/calibre-web.yaml
   - ${COMPOSE_DIR}/calibre.yaml
 #  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
@@ -129,10 +129,10 @@ include:
   - ${COMPOSE_DIR}/heimdall.yaml
   - ${COMPOSE_DIR}/heimdallint.yaml
   - ${COMPOSE_DIR}/lidarr.yaml
-  - ${COMPOSE_DIR}/lidify.yaml
+#  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
-  - ${COMPOSE_DIR}/mineos.yaml
-  - ${COMPOSE_DIR}/musicbrainz.yaml
+#  - ${COMPOSE_DIR}/mineos.yaml
+#  - ${COMPOSE_DIR}/musicbrainz.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
@@ -140,9 +140,9 @@ include:
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
   - ${COMPOSE_DIR}/phpmyadmin.yaml
-  - ${COMPOSE_DIR}/picard.yaml
+#  - ${COMPOSE_DIR}/picard.yaml
   - ${COMPOSE_DIR}/pihole.yaml
-  - ${COMPOSE_DIR}/pinchflat.yaml
+#  - ${COMPOSE_DIR}/pinchflat.yaml
   - ${COMPOSE_DIR}/plex.yaml
   - ${COMPOSE_DIR}/portainer.yaml
   - ${COMPOSE_DIR}/prowlarr.yaml
@@ -150,7 +150,7 @@ include:
   - ${COMPOSE_DIR}/readarr.yaml
   - ${COMPOSE_DIR}/sabnzbd.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
-  - ${COMPOSE_DIR}/tailscale.yaml
+#  - ${COMPOSE_DIR}/tailscale.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
 #  - ${COMPOSE_DIR}/traefik.yaml
