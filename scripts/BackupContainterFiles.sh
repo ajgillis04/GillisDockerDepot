@@ -40,67 +40,96 @@ check_container_status() {
     CONTAINER=$1
     STATUS=$(docker ps --filter "name=$CONTAINER" --format "{{.Status}}")
     if [[ "$STATUS" == *healthy* || "$STATUS" == *Up* ]]; then
-        echo "$CONTAINER is running and healthy" >> "$LOG_FILE"
+        echo "$CONTAINER is running and healthy" | tee -a "$LOG_FILE"
     else
-        echo "$CONTAINER has issues: $STATUS" >> "$LOG_FILE"
+        echo "$CONTAINER has issues: $STATUS" | tee -a "$LOG_FILE"
     fi
 }
 
 # Ensure the backup directory exists
+echo "Ensuring backup directory exists: $BACKUP_DIR"
 mkdir -p "$BACKUP_DIR"
 
 # Delete the log file if it exists
 if [ -f "$LOG_FILE" ]; then
+    echo "Removing existing log file: $LOG_FILE"
     rm -f "$LOG_FILE"
 fi
 
-echo "Backup started at: $DATE" >> "$LOG_FILE"
+echo "Starting backup process at $DATE"
+echo "Backup started at: $DATE" | tee -a "$LOG_FILE"
 
 # Perform pre-backup health checks
-echo "Performing pre-backup health checks..." >> "$LOG_FILE"
+echo "Performing pre-backup health checks..." | tee -a "$LOG_FILE"
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
+    echo "Checking health of $CONTAINER..."
     check_container_status $CONTAINER
 done
 
 # Stop critical containers
-echo "Stopping critical containers for final backup..." >> "$LOG_FILE"
+echo "Stopping critical containers for final backup..." | tee -a "$LOG_FILE"
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
+    echo "Stopping container: $CONTAINER"
     docker stop $CONTAINER >> "$LOG_FILE" 2>&1 && \
-        echo "Stopped $CONTAINER" >> "$LOG_FILE" || \
-        echo "Failed to stop $CONTAINER" >> "$LOG_FILE"
+        echo "Stopped $CONTAINER" | tee -a "$LOG_FILE" || \
+        echo "Failed to stop $CONTAINER" | tee -a "$LOG_FILE"
 done
 
 # Backup critical containers
+echo "Backing up critical containers..." | tee -a "$LOG_FILE"
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
     BACKUP_PATH="$CONTAINER_DIR/${CONTAINER%.*}/config"
     DEST_PATH="$BACKUP_DIR/${CONTAINER%.*}/"
-    echo "Backing up $CONTAINER" >> "$LOG_FILE"
+    echo "Backing up $CONTAINER from $BACKUP_PATH to $DEST_PATH..."
     rsync -a --ignore-existing "$BACKUP_PATH/" "$DEST_PATH/" 2>>"$LOG_FILE" && \
-        echo "Copied $CONTAINER" >> "$LOG_FILE" || \
-        echo "Failed $CONTAINER" >> "$LOG_FILE"
+        echo "Successfully backed up $CONTAINER" | tee -a "$LOG_FILE" || \
+        echo "Failed to back up $CONTAINER" | tee -a "$LOG_FILE"
 done
 
 # Special backup for Plex
-echo "Backing up Plex configuration..." >> "$LOG_FILE"
+echo "Backing up Plex configuration..." | tee -a "$LOG_FILE"
 PlexBackupPath="$CONTAINER_DIR/plex/Plex Media Server"
+echo "Backing up Plex files from $PlexBackupPath"
 rsync -a \
     --include='.LocalAdminToken' \
     --include='Preferences.xml' \
     --include='Setup Plex.html' \
     --exclude='*' \
     "$PlexBackupPath/" "$BACKUP_DIR/plex/" 2>>"$LOG_FILE" && \
-    echo "Copied Plex" >> "$LOG_FILE" || \
-    echo "Failed Plex" >> "$LOG_FILE"
+    echo "Successfully backed up Plex" | tee -a "$LOG_FILE" || \
+    echo "Failed to back up Plex" | tee -a "$LOG_FILE"
 
 # Restart containers after backup
-echo "Restarting critical containers after backup..." >> "$LOG_FILE"
+echo "Restarting critical containers after backup..." | tee -a "$LOG_FILE"
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
+    echo "Restarting container: $CONTAINER"
     docker start $CONTAINER >> "$LOG_FILE" 2>&1 && \
-        echo "Restarted $CONTAINER" >> "$LOG_FILE" || \
-        echo "Failed to restart $CONTAINER" >> "$LOG_FILE"
+        echo "Restarted $CONTAINER" | tee -a "$LOG_FILE" || \
+        echo "Failed to restart $CONTAINER" | tee -a "$LOG_FILE"
 done
 
 # Perform post-backup health checks
-echo "Performing post-backup health checks..." >> "$LOG_FILE"
+echo "Performing post-backup health checks..." | tee -a "$LOG_FILE"
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
-    check_container
+    echo "Checking health of $CONTAINER after restart..."
+    check_container_status $CONTAINER
+done
+
+# Log completion
+DATE=$(date +%F-%H%M%S)
+echo "Backup finished at: $DATE" | tee -a "$LOG_FILE"
+
+# Send email if any failures occurred
+if grep -q "Failed" "$LOG_FILE"; then
+    echo "Backup script encountered issues. Sending email..." | tee -a "$LOG_FILE"
+    SUBJECT="Backup Script Issues - $DATE"
+    {
+        echo "To: $EMAIL"
+        echo "Subject: $SUBJECT"
+        echo "Content-Type: text/plain"
+        echo
+        echo "Errors were found during the backup script. Here is the log content:"
+        echo
+        cat "$LOG_FILE"
+    } | sendmail -t
+fi
