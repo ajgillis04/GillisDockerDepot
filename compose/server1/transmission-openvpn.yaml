@@ -53,7 +53,7 @@ services:
     secrets:
       - pia_username
       - pia_password
-      - rpc_cred
+      - rpc_creds
     security_opt:
       - no-new-privileges:true
     labels:
