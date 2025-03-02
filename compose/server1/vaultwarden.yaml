@@ -11,7 +11,7 @@ services:
       TZ: ${TZ}
       PGID: ${PGID}
       PUID: ${PUID}
-      DOMAIN: ${DOMAINNAME}
+      #DOMAIN: ${DOMAINNAME}
       ADMIN_TOKEN_FILE: /run/secrets/vaultwarden_admin_token #cant' get working look at later
       DATABASE_URL: data/db.sqlite3
       #DATABASE_URL_FILE: /run/secrets/vaultwarden_db_password # for use in an external database      
