@@ -107,10 +107,8 @@ secrets:
     file: ${SECRETSDIR}/tautulli_user
   tautulli_user_pass:
     file: ${SECRETSDIR}/tautulli_user_pass
-  transmission_pass:
-    file: ${SECRETSDIR}/transmission_pass
-  transmission_user:
-    file: ${SECRETSDIR}/transmission_user
+  rpc_creds:
+    file: ${SECRETSDIR}/rpc_creds
   vaultwarden_admin_token:
     file: ${SECRETSDIR}/vaultwarden_admin_token
 
