@@ -130,16 +130,16 @@ include:
   - ${COMPOSE_DIR}/heimdallint.yaml
   - ${COMPOSE_DIR}/lidarr.yaml
   - ${COMPOSE_DIR}/lidify.yaml
-#  - ${COMPOSE_DIR}/mariadb.yaml
+  - ${COMPOSE_DIR}/mariadb.yaml
   - ${COMPOSE_DIR}/mineos.yaml
   - ${COMPOSE_DIR}/musicbrainz.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
-#  - ${COMPOSE_DIR}/photoprism.yaml
+  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
-# - ${COMPOSE_DIR}/phpmyadmin.yaml
+  - ${COMPOSE_DIR}/phpmyadmin.yaml
   - ${COMPOSE_DIR}/picard.yaml
   - ${COMPOSE_DIR}/pihole.yaml
   - ${COMPOSE_DIR}/pinchflat.yaml
@@ -153,10 +153,9 @@ include:
   - ${COMPOSE_DIR}/tailscale.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
-#  - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
 #  - ${COMPOSE_DIR}/traefik.yaml
   - ${COMPOSE_DIR}/transmission-openvpn.yaml
-#  - ${COMPOSE_DIR}/vaultwarden.yaml
+  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
   - ${COMPOSE_DIR}/wireguard.yaml
   - ${COMPOSE_DIR}/wizarr.yaml
