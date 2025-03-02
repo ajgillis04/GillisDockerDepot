@@ -9,6 +9,8 @@ set -e
 DATE=$(date +%F-%H%M%S)
 BACKUP_DIR=/share/Backups/GillisNAS/ContainerNew
 CONTAINER_DIR=/share/Docker/GillisDockerDepot/appdata
+ENV_PATH="/share/Docker/GillisDockerDepot/.env"
+SECRETS_PATH="/share/Docker/GillisDockerDepot/secrets"
 LOG_FILE="$BACKUP_DIR/backup_log.txt"
 EMAIL="andy.gillis@gmail.com"  # Replace with your email
 
@@ -81,7 +83,7 @@ for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
     BACKUP_PATH="$CONTAINER_DIR/${CONTAINER%.*}"
     DEST_PATH="$BACKUP_DIR/${CONTAINER%.*}/"
     echo "Backing up $CONTAINER from $BACKUP_PATH to $DEST_PATH..."
-    rsync -a --ignore-existing "$BACKUP_PATH/" "$DEST_PATH/" 2>>"$LOG_FILE" && \
+    sudo rsync -a --ignore-existing "$BACKUP_PATH/" "$DEST_PATH/" 2>>"$LOG_FILE" && \
         echo "Successfully backed up $CONTAINER" | tee -a "$LOG_FILE" || \
         echo "Failed to back up $CONTAINER" | tee -a "$LOG_FILE"
 done
@@ -98,6 +100,26 @@ rsync -a \
     "$PlexBackupPath/" "$BACKUP_DIR/plex/" 2>>"$LOG_FILE" && \
     echo "Successfully backed up Plex" | tee -a "$LOG_FILE" || \
     echo "Failed to back up Plex" | tee -a "$LOG_FILE"
+
+# Backup secrets
+if [ -d "$SECRETS_PATH" ]; then
+    echo "Backing up secrets from $SECRETS_PATH..."
+    rsync -a --ignore-existing "$SECRETS_PATH/" "$BACKUP_DIR/secrets/" 2>>"$LOG_FILE" && \
+        echo "Successfully backed up secrets" | tee -a "$LOG_FILE" || \
+        echo "Failed to back up secrets" | tee -a "$LOG_FILE"
+else
+    echo "Secrets directory does not exist at $SECRETS_PATH. Skipping..." | tee -a "$LOG_FILE"
+fi
+
+# Backup .env file(s)
+if [ -f "$ENV_PATH" ]; then
+    echo "Backing up .env file from $ENV_PATH..."
+    cp "$ENV_PATH" "$BACKUP_DIR/.env" && \
+        echo "Successfully backed up .env file" | tee -a "$LOG_FILE" || \
+        echo "Failed to back up .env file" | tee -a "$LOG_FILE"
+else
+    echo ".env file does not exist at $ENV_PATH. Skipping..." | tee -a "$LOG_FILE"
+fi
 
 # Restart containers after backup
 echo "Restarting critical containers after backup..." | tee -a "$LOG_FILE"
