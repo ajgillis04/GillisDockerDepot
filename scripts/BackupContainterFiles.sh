@@ -8,7 +8,7 @@ set -e
 
 DATE=$(date +%F-%H%M%S)
 BACKUP_DIR=/share/Backups/GillisNAS/ContainerNew
-CONTAINER_DIR=/share/Docker/GillisNAS/appdata
+CONTAINER_DIR=/share/Docker/GillisDockerDepot/appdata
 LOG_FILE="$BACKUP_DIR/backup_log.txt"
 EMAIL="andy.gillis@gmail.com"  # Replace with your email
 
