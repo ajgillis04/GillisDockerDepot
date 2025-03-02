@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# If script does not run, encoding might be wrong. Run:
+# sed -i -e 's/\r$//' BackupContainterFiles.sh
+
 # Set the script to exit immediately if any command fails
 set -e
 
@@ -43,6 +46,9 @@ check_container_status() {
     fi
 }
 
+# Ensure the backup directory exists
+mkdir -p "$BACKUP_DIR"
+
 # Delete the log file if it exists
 if [ -f "$LOG_FILE" ]; then
     rm -f "$LOG_FILE"
@@ -50,14 +56,21 @@ fi
 
 echo "Backup started at: $DATE" >> "$LOG_FILE"
 
-# Perform pre-backup health check
+# Perform pre-backup health checks
 echo "Performing pre-backup health checks..." >> "$LOG_FILE"
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
     check_container_status $CONTAINER
 done
 
+# Stop critical containers
+echo "Stopping critical containers for final backup..." >> "$LOG_FILE"
+for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
+    docker stop $CONTAINER >> "$LOG_FILE" 2>&1 && \
+        echo "Stopped $CONTAINER" >> "$LOG_FILE" || \
+        echo "Failed to stop $CONTAINER" >> "$LOG_FILE"
+done
+
 # Backup critical containers
-mkdir -p $BACKUP_DIR
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
     BACKUP_PATH="$CONTAINER_DIR/${CONTAINER%.*}/config"
     DEST_PATH="$BACKUP_DIR/${CONTAINER%.*}/"
@@ -79,27 +92,15 @@ rsync -a \
     echo "Copied Plex" >> "$LOG_FILE" || \
     echo "Failed Plex" >> "$LOG_FILE"
 
-# Perform post-backup health check
-echo "Performing post-backup health checks..." >> "$LOG_FILE"
+# Restart containers after backup
+echo "Restarting critical containers after backup..." >> "$LOG_FILE"
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
-    check_container_status $CONTAINER
+    docker start $CONTAINER >> "$LOG_FILE" 2>&1 && \
+        echo "Restarted $CONTAINER" >> "$LOG_FILE" || \
+        echo "Failed to restart $CONTAINER" >> "$LOG_FILE"
 done
 
-# Log completion
-DATE=$(date +%F-%H%M%S)
-echo "Backup finished at: $DATE" >> "$LOG_FILE"
-
-# Send email if any failures occurred
-if grep -q "Failed" "$LOG_FILE"; then
-    echo "Backup script encountered issues. Sending email..." >> "$LOG_FILE"
-    SUBJECT="Backup Script Issues - $DATE"
-    {
-        echo "To: $EMAIL"
-        echo "Subject: $SUBJECT"
-        echo "Content-Type: text/plain"
-        echo
-        echo "Errors were found during the backup script. Here is the log content:"
-        echo
-        cat "$LOG_FILE"
-    } | sendmail -t
-fi
+# Perform post-backup health checks
+echo "Performing post-backup health checks..." >> "$LOG_FILE"
+for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
+    check_container
