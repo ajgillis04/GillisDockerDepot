@@ -78,7 +78,7 @@ done
 # Backup critical containers
 echo "Backing up critical containers..." | tee -a "$LOG_FILE"
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
-    BACKUP_PATH="$CONTAINER_DIR/${CONTAINER%.*}/config"
+    BACKUP_PATH="$CONTAINER_DIR/${CONTAINER%.*}"
     DEST_PATH="$BACKUP_DIR/${CONTAINER%.*}/"
     echo "Backing up $CONTAINER from $BACKUP_PATH to $DEST_PATH..."
     rsync -a --ignore-existing "$BACKUP_PATH/" "$DEST_PATH/" 2>>"$LOG_FILE" && \
