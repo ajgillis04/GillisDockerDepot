@@ -21,7 +21,7 @@ services:
     environment:
       APACHE_PORT: 11000
       APACHE_IP_BINDING: ${SERVER_IP}
-      NEXTCLOUD_DATADIR: ${NEXTCLOUD_HOMES}\nextcloud # all user folders and data will be kept here
+      NEXTCLOUD_DATADIR: ${NEXTCLOUD_HOMES} # all user folders and data will be kept here
       NEXTCLOUD_MOUNT: ${NEXTCLOUD_EXSTORAGE} # Allows the Nextcloud container to access the chosen directory on the host
       NEXTCLOUD_TRUSTED_CACERTS_DIR: ${SHAREDDIR} # CA certificates in this directory will be trusted by the OS of the nexcloud container (Useful e.g. for LDAPS) See See
       SKIP_DOMAIN_VALIDATION: true
