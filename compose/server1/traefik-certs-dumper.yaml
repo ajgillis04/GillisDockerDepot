@@ -13,7 +13,7 @@ services:
       - mediaserver
     volumes:
       - ${DOCKERDIR}/certdumper/config:/config
-      - ${DOCKERDIR}/traefik2/acme:/traefik:ro
+      - ${DOCKERDIR}/traefik/acme:/traefik:ro
       - ${SHAREDDIR}:/output:rw
       - ${DOCKERDIR}/logs/certdumper:/var/log
     restart: always
