@@ -43,7 +43,7 @@ networks:
       config:
         - subnet: 192.168.2.0/24
           gateway: 192.168.2.1
-          ip_range: 192.168.2.12/28
+          ip_range: 192.168.2.0/28
  #   external: true # use if not managing network with docker-compose.yaml    
   nextcloud-aio:
     name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
