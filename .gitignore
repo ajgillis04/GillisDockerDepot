@@ -33,6 +33,7 @@ temp/
 !shared/*.example
 # Ignore everything else in the appdata directory
 secrets/
+shared/
 
 # Include specific example files
 !appdata/traefik2/rules/*.example.toml
