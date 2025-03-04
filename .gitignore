@@ -12,6 +12,8 @@ php-apache-gillisonline.yaml
 create_users_nextcloud.sh
 create_shares_nextcloud.sh
 QNAP_NAS_Restore.sh
+qnap_setup_users.sh
+qnap_create_shares.sh
 
 # Logs
 logs/
