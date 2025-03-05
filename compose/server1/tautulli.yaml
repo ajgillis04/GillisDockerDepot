@@ -26,7 +26,8 @@ services:
       DOMAINNAME: ${DOMAINNAME}
       TAUTULLI_PLEX_SERVER_IP: plex.${HOST_NAME}.local # Can use docker name if same host, recommended
       TAUTULLI_PLEX_SERVER_PORT: 32400
-      FILE__TAUTULLI_PLEX_TOKEN: /run/secrets/plex_token # currently not working, container sees file
+      #FILE__TAUTULLI_PLEX_TOKEN: /run/secrets/plex_token # currently not working, container sees file
+      TAUTULLI_PLEX_TOKEN: ${PLEX_TOKEN}
       FILE__TAUTULLI_HTTP_USERNAME: /run/secrets/tautulli_user
       FILE__TAUTULLI_HTTP_PASSWORD: /run/secrets/tautulli_user_pass
       #TAUTULLI_WEB_AUTH: true # good idea if not behind oauth or authelia
@@ -55,7 +56,7 @@ services:
       - "traefik.http.routers.tautulli-rtr.entrypoints=https"
       - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.${DOMAINNAME}`)"
       - "traefik.http.routers.tautulli-rtr.priority=99"
-      - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file,middlewares-secure-headers@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

@@ -15,7 +15,8 @@ services:
       DEFAULT_ACTION: auth
       DEFAULT_PROVIDER: google
       INSECURE_COOKIE: false
-      LIFETIME: 2678400 # 1 month
+      #LIFETIME: 2678400 # 1 month
+      LIFETIME: 86400 # 1 day, set if you want people to re-authenticate. if people are getting not authorized, check this.
       LOG_FORMAT: json
       LOG_LEVEL: info
       URL_PATH: /_oauth
