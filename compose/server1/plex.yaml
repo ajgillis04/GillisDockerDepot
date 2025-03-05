@@ -65,7 +65,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.plex-rtr.entrypoints=https"
       - "traefik.http.routers.plex-rtr.rule=Host(`plex.${DOMAINNAME}`)"
-      - "traefik.http.routers.plex-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.plex-rtr.middlewares=chain-no-auth@file,middlewares-secure-headers@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
