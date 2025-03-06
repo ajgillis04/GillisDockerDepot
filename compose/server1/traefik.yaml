@@ -71,8 +71,6 @@ services:
       
       # TLS & CERTIFICATES
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS: true
-      TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_OPTIONS: tls-opts@file
-      # Testing TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_CERTRESOLVER DISABLE for testing
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_CERTRESOLVER: dnscloudflare
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_DOMAINS[0]_MAIN: ${DOMAINNAME}
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_DOMAINS[0]_SANS: "*.${DOMAINNAME}"
@@ -90,7 +88,7 @@ services:
       
       # ENVIRONMENT VARIABLES
       CF_DNS_API_TOKEN_FILE: /run/secrets/cf_dns_api_token
-      HTPASSWD_FILE: /run/secrets/basic_auth_credentials      
+      HTPASSWD_FILE: /run/secrets/basic_auth_credentials
       # SECONDDOMAINNAME: ${SECONDDOMAINNAME}
 
     ports:
@@ -132,7 +130,7 @@ services:
       - "traefik.http.routers.traefik-rtr.tls=true"
       - "traefik.http.routers.traefik-rtr.service=api@internal"
       ## Middlewares
-      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file,middlewares-rate-limit@file,middlewares-secure-headers@file"
+      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## Watchtower Enable

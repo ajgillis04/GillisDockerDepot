@@ -26,7 +26,7 @@ services:
       - "traefik.http.routers.overseerr-rtr.entrypoints=https"
       - "traefik.http.routers.overseerr-rtr.rule=Host(`overseerr.${DOMAINNAME}`)"
       ## Middlewares
-      - "traefik.http.routers.overseerr-rtr.middlewares=chain-oauth@file,middlewares-secure-headers@file"
+      - "traefik.http.routers.overseerr-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

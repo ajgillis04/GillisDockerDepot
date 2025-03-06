@@ -37,9 +37,8 @@ services:
       - "${TAUTULLI_PORT}:8181"
     volumes:
       - ${DOCKERDIR}/tautulli/config:/config
-      - ${DOCKERDIR}/tautulli/logs:/logs:ro
-      - ${DOCKERDIR}/plex/config/Plex Media Server/Logs:/plex_logs:ro
-      - ${DOCKERDIR}/logs/tautulli:/var/log      
+      - ${DOCKERDIR}/logs/tautulli:/config/logs
+      - ${DOCKERDIR}/plex/config/Plex Media Server/Logs:/plex_logs:ro      
     restart: always
     secrets:
       - plex_token
@@ -56,7 +55,7 @@ services:
       - "traefik.http.routers.tautulli-rtr.entrypoints=https"
       - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.${DOMAINNAME}`)"
       - "traefik.http.routers.tautulli-rtr.priority=99"
-      - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file,middlewares-secure-headers@file"
+      - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
