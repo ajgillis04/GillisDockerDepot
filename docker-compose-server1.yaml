@@ -124,13 +124,13 @@ include:
   - ${COMPOSE_DIR}/cloudflare-ddnsawl.yaml
   - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/ersatztv.yaml
-# - ${COMPOSE_DIR}/guacamole.yaml
-# - ${COMPOSE_DIR}/guacd.yaml
+  - ${COMPOSE_DIR}/guacamole.yaml
+  - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/heimdall.yaml
 # - ${COMPOSE_DIR}/heimdallint.yaml
 #  - ${COMPOSE_DIR}/lidarr.yaml
 #  - ${COMPOSE_DIR}/lidify.yaml
-#  - ${COMPOSE_DIR}/mariadb.yaml
+  - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/mineos.yaml
 #  - ${COMPOSE_DIR}/musicbrainz.yaml
 #  - ${COMPOSE_DIR}/nextcloud.yaml

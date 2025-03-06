@@ -1,18 +1,3 @@
-# Guacamole - A remote desktop gateway.
-
-# # Notes:
-# 1. Ensure a user 'photoprism' is created in MariaDB.
-# 2. Create a database for 'photoprism' with appropriate permissions.
-# 3. Use the following SQL commands:
-#    docker exec -it mariadb.${HOST_NAME} /usr/bin/mariadb -u root -p
-#    CREATE DATABASE guacamole;
-#    CREATE USER 'guac_user'@'%' IDENTIFIED BY 'your_password';
-#    GRANT ALL PRIVILEGES ON guacamole.* TO 'guac_user'@'%';
-#    FLUSH PRIVILEGES;
-#    quit;
-#    docker cp /path/to/scripts/guac_initdb.sql mariadb.${HOST_NAME}:/guac_initdb.sql
-#    docker exec -i mariadb.${HOST_NAME} bash -c "/usr/bin/mariadb -u guac_user -p'YOURPASSWORD' guacamole < /guac_initdb.sql"
-
 services:
   guacamole:
     container_name: guacamole.${HOST_NAME}
@@ -23,21 +8,19 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
-      GUACAMOLE_HOME: /config
       GUACD_HOSTNAME: guacamole.${HOST_NAME}
       MYSQL_DATABASE: guacamole
-      MYSQL_HOSTNAME:  mariadb.${HOST_NAME}
+      MYSQL_HOSTNAME: mariadb.${HOST_NAME}
       MYSQL_PORT: 3306
       MYSQL_USER_FILE: /run/secrets/guac_mysql_user
       MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password
+    depends_on:
+      - guacd
+      - mariadb
     networks:
       - mediaserver
     ports:
       - "${GUACAMOLE_PORT}:8080"
-    volumes:
-      - ${DOCKERDIR}/guacamole/config:/config
-      - ${DOCKERDIR}/logs/guacamole:/var/log
-    restart: always
     secrets:
       - guac_mysql_user
       - guac_mysql_password
