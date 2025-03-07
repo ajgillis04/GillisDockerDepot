@@ -10,10 +10,11 @@ services:
       PUID: ${PUID}
       inContainer: true # Tell tdarr its running in docker      
       nodeID: tdarr_node.${HOST_NAME}
-      nodeIP: ${SERVER_IP}
+      nodeIP: tdarr.${HOST_NAME}.local
       nodePort: ${TDARR_NODE_PORT}
       serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
+      serverURL: ${TDARR_SERVER_PORT}:8266
       # NVIDIA_DRIVER_CAPABILITIES: all
       # NVIDIA_VISIBLE_DEVICES: all
     networks:
@@ -23,7 +24,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr_node/app/configs:/app/configs
-      - ${DOCKERDIR}/tdarr_node/transcode:/transcode
+      - /dev/shm/tdarr:/transcode # offload transcoding to memory
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr_node:/app/logs
     # Hardware transcoding
