@@ -53,7 +53,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/plex/config:/config
       - ${MEDIASHARE}:/media
-      - /dev/shm:/transcode # offload transcoding to memory
+      - /dev/shm/plex:/transcode # offload transcoding to memory
       - ${DOCKERDIR}/logs/plex:/var/log
     restart: always
     secrets:
