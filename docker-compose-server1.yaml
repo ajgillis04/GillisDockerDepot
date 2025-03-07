@@ -153,6 +153,7 @@ include:
 #  - ${COMPOSE_DIR}/tailscale.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
+  - ${COMPOSE_DIR}/tdarr_node.yaml
   - ${COMPOSE_DIR}/traefik.yaml
   - ${COMPOSE_DIR}/transmission-openvpn.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml

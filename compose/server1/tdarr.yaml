@@ -20,12 +20,12 @@ services:
       PUID: ${PUID}
       DOMAINNAME: ${DOMAINNAME}
       inContainer: true # Tell tdarr its running in docker
-      serverIP: 0.0.0.0
+      serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
       webUIPort: ${TDARR_WEBUI_PORT}
-      internalNode: true # turn on node as well as server
-      nodeName: tdarr_node.${HOST_NAME} 
-      nodeID: tdarr_node.${HOST_NAME}
+#      internalNode: true # turn on node as well as server
+#      nodeName: tdarr_node.${HOST_NAME} 
+#      nodeID: tdarr_node.${HOST_NAME}      
       # NVIDIA_DRIVER_CAPABILITIES: all # Nvidia transcoding
       # NVIDIA_VISIBLE_DEVICES: all # Nvidia transcoding
     networks:
