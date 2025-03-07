@@ -14,6 +14,7 @@ services:
       nodePort: ${TDARR_NODE_PORT}
       serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
+      serverURL: ${TDARR_SERVER_PORT}:8266
       # NVIDIA_DRIVER_CAPABILITIES: all
       # NVIDIA_VISIBLE_DEVICES: all
     networks:
@@ -23,7 +24,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr_node/app/configs:/app/configs
-      - /dev/shm:/transcode # offload transcoding to memory
+      - /dev/shm/tdarr:/transcode # offload transcoding to memory
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr_node:/app/logs
     # Hardware transcoding
