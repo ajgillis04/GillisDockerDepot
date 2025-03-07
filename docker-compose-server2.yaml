@@ -117,9 +117,9 @@ include:
 #  - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
 #  - ${COMPOSE_DIR}/opentelemetry.yaml
-  - ${COMPOSE_DIR}/orbital-sync.yaml
+#  - ${COMPOSE_DIR}/orbital-sync.yaml
 #  - ${COMPOSE_DIR}/phpmyadmin.yaml
-  - ${COMPOSE_DIR}/pihole.yaml
+#  - ${COMPOSE_DIR}/pihole.yaml
 #  - ${COMPOSE_DIR}/plex.yaml
 #  - ${COMPOSE_DIR}/portainer.yaml
 #  - ${COMPOSE_DIR}/tdarr.yaml
