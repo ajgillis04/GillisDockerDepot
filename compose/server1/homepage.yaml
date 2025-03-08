@@ -1,4 +1,8 @@
-﻿services:
+﻿#A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages. 
+#Easily configured via YAML files or through docker label discovery.
+
+
+services:
   homepage:
     container_name: homepage.${HOST_NAME}
     hostname: homepage.${HOST_NAME}.local
