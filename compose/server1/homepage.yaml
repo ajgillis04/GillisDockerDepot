@@ -1,12 +1,11 @@
 ﻿#A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages. 
 #Easily configured via YAML files or through docker label discovery.
 
-
 services:
   homepage:
     container_name: homepage.${HOST_NAME}
     hostname: homepage.${HOST_NAME}.local
-    image: ghcr.io/gethomepage/homepage:latest # Replace with the Docker image name, e.g., amir20/dozzle:latest
+    image: ghcr.io/gethomepage/homepage:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
@@ -15,10 +14,9 @@ services:
     networks:
       - mediaserver
     ports:
-      - ${HOMEPAGE_PORT}:3000  # Add homepage_PORT to your .env file.
+      - "${HOMEPAGE_PORT}:3000"  # Add HOMEPAGE_PORT to your .env file.
     volumes:
-      # Uncomment if needed
-       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${DOCKERDIR}/homepage/app/config:/app/config
       - ${DOCKERDIR}/logs/homepage:/var/log
     restart: always
@@ -29,7 +27,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.homepage-rtr.entrypoints=https"
       ## Middlewares
-      - "traefik.http.routers.homepage-rtr.rule=Host(`homepage${HOST_SUFFIX}.${DOMAINNAME}`)"
+      - "traefik.http.routers.homepage-rtr.rule=Host(`homepage.${DOMAINNAME}`)"
       - "traefik.http.routers.homepage-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
