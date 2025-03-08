@@ -1,0 +1,36 @@
+﻿services:
+  homepage:
+    container_name: homepage.${HOST_NAME}
+    hostname: homepage.${HOST_NAME}.local
+    image: ghcr.io/gethomepage/homepage:latest # Replace with the Docker image name, e.g., amir20/dozzle:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
+    networks:
+      - mediaserver
+    ports:
+      - ${HOMEPAGE_PORT}:3000  # Add homepage_PORT to your .env file.
+    volumes:
+      # Uncomment if needed
+       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKERDIR}/homepage/app/config:/app/config
+      - ${DOCKERDIR}/logs/homepage:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.homepage-rtr.entrypoints=https"
+      ## Middlewares
+      - "traefik.http.routers.homepage-rtr.rule=Host(`homepage${HOST_SUFFIX}.${DOMAINNAME}`)"
+      - "traefik.http.routers.homepage-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.homepage-rtr.service=homepage-svc"
+      - "traefik.http.services.homepage-svc.loadbalancer.server.port=3000"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
