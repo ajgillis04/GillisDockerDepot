@@ -13,8 +13,8 @@ services:
       nodeIP: tdarr.${HOST_NAME}.local
       nodePort: ${TDARR_NODE_PORT}
       serverIP: ${TDARR_SERVERIP}
-      serverPort: ${TDARR_SERVER_PORT}
-      serverURL: ${TDARR_SERVER_PORT}:8266
+      serverPort: ${TDARR_SERVERIP}
+      serverURL: http://${TDARR_SERVERIP}:8266
       # NVIDIA_DRIVER_CAPABILITIES: all
       # NVIDIA_VISIBLE_DEVICES: all
     networks:
