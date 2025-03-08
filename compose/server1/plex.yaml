@@ -9,6 +9,7 @@
 #       Settings, Transcode, Transcoder temporary directory: /transcode
 #         If you paid for plex pass ensure these are selected Use hardware-accelerated video encoding, Use hardware acceleration when available
 #       Settings, Extras, Include Cinema Trailers from new and upcoming movies in theaters
+#       to restore playlists from old plex server https://soundiiz.com/webapp/playlists/spotify
 
 services:
   plex:
