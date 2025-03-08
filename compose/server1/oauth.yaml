@@ -15,17 +15,11 @@ services:
       DEFAULT_ACTION: auth
       DEFAULT_PROVIDER: google
       INSECURE_COOKIE: false
-      #LIFETIME: 2678400 # 1 month
-      LIFETIME: 86400 # 1 day, set if you want people to re-authenticate. if people are getting not authorized, check this.
+      LIFETIME: 2678400 # 1 month
+      #LIFETIME: 86400 # 1 day, set if you want people to re-authenticate. if people are getting not authorized, check this.
       LOG_FORMAT: json
       LOG_LEVEL: info
       URL_PATH: /_oauth
-     # PROVIDERS_GOOGLE_CLIENT_ID_FILE: /run/secrets/google_client_id
-      #PROVIDERS_GOOGLE_CLIENT_ID: ${PROVIDERS_GOOGLE_CLIENT_ID}
-      #PROVIDERS_GOOGLE_CLIENT_SECRET_FILE: /run/secrets/google_client_secret
-      #PROVIDERS_GOOGLE_CLIENT_SECRET: ${PROVIDERS_GOOGLE_CLIENT_SECRET}
-      #SECRET_FILE: /run/secrets/oauth_secret
-      #SECRET: ${OAUTH_SECRET}
     networks:
       - mediaserver
     ports:
@@ -35,12 +29,8 @@ services:
       - ${DOCKERDIR}/logs/oauth:/var/log
     restart: always
     secrets:
-      #- source: traefik_forward_auth
       - source: oauth_secrets
         target: /config
-      #- google_client_id
-      #- google_client_secret
-      #- oauth_secret
     security_opt:
       - no-new-privileges:true
     labels:
