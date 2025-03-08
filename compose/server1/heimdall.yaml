@@ -7,7 +7,7 @@ services:
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
-      PGID: 100 #can't be an admin group.
+      PGID: 100 # can't be an admin group check by id <Username>
       DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
