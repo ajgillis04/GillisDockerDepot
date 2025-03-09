@@ -1,66 +1,172 @@
 #!/bin/bash
 
-# Load environment variables from .env file
+# This script generates a services.yaml file for the homepage app
+# based on the running containers and their environment variables.
+# It groups services into categories and sets the appropriate
+# icon, href, widget, and siteMonitor values for each service.
+
+# Load environment variables
 set -a
 source .env
 set +a
 
-SERVICES_CONFIG_FILE="${DOCKERDIR}/homepage/config/services.yaml"
-WIDGETS_CONFIG_FILE="${DOCKERDIR}/homepage/config/widgets.yaml"
-LABEL="traefik.http.routers.homepage-rtr.rule"
-WARNING_MESSAGE="Warning: Only running containers with the Traefik label will be added."
+# Set config file paths. Adjust these if needed.
+SERVICES_CONFIG_FILE="${DOCKERDIR}/homepage/app/config/services.yaml"
 
-echo $WARNING_MESSAGE
+# Define your service groups
+media_list=("sonarr" "radarr" "bazarr" "lidarr" "overseerr" "tautulli" "plex" "tdarr" "sabnzbd" "prowlarr")
+infrastructure_list=("traefik" "php-apache-gillisonline" "php-apache-awl" "portainer" "guacamole")
+network_list=("pihole")
+utility_list=("dozzle" "vaultwarden")
 
-NOT_ADDED=()
+# Extract SERVER_IP from .env or default to localhost
+SERVER_IP="${SERVER_IP:-127.0.0.1}"
 
-declare -A groups
-groups=(
-    [Media]="Sonarr.GillisNAS Radarr.GillisNAS Bazarr.GillisNAS Lidarr.GillisNAS Overseerr.GillisNAS Tautulli.GillisNAS Plex.GillisNAS Tdarr.GillisNAS Sabnzbd.GillisNAS Prowlarr.GillisNAS"
-    [Infrastructure]="Traefik.GillisNAS Php-Apache-Gillisonline.GillisNAS Php-Apache-Awl.GillisNAS Portainer.GillisNAS Guacamole.GillisNAS"
-    [Network]="Pihole.GillisNAS"
-    [Utility]="Dozzle.GillisNAS Vaultwarden.GillisNAS"
-    [Other]="Chowdown.GillisNAS Transmission-Openvpn.GillisNAS Nextcloud.GillisNAS"
-)
+# Initialize group variables
+media_services="- media:\n"
+infrastructure_services="- infrastructure:\n"
+network_services="- network:\n"
+utility_services="- utility:\n"
+other_services="- other:\n"
 
-echo "---" > $SERVICES_CONFIG_FILE
+# Added, skipped, and missing services for logging
+added_services=()
+skipped_services=()
+missing_port_services=()
 
-for group in "${!groups[@]}"; do
-    echo "- $group:" >> $SERVICES_CONFIG_FILE
-    for container_name in ${groups[$group]}; do
-        if docker inspect $container_name | grep -q "$LABEL"; then
-            container_url=$(docker inspect --format='{{(index (index .Config.Labels "'"$LABEL"'") 0)}}' $container_name)
-            container_url=$(echo $container_url | sed "s/Host('//; s/')//")
-            echo "    - name: \"$container_name\"" >> $SERVICES_CONFIG_FILE
-            echo "      href: \"http://$container_url\"" >> $SERVICES_CONFIG_FILE
-            echo "      icon: \"/path/to/icon\"" >> $SERVICES_CONFIG_FILE
-            echo "      description: \"Description for $container_name\"" >> $SERVICES_CONFIG_FILE
-        else
-            NOT_ADDED+=($container_name)
-        fi
+# Get the names of all running containers
+running_containers=$(docker ps --format "{{.Names}}")
+
+# Loop over each running container
+for container in $running_containers; do
+  # Standardize the container name
+  cn_clean=$(echo "$container" | tr '[:upper:]' '[:lower:]' | sed 's/\.gillisnas//')
+
+  # Extract API key and port for the application from .env
+  api_key_var=$(env | grep -i "^${cn_clean}_API_KEY=" | awk -F'=' '{print $2}')
+  port_var=$(env | grep -i "^${cn_clean}_PORT=" | awk -F'=' '{print $2}')
+
+  # Log services with missing PORT
+  if [ -z "$port_var" ]; then
+    missing_port_services+=("$container")
+    site_monitor_url="http://${SERVER_IP}" # Default to SERVER_IP without port
+  else
+    site_monitor_url="http://${SERVER_IP}:${port_var}"
+  fi
+
+  # Construct default href using SERVER_IP and PORT
+  href_url="http://${SERVER_IP}"
+  if [ -n "$port_var" ]; then
+    href_url="${href_url}:${port_var}"
+  fi
+
+  # Extract container labels
+  container_labels=$(docker inspect --format='{{json .Config.Labels}}' "$container" 2>/dev/null)
+
+  # Extract the first valid Host(...) label to avoid duplicates
+  if [ -n "$container_labels" ]; then
+    container_url=$(echo "$container_labels" | grep -o 'Host(`[^`]*`)' | head -n 1 | sed 's/Host(`//; s/`)//' | tr -d '[:space:]')
+    if [ -n "$container_url" ]; then
+      href_url="http://${container_url}"
+    fi
+  fi
+
+  added_services+=("$container")
+
+  # Build the service entry
+  service_entry="      - $container:\n"
+  service_entry+="          icon: ${cn_clean}.png\n"
+  service_entry+="          href: $href_url\n"
+
+  # Add the widget if API_KEY is available
+  if [ -n "$api_key_var" ]; then
+    service_entry+="          widget:\n"
+    service_entry+="            type: $cn_clean\n"
+    service_entry+="            url: $site_monitor_url\n"
+    service_entry+="            key: $api_key_var\n"
+  fi
+
+  # Add the siteMonitor field
+  service_entry+="          siteMonitor: $site_monitor_url\n"
+
+  # Determine which group the service belongs to
+  group_name="other"
+  for g in "${media_list[@]}"; do
+    if [ "$cn_clean" = "$g" ]; then
+      group_name="media"
+      break
+    fi
+  done
+  if [ "$group_name" = "other" ]; then
+    for g in "${infrastructure_list[@]}"; do
+      if [ "$cn_clean" = "$g" ]; then
+        group_name="infrastructure"
+        break
+      fi
     done
+  fi
+  if [ "$group_name" = "other" ]; then
+    for g in "${network_list[@]}"; do
+      if [ "$cn_clean" = "$g" ]; then
+        group_name="network"
+        break
+      fi
+    done
+  fi
+  if [ "$group_name" = "other" ]; then
+    for g in "${utility_list[@]}"; do
+      if [ "$cn_clean" = "$g" ]; then
+        group_name="utility"
+        break
+      fi
+    done
+  fi
+
+  # Append the service entry to the appropriate group
+  case $group_name in
+    media)
+      media_services+="$service_entry"
+      ;;
+    infrastructure)
+      infrastructure_services+="$service_entry"
+      ;;
+    network)
+      network_services+="$service_entry"
+      ;;
+    utility)
+      utility_services+="$service_entry"
+      ;;
+    other)
+      other_services+="$service_entry"
+      ;;
+  esac
 done
 
-echo "Containers added to $SERVICES_CONFIG_FILE"
+# Write services.yaml file with nested structure
+{
+  echo -e "$media_services"
+  echo -e "$infrastructure_services"
+  echo -e "$network_services"
+  echo -e "$utility_services"
+  echo -e "$other_services"
+} > "$SERVICES_CONFIG_FILE"
 
-if [ ${#NOT_ADDED[@]} -ne 0 ]; then
-    echo "These containers were not added because they do not have the required Traefik label:"
-    for container in "${NOT_ADDED[@]}"; do
-        echo "- $container"
-    done
-fi
+# Display summary with better separation
+echo -e "\n========= SUMMARY ========="
 
-# Add Google search widget to widgets.yaml
-echo "- name: \"Google Search\"" > $WIDGETS_CONFIG_FILE
-echo "  widget: html" >> $WIDGETS_CONFIG_FILE
-echo "  refresh_interval: 60000" >> $WIDGETS_CONFIG_FILE
-echo "  settings:" >> $WIDGETS_CONFIG_FILE
-echo "    html: |" >> $WIDGETS_CONFIG_FILE
-echo "      <div style=\"text-align: center;\">" >> $WIDGETS_CONFIG_FILE
-echo "        <form action=\"https://www.google.com/search\" method=\"get\">" >> $WIDGETS_CONFIG_FILE
-echo "          <input type=\"text\" name=\"q\" placeholder=\"Search Google\" style=\"width: 300px; padding: 5px;\" />" >> $WIDGETS_CONFIG_FILE
-echo "          <input type=\"submit\" value=\"Search\" style=\"padding: 5px 10px;\" />" >> $WIDGETS_CONFIG_FILE
-echo "        </form>" >> $WIDGETS_CONFIG_FILE
-echo "      </div>" >> $WIDGETS_CONFIG_FILE
+echo -e "\n[ADDED SERVICES]"
+for added in "${added_services[@]}"; do
+  echo " - $added"
+done
 
-echo "Google search widget added to $WIDGETS_CONFIG_FILE"
+echo -e "\n[SKIPPED SERVICES]"
+for skipped in "${skipped_services[@]}"; do
+  echo " - $skipped"
+done
+
+echo -e "\n[MISSING PORT SERVICES (please add PORT manually)]"
+for missing in "${missing_port_services[@]}"; do
+  echo " - $missing"
+done
+
+echo -e "\nServices configuration written to $SERVICES_CONFIG_FILE"
