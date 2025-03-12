@@ -34,3 +34,13 @@ services:
       - "traefik.http.services.overseerr-svc.loadbalancer.server.port=5055"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Overseerr"
+      - "homepage.icon=overseerr.png"
+      - "homepage.href=http://overseerr.${DOMAINNAME}/"
+      - "homepage.description=Request and manage your media"
+      ## Homepage Widget
+      - "homepage.widget.type=overseerr"
+      - "homepage.widget.url=http://overseerr.${HOST_NAME}:5055"
+      - "homepage.widget.key=${OVERSEERR_API_KEY}"

@@ -40,3 +40,13 @@ services:
       - "traefik.http.services.radarr-svc.loadbalancer.server.port=7878"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Radarr"
+      - "homepage.icon=radarr.png"
+      - "homepage.href=http://radarr.${DOMAINNAME}/"
+      - "homepage.description=Movie download manager"
+      ## Homepage Widget
+      - "homepage.widget.type=radarr"
+      - "homepage.widget.url=http://radarr.${HOST_NAME}:7878"
+      - "homepage.widget.key=${RADARR_API_KEY}"

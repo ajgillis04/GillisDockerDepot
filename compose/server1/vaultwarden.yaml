@@ -51,3 +51,9 @@ services:
       - "traefik.http.services.vaultwarden-svc.loadbalancer.server.port=80"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Vaultwarden"
+      - "homepage.icon=vaultwarden.png"
+      - "homepage.href=http://vault.${DOMAINNAME}/"
+      - "homepage.description=Self-hosted password management"

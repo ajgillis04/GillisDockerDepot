@@ -41,4 +41,13 @@ services:
       - "traefik.http.services.lidarr-svc.loadbalancer.server.port=8686"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
-
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Lidarr"
+      - "homepage.icon=lidarr.png"
+      - "homepage.href=http://lidarr.${DOMAINNAME}/"
+      - "homepage.description=Music download manager"
+      ## Homepage Widget
+      - "homepage.widget.type=lidarr"
+      - "homepage.widget.url=http://lidarr.${HOST_NAME}:8686"
+      - "homepage.widget.key=${LIDARR_API_KEY}"

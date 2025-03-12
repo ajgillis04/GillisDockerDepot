@@ -34,3 +34,9 @@ services:
       - "traefik.http.services.chowdown-svc.loadbalancer.server.port=4000"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Other"
+      - "homepage.name=Chowdown"
+      - "homepage.icon=chowdown.png"
+      - "homepage.href=http://chowdown.${DOMAINNAME}/"
+      - "homepage.description=Cookbook and recipe manager"

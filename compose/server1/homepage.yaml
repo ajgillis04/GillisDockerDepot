@@ -21,7 +21,7 @@ services:
       - ${DOCKERDIR}/logs/homepage:/var/log
     restart: always
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges:true    
     labels:
       - "traefik.enable=true"
       ## HTTP Routers

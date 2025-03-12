@@ -71,6 +71,12 @@ services:
       - "traefik.http.services.transmission-vpn-svc.loadbalancer.server.port=9091"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Other"
+      - "homepage.name=Transmission-OpenVPN"
+      - "homepage.icon=transmission.png"
+      - "homepage.href=http://trans.${DOMAINNAME}/"
+      - "homepage.description=Torrent client with OpenVPN"
     logging:
       driver: json-file
       options:

@@ -74,3 +74,14 @@ services:
       - "traefik.http.services.plex-svc.loadbalancer.server.port=32400"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Plex"
+      - "homepage.icon=plex.png"
+      - "homepage.href=http://plex.${DOMAINNAME}/"
+      - "homepage.description=Stream your favorite media"
+      ## Homepage Widget
+      - "homepage.widget.type=plex"
+      - "homepage.widget.url=http://plex.${HOST_NAME}:32400"
+      - "homepage.widget.key=${PLEX_TOKEN}"
+

@@ -42,3 +42,9 @@ services:
       - "traefik.http.services.guacamole-svc.loadbalancer.server.port=8080"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Guacamole"
+      - "homepage.icon=guacamole.png"
+      - "homepage.href=http://guac.${DOMAINNAME}/"
+      - "homepage.description=Remote desktop gateway"

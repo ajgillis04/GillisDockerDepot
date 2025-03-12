@@ -26,6 +26,7 @@ services:
     restart: unless-stopped
     networks:
       - mediaserver
+      - pihole_network
     environment:
       # COMMON
       TZ: ${TZ}
@@ -135,3 +136,9 @@ services:
       - "traefik.docker.network=mediaserver"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Traefik"
+      - "homepage.icon=traefik.png"
+      - "homepage.href=http://traefik.${DOMAINNAME}/"
+      - "homepage.description=Manage Traefik reverse proxy"

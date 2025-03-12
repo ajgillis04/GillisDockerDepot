@@ -34,3 +34,16 @@ services:
       - "traefik.http.services.sabnzbd-svc.loadbalancer.server.port=8080"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Sabnzbd"
+      - "homepage.icon=sabnzbd.png"
+      - "homepage.href=http://sabnzbd.${DOMAINNAME}/"
+      - "homepage.description=NZB downloader"
+      ## Homepage Widget
+      - "homepage.widget.type=sabnzbd"
+      - "homepage.widget.url=http://192.168.2.10:8087"
+      - "homepage.widget.key=${SABNZDB_API_KEY}"
+#                  url: http://192.168.2.10:8087
+#            key: d51e0c9757c24492999f219fb32615ed          
+#          siteMonitor: http:/172.30.0.17:8087

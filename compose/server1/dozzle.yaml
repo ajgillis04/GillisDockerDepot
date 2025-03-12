@@ -33,3 +33,9 @@ services:
       - "traefik.http.services.dozzle-svc.loadbalancer.server.port=8080"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Dozzle"
+      - "homepage.icon=dozzle.png"
+      - "homepage.href=http://dozzle.${DOMAINNAME}/"
+      - "homepage.description=Stream container logs in real-time"

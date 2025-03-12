@@ -33,3 +33,9 @@ services:
       - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Portainer"
+      - "homepage.icon=portainer.png"
+      - "homepage.href=http://portainer.${DOMAINNAME}/"
+      - "homepage.description=Manage your Docker containers"

@@ -39,4 +39,13 @@ services:
       - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
-
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Bazarr"
+      - "homepage.icon=bazarr.png"
+      - "homepage.href=http://bazarr.${DOMAINNAME}/"
+      - "homepage.description=Subtitle management"
+      ## Homepage Widget
+      - "homepage.widget.type=bazarr"
+      - "homepage.widget.url=http://bazarr.${HOST_NAME}:6767"
+      - "homepage.widget.key=${BAZARR_API_KEY}"

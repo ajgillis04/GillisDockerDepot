@@ -40,3 +40,14 @@ services:
       - "traefik.http.services.sonarr-svc.loadbalancer.server.port=8989"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Sonarr"
+      - "homepage.icon=sonarr.png"
+      - "homepage.href=http://sonarr.${DOMAINNAME}/"
+      - "homepage.description=TV show download manager"
+      ## Homepage Widget
+      - "homepage.widget.type=sonarr"
+      - "homepage.widget.url=http://sonarr.${HOST_NAME}:8989"
+      - "homepage.widget.key=${SONARR_API_KEY}"
+
