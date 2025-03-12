@@ -1,0 +1,41 @@
+services:
+  jellyfin:
+    container_name: jellyfin.${HOST_NAME}
+    hostname: jellyfin.${HOST_NAME}.local
+    image: jellyfin/jellyfin:latest
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      TZ: ${TZ}
+      PUID: 0
+      PGID: 0
+      DOMAINNAME: ${DOMAINNAME}
+      UMASK: 002
+    networks:
+      - mediaserver
+    ports:
+      - "8096:8096/tcp" # Default Jellyfin port
+      - "8920:8920/tcp" # HTTPS port
+      - "7359:7359/udp" # DLNA UDP
+      - "1900:1900/udp" # SSDP UDP
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/jellyfin/config:/config
+      - ${MEDIASHARE}:/media
+      - ${DOCKERDIR}/logs/jellyfin:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.jellyfin-rtr.entrypoints=https"
+      - "traefik.http.routers.jellyfin-rtr.rule=Host(`jellyfin.${DOMAINNAME}`)"
+      - "traefik.http.routers.jellyfin-rtr.middlewares=chain-no-auth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.jellyfin-rtr.service=jellyfin-svc"
+      - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
