@@ -67,5 +67,5 @@ services:
       - "homepage.description=Network-wide ad blocker"
       ## Homepage Widget
       - "homepage.widget.type=pihole"
-      - "homepage.widget.url=http://pihole.${HOST_NAME}"
+      - "homepage.widget.url=https://pihole.${HOST_NAME}"
       - "homepage.widget.key=${PIHOLE_TOKEN}"
