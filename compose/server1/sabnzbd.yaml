@@ -42,5 +42,5 @@ services:
       - "homepage.description=NZB downloader"
       ## Homepage Widget
       - "homepage.widget.type=sabnzbd"
-      - "homepage.widget.url=http://192.168.2.10:8087"
+      - "homepage.widget.url=http://sabnzbd.${HOST_NAME}:8080"
       - "homepage.widget.key=${SABNZDB_API_KEY}"
