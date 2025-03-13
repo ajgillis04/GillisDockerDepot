@@ -1,3 +1,7 @@
+# The Free Software Media System
+# Jellyfin is the volunteer-built media solution that puts you in control of your media.
+# Stream to any device from your own server, with no strings attached. Your media, your server, your way.
+
 services:
   jellyfin:
     container_name: jellyfin.${HOST_NAME}
@@ -11,31 +15,40 @@ services:
       PGID: 0
       DOMAINNAME: ${DOMAINNAME}
       UMASK: 002
+      JELLYFIN_PublishedServerUrl: jellyfin.${DOMAINNAME}
     networks:
       - mediaserver
     ports:
-      - "8096:8096/tcp" # Default Jellyfin port
-      - "8920:8920/tcp" # HTTPS port
-      - "7359:7359/udp" # DLNA UDP
-      - "1900:1900/udp" # SSDP UDP
+      - "${JELLYFIN_PORT_1}:8096"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/jellyfin/config:/config
       - ${MEDIASHARE}:/media
-      - ${DOCKERDIR}/logs/jellyfin:/var/log
+      - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
     restart: always
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges:true    
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.jellyfin-rtr.entrypoints=https"
       - "traefik.http.routers.jellyfin-rtr.rule=Host(`jellyfin.${DOMAINNAME}`)"
-      - "traefik.http.routers.jellyfin-rtr.middlewares=chain-no-auth@file"
+      ## Middlewares
+      - "traefik.http.routers.jellyfin-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
       - "traefik.http.routers.jellyfin-rtr.service=jellyfin-svc"
       - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
-      ## Watchtower Enable
+      ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Jellyfin"
+      - "homepage.icon=jellyfin.png"
+      - "homepage.href=http://jellyfin.${DOMAINNAME}"
+      - "homepage.description=The Free Software Media System"
+      ## Homepage Widget
+      - "homepage.widget.type=jellyfin"
+      - "homepage.widget.url=https://jellyfin.${HOST_NAME}:8096"      
+      - "homepage.widget.key=${JELLYFIN_API_KEY}"
