@@ -50,5 +50,5 @@ services:
       - "homepage.description=The Free Software Media System"
       ## Homepage Widget
       - "homepage.widget.type=jellyfin"
-      - "homepage.widget.url=https://jellyfin.${HOST_NAME}:8096"      
+      - "homepage.widget.url=http://jellyfin.${HOST_NAME}:8096"      
       - "homepage.widget.key=${JELLYFIN_API_KEY}"
