@@ -9,8 +9,9 @@ services:
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
-      PGID: ${PGID}
+      PGID: 0
       DOMAINNAME: ${DOMAINNAME}
+      HOMEPAGE_ALLOWED_HOSTS: homepage.${DOMAINNAME}
     networks:
       - mediaserver
     ports:
