@@ -13,7 +13,7 @@ services:
       MYSQL_HOSTNAME: mariadb.${HOST_NAME}
       MYSQL_PORT: 3306
       MYSQL_USER_FILE: /run/secrets/guac_mysql_user
-      MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password
+      MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password      
     depends_on:
       - guacd
       - mariadb
@@ -21,6 +21,12 @@ services:
       - mediaserver
     ports:
       - "${GUACAMOLE_PORT}:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/guacamole/home:/home/guacamole
+      - ${DOCKERDIR}/guacamole/etc:/etc/guacamole
+      - ${DOCKERDIR}/logs/guacamole:/var/log
+    restart: unless-stopped
     secrets:
       - guac_mysql_user
       - guac_mysql_password
