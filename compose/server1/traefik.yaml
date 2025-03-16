@@ -49,12 +49,12 @@ services:
       TRAEFIK_API: true
       TRAEFIK_API_DASHBOARD: true
       # Disable once up and running for security
-      TRAEFIK_API_INSECURE: true
+      TRAEFIK_API_INSECURE: false
       
       # LOGGING
       TRAEFIK_LOG: true
       TRAEFIK_LOG_FILEPATH: /logs/traefik.log
-      TRAEFIK_LOG_LEVEL: DEBUG # DEBUG, INFO, WARN, ERROR, FATAL, PANIC. Set debug for testing
+      TRAEFIK_LOG_LEVEL: INFO # DEBUG, INFO, WARN, ERROR, FATAL, PANIC. Set debug for testing
       
       # ACCESS LOG
       TRAEFIK_ACCESSLOG: true
@@ -67,7 +67,6 @@ services:
       TRAEFIK_PROVIDERS_DOCKER_ENDPOINT: unix:///var/run/docker.sock
       TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: false
       TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver
-      TRAEFIK_PROVIDERS_FILE_DEBUG: true
       TRAEFIK_PROVIDERS_FILE_DIRECTORY: /rules
       TRAEFIK_PROVIDERS_FILE_WATCH: true
       
