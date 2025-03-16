@@ -1,0 +1,38 @@
+# Nextcloud - An open-source cloud storage solution.
+# Nextcloud is a finicky beast if you get into trouble if you get in trouble with it start over
+# docker stop $(docker ps -a -q --filter name=nextcloud)
+# docker rm $(docker ps -a -q --filter name=nextcloud)
+# docker volume rm $(docker volume ls -q --filter name=nextcloud)
+# docker network rm $(docker network ls -q --filter name=nextcloud)
+# sudo rm -rf /share/CACHEDEV1_DATA/Container/container-station-data/lib/docker/volumes/nextcloud/_data
+# sudo rm -rf /share/CACHEDEV1_DATA/Container/container-station-data/lib/docker/volumes/nextcloud
+
+# *************************** VOLUMES ******************************************
+# This volume is required to make nextcloud_aio_mastercontainer work
+volumes:
+  nextcloud_aio_mastercontainer:
+    name: nextcloud_aio_mastercontainer # This line is not allowed to be changed    
+    
+services:
+  nextcloud:
+    container_name: nextcloud-aio-mastercontainer # cannot use .${HOST_NAME} nextcloud-aio very picky on naming
+    hostname: nextcloud.${HOST_NAME}.local
+    image: nextcloud/all-in-one:latest
+    environment:
+      APACHE_PORT: 11000
+      APACHE_IP_BINDING: ${SERVER_IP}
+      NEXTCLOUD_DATADIR: ${NEXTCLOUD_HOMES} # all user folders and data will be kept here
+      NEXTCLOUD_MOUNT: ${NEXTCLOUD_EXSTORAGE} # Allows the Nextcloud container to access the chosen directory on the host
+      NEXTCLOUD_TRUSTED_CACERTS_DIR: ${SHAREDDIR} # CA certificates in this directory will be trusted by the OS of the nexcloud container (Useful e.g. for LDAPS) See See
+      SKIP_DOMAIN_VALIDATION: true
+    networks:
+      - nextcloud-aio
+      - mediaserver
+    ports:
+      - "87:80"
+      - "8086:8080"
+      - "16002:8443"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
