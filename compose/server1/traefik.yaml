@@ -28,7 +28,7 @@ services:
       - mediaserver
       - pihole_network
     environment:
-      # COMMON
+      # COMMON      
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
       TRAEFIK_GLOBAL_CHECKNEWVERSION: true
@@ -67,6 +67,7 @@ services:
       TRAEFIK_PROVIDERS_DOCKER_ENDPOINT: unix:///var/run/docker.sock
       TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: false
       TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver
+      TRAEFIK_PROVIDERS_FILE_DEBUG: true
       TRAEFIK_PROVIDERS_FILE_DIRECTORY: /rules
       TRAEFIK_PROVIDERS_FILE_WATCH: true
       
@@ -104,12 +105,7 @@ services:
       - target: 8080
         published: 8085
         protocol: tcp
-        mode: host
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "7"
+        mode: host    
     volumes:
       - ${DOCKERDIR}/traefik/rules:/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -142,3 +138,9 @@ services:
       - "homepage.icon=traefik.png"
       - "homepage.href=http://traefik.${DOMAINNAME}/"
       - "homepage.description=Manage Traefik reverse proxy"
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "7"
