@@ -66,7 +66,7 @@ services:
       TRAEFIK_PROVIDERS_DOCKER: true
       TRAEFIK_PROVIDERS_DOCKER_ENDPOINT: unix:///var/run/docker.sock
       TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: false
-      TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver
+      #TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver #if you want route other networks leave this
       TRAEFIK_PROVIDERS_FILE_DIRECTORY: /rules
       TRAEFIK_PROVIDERS_FILE_WATCH: true
       
