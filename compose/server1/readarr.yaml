@@ -45,6 +45,6 @@ services:
       - "homepage.description=Book download manager"
       ## Homepage Widget
       - "homepage.widget.type=readarr"
-      - "homepage.widget.url=http://readarr.gillisonline.com:8787"
+      - "homepage.widget.url=http://readarr.${HOST_NAME}:8787"
       - "homepage.widget.key=${READARR_API_KEY}"
 
