@@ -21,21 +21,16 @@ services:
     security_opt:
       - no-new-privileges:true   
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers - Bypass
-      - "traefik.http.routers.bazarr-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.bazarr-rtr-bypass.rule=Host(`bazarr.${DOMAINNAME}`) && Header(`traefik-auth-bypass-key`, `${TRAEFIK_AUTH_BYPASS_KEY}`)"                                                                                                                          
-      - "traefik.http.routers.bazarr-rtr-bypass.priority=100"
+      - "traefik.enable=true"      
       ## HTTP Routers
       - "traefik.http.routers.bazarr-rtr.entrypoints=https"
-      - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.bazarr-rtr.priority=99"
+      - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.${DOMAINNAME}`)"      
       - "traefik.http.routers.bazarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.bazarr-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
-      - "traefik.http.routers.bazarr-rtr.service=bazarr-svc"
-      - "traefik.http.routers.bazarr-rtr-bypass.service=bazarr-svc"
+      - "traefik.http.routers.bazarr-rtr.service=bazarr-svc"      
       - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"

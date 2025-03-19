@@ -27,8 +27,9 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.netdata-rtr.entrypoints=https"
       - "traefik.http.routers.netdata-rtr.rule=Host(`netdata.${DOMAINNAME}`)"
-      ## Middlewares
-      - "traefik.http.routers.netdata-rtr.middlewares=chain-oauth@file"      
+      - "traefik.http.routers.netdata-rtr.tls.options=tls-opts"
+      ## Middlewares      
+      - "traefik.http.routers.netdata-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
       - "traefik.http.routers.netdata-rtr.service=netdata-svc"
       - "traefik.http.services.netdata-svc.loadbalancer.server.port=19999"

@@ -23,20 +23,16 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers - Bypass
-      - "traefik.http.routers.sonarr-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.sonarr-rtr-bypass.priority=100"
+      - "traefik.enable=true"      
       ## HTTP Routers
       - "traefik.http.routers.sonarr-rtr.entrypoints=https"
       - "traefik.http.routers.sonarr-rtr.rule=Host(`sonarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.sonarr-rtr.priority=99"
       - "traefik.http.routers.sonarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.sonarr-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
-      - "traefik.http.routers.sonarr-rtr.service=sonarr-svc"
-      - "traefik.http.routers.sonarr-rtr-bypass.service=sonarr-svc"
+      - "traefik.http.routers.sonarr-rtr.service=sonarr-svc"      
       - "traefik.http.services.sonarr-svc.loadbalancer.server.port=8989"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"

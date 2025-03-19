@@ -29,6 +29,7 @@ services:
       - "traefik.http.routers.readarr-rtr.entrypoints=https"
       - "traefik.http.routers.readarr-rtr.rule=Host(`readarr.${DOMAINNAME}`)"
       - "traefik.http.routers.readarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.readarr-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
@@ -36,3 +37,14 @@ services:
       - "traefik.http.services.readarr-svc.loadbalancer.server.port=8787"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Readarr"
+      - "homepage.icon=readarr.png"
+      - "homepage.href=http://readarr.gillisonline.com/"
+      - "homepage.description=Book download manager"
+      ## Homepage Widget
+      - "homepage.widget.type=readarr"
+      - "homepage.widget.url=http://readarr.gillisonline.com:8787"
+      - "homepage.widget.key=${READARR_API_KEY}"
+
