@@ -36,11 +36,11 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.guacamole-rtr.entrypoints=https"
-      - "traefik.http.routers.guacamole-rtr.rule=Host(`guac.${DOMAINNAME}`)"
-      - "traefik.http.routers.guacamole-rtr.tls=true"
-      ## Middlewares
+      - "traefik.http.routers.guacamole-rtr.rule=Host(`guac.${DOMAINNAME}`)"      
       - "traefik.http.routers.guacamole-rtr.middlewares=chain-oauth@file,add-guacamole"
-      - "traefik.http.middlewares.add-guacamole.addPrefix.prefix=/guacamole"
+      - "traefik.http.routers.guacamole-rtr.tls.options=tls-opts@file"
+      ## Middlewares      
+      - "traefik.http.middlewares.add-guacamole.addPrefix.prefix=/guacamole"      
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

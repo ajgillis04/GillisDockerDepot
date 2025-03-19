@@ -22,10 +22,10 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.dozzle-rtr.entrypoints=https"
-      ## Middlewares
+      - "traefik.http.routers.dozzle-rtr.entrypoints=https"      
       - "traefik.http.routers.dozzle-rtr.rule=Host(`dozzle.${DOMAINNAME}`)"
       - "traefik.http.routers.dozzle-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.dozzle-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

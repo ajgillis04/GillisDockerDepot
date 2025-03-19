@@ -74,7 +74,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.photoprism-rtr.entrypoints=https"
       - "traefik.http.routers.photoprism-rtr.rule=Host(`photos.${DOMAINNAME}`)"
-      - "traefik.http.routers.photoprism-rtr.tls=true"
+      - "traefik.http.routers.photoprism-rtr.tls.options=tls-opts@file"
       ## Middlewares
       - "traefik.http.routers.photoprism-rtr.middlewares=chain-oauth@file"
       ## Docker Network

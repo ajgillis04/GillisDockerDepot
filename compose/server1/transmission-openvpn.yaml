@@ -12,7 +12,9 @@ services:
       - 1.1.1.1
       - 1.0.0.1
     environment:
-      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}      
       DOMAIN: ${DOMAINNAME}
       CREATE_TUN_DEVICE: true
       LOCAL_NETWORK: ${LOCAL_NETWORK}
@@ -64,6 +66,7 @@ services:
       - "traefik.http.routers.transmission-vpn-rtr.entrypoints=https"
       - "traefik.http.routers.transmission-vpn-rtr.rule=Host(`trans.${DOMAINNAME}`)"
       - "traefik.http.routers.transmission-vpn-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.transmission-openvpn-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

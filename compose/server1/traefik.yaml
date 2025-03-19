@@ -28,9 +28,12 @@ services:
       - mediaserver
       - pihole_network
     environment:
-      # COMMON      
+      # COMMON load these from .env into container to use variables in rules
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
+      SERVER_IP: ${SERVER_IP}
+      PLEX_TOKEN: ${PLEX_TOKEN} #adding for dynamic config in plex-cors-headers.yml
+      
       TRAEFIK_GLOBAL_CHECKNEWVERSION: true
       TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: true
       
@@ -125,8 +128,9 @@ services:
       - "traefik.http.routers.traefik-rtr.rule=Host(`traefik${HOST_SUFFIX}.${DOMAINNAME}`)"
       - "traefik.http.routers.traefik-rtr.tls=true"
       - "traefik.http.routers.traefik-rtr.service=api@internal"
+      - "traefik.http.routers.traefik-rtr.tls.options=tls-opts@file"
       ## Middlewares
-      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file"      
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## Watchtower Enable

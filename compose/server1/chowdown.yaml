@@ -24,9 +24,9 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.chowdown-rtr.entrypoints=https"
       - "traefik.http.routers.chowdown-rtr.rule=Host(`chowdown.${DOMAINNAME}`)"
-      - "traefik.http.routers.chowdown-rtr.tls=true"
+      - "traefik.http.routers.chowdown-rtr.tls.options=tls-opts@file"
       ## Middlewares
-      - "traefik.http.routers.chowdown-rtr.middlewares=chain-oauth@file" # hardening to use traefik_forward_auth
+      - "traefik.http.routers.chowdown-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

@@ -26,10 +26,10 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.homepage-rtr.entrypoints=https"
-      ## Middlewares
+      - "traefik.http.routers.homepage-rtr.entrypoints=https"      
       - "traefik.http.routers.homepage-rtr.rule=Host(`homepage.${DOMAINNAME}`)"
       - "traefik.http.routers.homepage-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.homepage-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

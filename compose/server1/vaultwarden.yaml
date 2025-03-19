@@ -32,22 +32,16 @@ services:
       - no-new-privileges:true
     labels:
       - "traefik.enable=true"
-      ## HTTP Routers - Bypass
-      - "traefik.http.routers.vaultwarden-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.vaultwarden-rtr-bypass.rule=Host(`vault.${DOMAINNAME}`) && Header(`traefik-auth-bypass-key`, `${TRAEFIK_AUTH_BYPASS_KEY}`)"
-      - "traefik.http.routers.vaultwarden-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.vaultwarden-rtr.entrypoints=https"
       - "traefik.http.routers.vaultwarden-rtr.rule=Host(`vault.${DOMAINNAME}`)"
-      - "traefik.http.routers.vaultwarden-rtr.priority=99"
+      - "traefik.http.routers.vaultwarden-rtr.tls.options=tls-opts@file"
       ## Middlewares
-      - "traefik.http.routers.vaultwarden-rtr-bypass.middlewares=chain-no-auth@file"
       - "traefik.http.routers.vaultwarden-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
       - "traefik.http.routers.vaultwarden-rtr.service=vaultwarden-svc"
-      - "traefik.http.routers.vaultwarden-rtr-bypass.service=vaultwarden-svc"
       - "traefik.http.services.vaultwarden-svc.loadbalancer.server.port=80"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"

@@ -34,6 +34,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.calibre-rtr.entrypoints=https"
       - "traefik.http.routers.calibre-rtr.rule=Host(`calibre.${DOMAINNAME}`)"
+      - "traefik.http.routers.calibre-rtr.tls.options=tls-opts@file"
       ## Middlewares
       - "traefik.http.routers.calibre-rtr.middlewares=chain-oauth@file"
       ## Docker Network

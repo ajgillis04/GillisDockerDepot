@@ -60,7 +60,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.tdarr-rtr.entrypoints=https"
       - "traefik.http.routers.tdarr-rtr.rule=Host(`tdarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.tdarr-rtr.tls=true"
+      - "traefik.http.routers.tdarr-rtr.tls.options=tls-opts@file"
       ## Middlewares
       - "traefik.http.routers.tdarr-rtr.middlewares=chain-oauth@file"
       ## Docker Network
