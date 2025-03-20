@@ -43,11 +43,11 @@ networks:
       config:
         - subnet: 192.168.2.0/24
           gateway: 192.168.2.1
-          ip_range: 192.168.2.0/28
- #   external: true # use if not managing network with docker-compose.yaml    
-  nextcloud-aio:
-    name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
-    driver: bridge
+          ip_range: 192.168.2.0/26
+    external: false # use if not managing network with docker-compose.yaml    
+#  nextcloud-aio:
+ #   name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
+ #   driver: bridge
     #external: true # If you create outside the docker compose file you need to use this
 
 # *************************** SECRETS ****************************************** 
@@ -81,6 +81,10 @@ secrets:
 #    file: ${SECRETSDIR}/maria_user
 #  maria_user_password:
 #    file: ${SECRETSDIR}/maria_user_password
+  nextcloud_mysql_user:
+    file: ${SECRETSDIR}/nextcloud_mysql_user
+  nextcloud_mysql_password:
+    file: ${SECRETSDIR}/nextcloud_mysql_password
   mineos_password:
     file: ${SECRETSDIR}/mineos_password
   oauth_secrets:
@@ -134,6 +138,7 @@ include:
 #  - ${COMPOSE_DIR}/mineos.yaml
 #  - ${COMPOSE_DIR}/musicbrainz.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
+#  - ${COMPOSE_DIR}/netdata.yaml
   - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml

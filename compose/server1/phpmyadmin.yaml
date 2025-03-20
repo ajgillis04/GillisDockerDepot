@@ -28,7 +28,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.phpmyadmin-rtr.entrypoints=https"
       - "traefik.http.routers.phpmyadmin-rtr.rule=Host(`pma.${DOMAINNAME}`)"
-      - "traefik.http.routers.phpmyadmin-rtr.tls=true"
+      - "traefik.http.routers.phpmyadmin-rtr.tls.options=tls-opts@file"
       ## Middlewares
       - "traefik.http.routers.phpmyadmin-rtr.middlewares=chain-oauth@file"
       ## Docker Network

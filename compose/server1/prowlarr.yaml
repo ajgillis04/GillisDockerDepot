@@ -27,6 +27,7 @@ services:
       - "traefik.http.routers.prowlarr-rtr.entrypoints=https"
       - "traefik.http.routers.prowlarr-rtr.rule=Host(`prowlarr.${DOMAINNAME}`)"
       - "traefik.http.routers.prowlarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.prowlarr-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

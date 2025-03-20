@@ -37,7 +37,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr/app/server:/app/server
       - ${DOCKERDIR}/tdarr/app/configs:/app/configs
-#      - /dev/shm/tdarr:/transcode # offload transcoding to memory
+      - /dev/shm/tdarr:/transcode # offload transcoding to memory
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr:/app/logs
     # Hardware transcoding
@@ -60,7 +60,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.tdarr-rtr.entrypoints=https"
       - "traefik.http.routers.tdarr-rtr.rule=Host(`tdarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.tdarr-rtr.tls=true"
+      - "traefik.http.routers.tdarr-rtr.tls.options=tls-opts@file"
       ## Middlewares
       - "traefik.http.routers.tdarr-rtr.middlewares=chain-oauth@file"
       ## Docker Network

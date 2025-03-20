@@ -10,6 +10,9 @@
 #         If you paid for plex pass ensure these are selected Use hardware-accelerated video encoding, Use hardware acceleration when available
 #       Settings, Extras, Include Cinema Trailers from new and upcoming movies in theaters
 #       to restore playlists from old plex server https://soundiiz.com/webapp/playlists/spotify
+# 
+#       Get Token:  sudo grep 'PlexOnlineToken=' appdata/plex/config/Plex\ Media\ Server/Preferences.xml | sed 's/.*PlexOnlineToken="\([^"]*\)".*/\1/'
+#
 
 services:
   plex:
@@ -66,7 +69,8 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.plex-rtr.entrypoints=https"
       - "traefik.http.routers.plex-rtr.rule=Host(`plex.${DOMAINNAME}`)"
-      - "traefik.http.routers.plex-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.plex-rtr.middlewares=chain-no-auth@file,plex-cors-headers@file"     
+      - "traefik.http.routers.plex-rtr.tls.options=tls-opts@file" 
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

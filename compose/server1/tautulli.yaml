@@ -47,20 +47,16 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers - Bypass
-      - "traefik.http.routers.tautulli-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.tautulli-rtr-bypass.priority=100"
+      - "traefik.enable=true"    
       ## HTTP Routers
       - "traefik.http.routers.tautulli-rtr.entrypoints=https"
-      - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.${DOMAINNAME}`)"
-      - "traefik.http.routers.tautulli-rtr.priority=99"
+      - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.${DOMAINNAME}`)"      
       - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.tautulli-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
-      - "traefik.http.routers.tautulli-rtr.service=tautulli-svc"
-      - "traefik.http.routers.tautulli-rtr-bypass.service=tautulli-svc"
+      - "traefik.http.routers.tautulli-rtr.service=tautulli-svc"      
       - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"

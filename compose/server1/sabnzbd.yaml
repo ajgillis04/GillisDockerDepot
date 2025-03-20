@@ -9,7 +9,7 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
       DOMAINNAME: ${DOMAINNAME}
-      SABNZBD_HOSTS: localhost,127.0.0.1,::1,sabnzbd.${DOMAINNAME}
+      SABNZBD_HOSTS: localhost,127.0.0.1,::1,sabnzbd.${DOMAINNAME},sabnzbd.${HOST_NAME}
     networks:
       - mediaserver
     ports:
@@ -27,6 +27,7 @@ services:
       - "traefik.http.routers.sabnzbd-rtr.entrypoints=https"
       - "traefik.http.routers.sabnzbd-rtr.rule=Host(`sabnzbd.${DOMAINNAME}`)"
       - "traefik.http.routers.sabnzbd-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.sabnzbd-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
@@ -42,5 +43,5 @@ services:
       - "homepage.description=NZB downloader"
       ## Homepage Widget
       - "homepage.widget.type=sabnzbd"
-      - "homepage.widget.url=http://sabnzbd.${DOMAINNAME}:8087"
+      - "homepage.widget.url=http://sabnzbd.${HOST_NAME}:8080"      
       - "homepage.widget.key=${SABNZDB_API_KEY}"

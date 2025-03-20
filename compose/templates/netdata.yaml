@@ -1,0 +1,46 @@
+# Real-Time Performance Monitoring for Your Systems and Networks
+# Netdata is a real-time performance monitoring solution with beautiful dashboards, giving you insights into your systems and network activity.
+
+services:
+  netdata:
+    container_name: netdata.${HOST_NAME}
+    hostname: netdata.${HOST_NAME}.local
+    image: netdata/netdata:latest
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    network_mode: host
+#    ports:
+#      - "${NETDATA_PORT}:19999" # Expose the Netdata dashboard
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro # Monitor Docker containers
+      - ${DOCKERDIR}/netdata/config:/etc/netdata # Configuration files
+      - ${DOCKERDIR}/netdata/cache:/var/cache/netdata # Caching directory
+      - ${DOCKERDIR}/netdata/lib:/var/lib/netdata # Persistent database storage
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.netdata-rtr.entrypoints=https"
+      - "traefik.http.routers.netdata-rtr.rule=Host(`netdata.${DOMAINNAME}`)"
+      - "traefik.http.routers.netdata-rtr.tls.options=tls-opts"
+      ## Middlewares      
+      - "traefik.http.routers.netdata-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.netdata-rtr.service=netdata-svc"
+      - "traefik.http.services.netdata-svc.loadbalancer.server.port=19999"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Monitoring"
+      - "homepage.name=Netdata"
+      - "homepage.icon=netdata.png"
+      - "homepage.href=http://netdata.${DOMAINNAME}"
+      - "homepage.description=Real-time monitoring for systems and networks"
+      ## Homepage Widget
+      - "homepage.widget.type=iframe"
+      - "homepage.widget.url=http://netdata.${HOST_NAME}:19999"

@@ -35,7 +35,7 @@ services:
       TEMPERATUREUNIT: c
     networks:
       pihole_network:
-        ipv4_address: ${PIHOLE_IP}  
+        ipv4_address: ${PIHOLE_IP}
     volumes:
       - ${DOCKERDIR}/pihole/etc:/etc/pihole
       - ${DOCKERDIR}/pihole/dnsmasq.d:/etc/dnsmasq.d
@@ -48,14 +48,15 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.pihole-rtr.entrypoints=https"
-      - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.${DOMAINNAME}`)"      
-      - "traefik.http.middlewares.add-pihole.addPrefix.prefix=/admin"
+      - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.${DOMAINNAME}`)"            
+      - "traefik.http.routers.pihole-rtr.tls.options=tls-opts@file"
+      ## Middlewares
       - "traefik.http.routers.pihole-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.middlewares.add-pihole.addPrefix.prefix=/admin"      
       ## Docker Network
       - "traefik.docker.network=pihole_network"
       ## HTTP Services
-      - "traefik.http.routers.pihole-rtr.service=pihole-svc"
-      - "traefik.http.routers.pihole-rtr-bypass.service=pihole-svc"
+      - "traefik.http.routers.pihole-rtr.service=pihole-svc"      
       - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"

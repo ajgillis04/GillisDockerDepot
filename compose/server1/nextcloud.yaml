@@ -7,32 +7,59 @@
 # sudo rm -rf /share/CACHEDEV1_DATA/Container/container-station-data/lib/docker/volumes/nextcloud/_data
 # sudo rm -rf /share/CACHEDEV1_DATA/Container/container-station-data/lib/docker/volumes/nextcloud
 
+# After setup you can run these scripts
+# sudo docker run -it --rm --volume /share/Docker/GillisDockerDepot/appdata/nextcloud/var/www/html:/var/www/html:rw alpine sh -c "apk add --no-cache nano && nano /var/www/html/config/config.php"
+# docker cp /share/Docker/GillisDockerDepot/scripts/create_users_nextcloud.sh nextcloud.GillisNAS:/tmp/create_users_nextcloud.sh
+# docker exec -it -u www-data nextcloud.GillisNAS sh /tmp/create_users_nextcloud.sh
+# Create shares manually script not working
+# create_photosdir_nextcloud.sh
 # *************************** VOLUMES ******************************************
 # This volume is required to make nextcloud_aio_mastercontainer work
-volumes:
-  nextcloud_aio_mastercontainer:
-    name: nextcloud_aio_mastercontainer # This line is not allowed to be changed    
-    
+# Nextcloud - A private cloud storage solution
+
 services:
   nextcloud:
-    container_name: nextcloud-aio-mastercontainer # cannot use .${HOST_NAME} nextcloud-aio very picky on naming
+    container_name: nextcloud.${HOST_NAME}
     hostname: nextcloud.${HOST_NAME}.local
-    image: nextcloud/all-in-one:latest
+    image: nextcloud:latest
     environment:
-      APACHE_PORT: 11000
-      APACHE_IP_BINDING: ${SERVER_IP}
-      NEXTCLOUD_DATADIR: ${NEXTCLOUD_HOMES} # all user folders and data will be kept here
-      NEXTCLOUD_MOUNT: ${NEXTCLOUD_EXSTORAGE} # Allows the Nextcloud container to access the chosen directory on the host
-      NEXTCLOUD_TRUSTED_CACERTS_DIR: ${SHAREDDIR} # CA certificates in this directory will be trusted by the OS of the nexcloud container (Useful e.g. for LDAPS) See See
-      SKIP_DOMAIN_VALIDATION: true
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      MYSQL_HOST: mariadb.${HOST_NAME}
+      MYSQL_DATABASE: nextcloud      
+      MYSQL_USER_FILE: /run/secrets/nextcloud_mysql_user
+      MYSQL_PASSWORD_FILE: /run/secrets/nextcloud_mysql_password
     networks:
-      - nextcloud-aio
       - mediaserver
     ports:
-      - "87:80"
-      - "8086:8080"
-      - "16002:8443"
-    restart: always
+      - "${NEXTCLOUD_PORT}:80"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
+      - ${DOCKERDIR}/nextcloud/var/www/html:/var/www/html      
+      - ${DOCKERDIR}/logs/nextcloud:/var/log
+      - ${NEXTCLOUD_EXSTORAGE}:/share
+      - ${NEXTCLOUD_HOMES}:/homes
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.nextcloud-rtr.entrypoints=https"
+      - "traefik.http.routers.nextcloud-rtr.rule=Host(`nextcloud.${DOMAINNAME}`)"      
+      - "traefik.http.routers.nextcloud-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.nextcloud-rtr.tls.options=tls-opts@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.nextcloud-rtr.service=nextcloud-svc"      
+      - "traefik.http.services.nextcloud-svc.loadbalancer.server.port=80"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=false" # Disable watchtower for this container, should upgrade manually
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Nextcloud"
+      - "homepage.icon=nextcloud.png"
+      - "homepage.href=http://nextcloud.${DOMAINNAME}/"
+      - "homepage.description=Your private cloud"
