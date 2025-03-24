@@ -30,6 +30,7 @@ for username in $users; do
 done
 
 # Set permissions within the Nextcloud container
-docker exec -it nextcloud-aio-nextcloud bash -c 'for user_dir in /share/homes/*; do if [ -d "$user_dir/Photos" ]; then chown -R www-data:www-data "$user_dir/Photos"; chmod -R 775 "$user_dir/Photos"; echo "Set permissions for Photos directory in $user_dir"; fi; done'
+#docker exec -it nextcloud-aio-nextcloud bash -c 'for user_dir in /share/homes/*; do if [ -d "$user_dir/Photos" ]; then chown -R www-data:www-data "$user_dir/Photos"; chmod -R 775 "$user_dir/Photos"; echo "Set permissions for Photos directory in $user_dir"; fi; done'
+docker exec -it nextcloud.GillisNAS bash -c 'for user_dir in /share/homes/*; do if [ -d "$user_dir/Photos" ]; then chown -R www-data:www-data "$user_dir/Photos"; chmod -R 775 "$user_dir/Photos"; echo "Set permissions for Photos directory in $user_dir"; fi; done'
 
 echo "Script completed successfully."

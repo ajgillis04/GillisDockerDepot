@@ -12,6 +12,8 @@
 # docker cp /share/Docker/GillisDockerDepot/scripts/create_users_nextcloud.sh nextcloud.GillisNAS:/tmp/create_users_nextcloud.sh
 # docker exec -it -u www-data nextcloud.GillisNAS sh /tmp/create_users_nextcloud.sh
 # Create shares manually script not working
+# chmod +x scripts/create_photosdir_nextcloud.sh
+# dos2unix scripts/create_photosdir_nextcloud.sh
 # create_photosdir_nextcloud.sh
 # *************************** VOLUMES ******************************************
 # This volume is required to make nextcloud_aio_mastercontainer work
