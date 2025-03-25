@@ -19,6 +19,11 @@
 # This volume is required to make nextcloud_aio_mastercontainer work
 # Nextcloud - A private cloud storage solution
 
+# Perms if you are mounting hosts home directories to nextcloud. Note this removes admins rights to read user files.
+# sudo chown -R <username>:33 /share/homes/<username>
+# sudo chmod -R 770 /share/homes/<username>
+# restore rights to admin
+# sudo chown -R <username>:administrators /share/homes/<username>
 services:
   nextcloud:
     container_name: nextcloud.${HOST_NAME}
