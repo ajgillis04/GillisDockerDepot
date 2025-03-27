@@ -27,17 +27,17 @@ services:
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr_node:/app/logs
     # Hardware transcoding
-    # devices:
-    #  - /dev/dri:/dev/dri
-    # deploy:
-    #  resources:
-    #    reservations:
-    #      devices:
+    devices:
+      - /dev/dri:/dev/dri
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
     #      - driver: nvidia # Pick one
-    #      - driver: vaapi # Pick one
+#          - driver: vaapi # Pick one
     #      - driver: qsv # Pick one
-    #        count: all
-    #        capabilities: [gpu] 
+#            count: all
+#            capabilities: [gpu] 
     restart: always
     security_opt:
       - no-new-privileges:true
