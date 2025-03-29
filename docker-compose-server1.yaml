@@ -99,6 +99,8 @@ secrets:
     file: ${SECRETSDIR}/photoprism_admin_password
   plex_claim:
     file: ${SECRETSDIR}/plex_claim
+  plextest_claim:
+    file: ${SECRETSDIR}/plextest_claim  
   plex_token:
     file: ${SECRETSDIR}/plex_token
   spotify_client_id:
@@ -148,6 +150,7 @@ include:
   - ${COMPOSE_DIR}/pihole.yaml
 #  - ${COMPOSE_DIR}/pinchflat.yaml
   - ${COMPOSE_DIR}/plex.yaml
+#  - ${COMPOSE_DIR}/plextest.yaml
   - ${COMPOSE_DIR}/portainer.yaml
   - ${COMPOSE_DIR}/prowlarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
