@@ -74,9 +74,20 @@ services:
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
       - "traefik.http.routers.${SERVICE_NAME}-rtr.service=${SERVICE_NAME}-svc"
-      - "traefik.http.services.${SERVICE_NAME}-svc.loadbalancer.server.port=80"
+      - "traefik.http.services.${SERVICE_NAME}-svc.loadbalancer.server.port=<ENTER PORT HERE>" # Replace with the internal port of the service
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=${SERVICE_NAME}"
+      - "homepage.icon=${SERVICE_NAME}.png"
+      - "homepage.href=http://${SERVICE_NAME}.${DOMAINNAME}/"
+      - "homepage.description=<Enter description here>"
+      ## Homepage Widget
+      - "homepage.widget.type="
+      - "homepage.widget.url=http://${SERVICE_NAME}.${HOST_NAME}:<enter port here>/" # Replace with the internal port of the service
+      - "homepage.widget.key=.${SERVICE_NAME}_API_KEY"
+
 EOF
 )
 

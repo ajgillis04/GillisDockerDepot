@@ -1,0 +1,513 @@
+{
+  "_id": "Cb2EH-RI3_R",
+  "name": "Gillis Master Flow",
+  "description": "Gillis Master Flow",
+  "tags": "",
+  "flowPlugins": [
+    {
+      "name": "Fail Flow Final",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "HWD9I7jFY",
+      "position": {
+        "x": 382.3474784856101,
+        "y": 26.908541906880505
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Fail Flow Image",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "5jSRm0JJ3",
+      "position": {
+        "x": 94.17706881452864,
+        "y": 28.33340416447349
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Image",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "nOpdAfdUN",
+      "position": {
+        "x": -8.69497381599976,
+        "y": -338.4335966451156
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Input File",
+      "sourceRepo": "Community",
+      "pluginName": "inputFile",
+      "version": "1.0.0",
+      "inputsDB": {
+        "fileAccessChecks": "true",
+        "pauseNodeIfAccessChecksFail": "true"
+      },
+      "id": "4nyE-sIn0I",
+      "position": {
+        "x": -389.45273575125583,
+        "y": -410.68209916935393
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Audio",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "eSIuagYsY",
+      "position": {
+        "x": -390.2225111063082,
+        "y": -339.81646681345757
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Fail Flow Audio",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "zwcUdWRvZ",
+      "position": {
+        "x": -279.34279245231806,
+        "y": 28.611661169704405
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Text",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "nJUHbufln",
+      "position": {
+        "x": -199.66379957402893,
+        "y": -339.4125000814347
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Fail Flow Subtitle",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "id": "HJV1clEqy",
+      "position": {
+        "x": -97.89349112099683,
+        "y": 28.14541856925652
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Review",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "MDLrfvRh5",
+      "position": {
+        "x": 182.11655640515482,
+        "y": -337.635309155616
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Compare File Size Ratio",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileSizeRatio",
+      "version": "2.0.0",
+      "id": "t4ezIpmo4",
+      "position": {
+        "x": 182.55873216720443,
+        "y": -271.3207431146052
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Require Review",
+      "sourceRepo": "Community",
+      "pluginName": "requireReview",
+      "version": "1.0.0",
+      "id": "SrgVUdEsr",
+      "position": {
+        "x": 280.50376694257864,
+        "y": -179.6481884885259
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Replace Original File",
+      "sourceRepo": "Community",
+      "pluginName": "replaceOriginalFile",
+      "version": "1.0.0",
+      "id": "vK-cmo0Bn",
+      "position": {
+        "x": 190.67969718316755,
+        "y": -64.82837047677742
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Clean Audio and Tag Undetermined Tracks (Migz3CleanAudio)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "id": "qCCgS1WvZ",
+      "position": {
+        "x": -390.1042930114868,
+        "y": -284.49047838108544
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "pluginSourceId": "Local:Tdarr_Plugin_MC93_Migz3CleanAudio",
+        "commentary": "true",
+        "tag_language": "eng",
+        "tag_title": "true"
+      }
+    },
+    {
+      "name": "Clean Subtitle Streams",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "id": "vRkvH-KvI",
+      "position": {
+        "x": -199.2631209640997,
+        "y": -269.4945094524013
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "pluginSourceId": "Community:Tdarr_Plugin_MC93_Migz4CleanSubs",
+        "commentary": "true",
+        "tag_language": "eng"
+      }
+    },
+    {
+      "name": "Reorder Streams (Migz6OrderStreams)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "id": "RCI2rqZ9I",
+      "position": {
+        "x": -6.117729603976528,
+        "y": -181.4130799404369
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "pluginSourceId": "Community:Tdarr_Plugin_MC93_Migz6OrderStreams"
+      }
+    },
+    {
+      "name": "Remove Images (MigzImageRemoval)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "id": "ruFFCm8vT",
+      "position": {
+        "x": -8.874738009125963,
+        "y": -270.4657230159178
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "pluginSourceId": "Community:Tdarr_Plugin_MC93_MigzImageRemoval"
+      }
+    },
+    {
+      "name": "Complete Successful",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "id": "NDurACYz7",
+      "position": {
+        "x": 191.10582603197815,
+        "y": 116.06480633567695
+      },
+      "fpEnabled": true
+    },
+    {
+      "name": "Normalize Audio (NIfPZuCLU_2_Pass_Loudnorm_Audio_Normalisation)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "id": "Wwvz5G-PN",
+      "position": {
+        "x": -387.91974367974046,
+        "y": -68.00027458839513
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "pluginSourceId": "Community:Tdarr_Plugin_NIfPZuCLU_2_Pass_Loudnorm_Audio_Normalisation"
+      }
+    },
+    {
+      "name": "Clean Metadata (Migz2CleanTitle)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "id": "V3VLQejtY",
+      "position": {
+        "x": -196.25158939186707,
+        "y": -180.69702876483873
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "pluginSourceId": "Community:Tdarr_Plugin_MC93_Migz2CleanTitle"
+      }
+    },
+    {
+      "name": "Convert Audio to EAC3 (a9hd_FFMPEG_Transcode_Specific_Audio_Stream_Codecs codecs_to_transcode)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "id": "Fy9waBI62",
+      "position": {
+        "x": -389.0690381175107,
+        "y": -181.3114747592283
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "pluginSourceId": "Community:Tdarr_Plugin_a9hd_FFMPEG_Transcode_Specific_Audio_Stream_Codecs",
+        "codec": "eac3",
+        "codecs_to_transcode": "ac3,aac,mp3"
+      }
+    }
+  ],
+  "flowEdges": [
+    {
+      "source": "4nyE-sIn0I",
+      "sourceHandle": "1",
+      "target": "eSIuagYsY",
+      "targetHandle": null,
+      "id": "O5_tdBN9B"
+    },
+    {
+      "source": "MDLrfvRh5",
+      "sourceHandle": "1",
+      "target": "t4ezIpmo4",
+      "targetHandle": null,
+      "id": "YVWAkoDrn"
+    },
+    {
+      "source": "eSIuagYsY",
+      "sourceHandle": "1",
+      "target": "qCCgS1WvZ",
+      "targetHandle": null,
+      "id": "IgXmDX4gB"
+    },
+    {
+      "source": "nJUHbufln",
+      "sourceHandle": "1",
+      "target": "vRkvH-KvI",
+      "targetHandle": null,
+      "id": "kbcvO3EAU"
+    },
+    {
+      "source": "nOpdAfdUN",
+      "sourceHandle": "1",
+      "target": "ruFFCm8vT",
+      "targetHandle": null,
+      "id": "EPpduClpL"
+    },
+    {
+      "source": "ruFFCm8vT",
+      "sourceHandle": "1",
+      "target": "RCI2rqZ9I",
+      "targetHandle": null,
+      "id": "a4udXWtGo"
+    },
+    {
+      "source": "ruFFCm8vT",
+      "sourceHandle": "2",
+      "target": "RCI2rqZ9I",
+      "targetHandle": null,
+      "id": "pLwWbZg5S"
+    },
+    {
+      "source": "RCI2rqZ9I",
+      "sourceHandle": "2",
+      "target": "MDLrfvRh5",
+      "targetHandle": null,
+      "id": "20kPOiie2"
+    },
+    {
+      "source": "RCI2rqZ9I",
+      "sourceHandle": "1",
+      "target": "MDLrfvRh5",
+      "targetHandle": null,
+      "id": "6HuHNhOPL"
+    },
+    {
+      "source": "t4ezIpmo4",
+      "sourceHandle": "1",
+      "target": "vK-cmo0Bn",
+      "targetHandle": null,
+      "id": "ItIsO9HSZ"
+    },
+    {
+      "source": "t4ezIpmo4",
+      "sourceHandle": "2",
+      "target": "SrgVUdEsr",
+      "targetHandle": null,
+      "id": "664JKcjwt"
+    },
+    {
+      "source": "qCCgS1WvZ",
+      "sourceHandle": "err1",
+      "target": "zwcUdWRvZ",
+      "targetHandle": null,
+      "id": "xB6kBNxKH"
+    },
+    {
+      "source": "vRkvH-KvI",
+      "sourceHandle": "err1",
+      "target": "HJV1clEqy",
+      "targetHandle": null,
+      "id": "uqCXt9bEH"
+    },
+    {
+      "source": "ruFFCm8vT",
+      "sourceHandle": "err1",
+      "target": "5jSRm0JJ3",
+      "targetHandle": null,
+      "id": "wrH4g8aS1"
+    },
+    {
+      "source": "RCI2rqZ9I",
+      "sourceHandle": "err1",
+      "target": "5jSRm0JJ3",
+      "targetHandle": null,
+      "id": "GhUMmaJJo"
+    },
+    {
+      "source": "SrgVUdEsr",
+      "sourceHandle": "1",
+      "target": "vK-cmo0Bn",
+      "targetHandle": null,
+      "id": "8XAvxFwAc"
+    },
+    {
+      "source": "SrgVUdEsr",
+      "sourceHandle": "err1",
+      "target": "HWD9I7jFY",
+      "targetHandle": null,
+      "id": "PfNda3FIu"
+    },
+    {
+      "source": "vK-cmo0Bn",
+      "sourceHandle": "err1",
+      "target": "HWD9I7jFY",
+      "targetHandle": null,
+      "id": "yWNDJr3t5"
+    },
+    {
+      "source": "vK-cmo0Bn",
+      "sourceHandle": "1",
+      "target": "NDurACYz7",
+      "targetHandle": null,
+      "id": "Hy2bt0eX_"
+    },
+    {
+      "source": "t4ezIpmo4",
+      "sourceHandle": "err1",
+      "target": "HWD9I7jFY",
+      "targetHandle": null,
+      "id": "yICTCfJJW"
+    },
+    {
+      "source": "Wwvz5G-PN",
+      "sourceHandle": "2",
+      "target": "nJUHbufln",
+      "targetHandle": null,
+      "id": "PMsS5n-4x"
+    },
+    {
+      "source": "Wwvz5G-PN",
+      "sourceHandle": "1",
+      "target": "nJUHbufln",
+      "targetHandle": null,
+      "id": "TEJ8--A-p"
+    },
+    {
+      "source": "Wwvz5G-PN",
+      "sourceHandle": "err1",
+      "target": "zwcUdWRvZ",
+      "targetHandle": null,
+      "id": "N_a7XI2FN"
+    },
+    {
+      "source": "vRkvH-KvI",
+      "sourceHandle": "1",
+      "target": "V3VLQejtY",
+      "targetHandle": null,
+      "id": "MYVWgrmUq"
+    },
+    {
+      "source": "vRkvH-KvI",
+      "sourceHandle": "2",
+      "target": "V3VLQejtY",
+      "targetHandle": null,
+      "id": "MeSJTzWLR"
+    },
+    {
+      "source": "V3VLQejtY",
+      "sourceHandle": "err1",
+      "target": "HJV1clEqy",
+      "targetHandle": null,
+      "id": "TcI5Ivbqn"
+    },
+    {
+      "source": "V3VLQejtY",
+      "sourceHandle": "1",
+      "target": "nOpdAfdUN",
+      "targetHandle": null,
+      "id": "y_vPx7hQ8"
+    },
+    {
+      "source": "V3VLQejtY",
+      "sourceHandle": "2",
+      "target": "nOpdAfdUN",
+      "targetHandle": null,
+      "id": "Veiu_dPj_"
+    },
+    {
+      "source": "qCCgS1WvZ",
+      "sourceHandle": "1",
+      "target": "Fy9waBI62",
+      "targetHandle": null,
+      "id": "YeatX7uha"
+    },
+    {
+      "source": "qCCgS1WvZ",
+      "sourceHandle": "2",
+      "target": "Fy9waBI62",
+      "targetHandle": null,
+      "id": "JgEDlGUrO"
+    },
+    {
+      "source": "Fy9waBI62",
+      "sourceHandle": "err1",
+      "target": "zwcUdWRvZ",
+      "targetHandle": null,
+      "id": "O8XVtThkm"
+    },
+    {
+      "source": "Fy9waBI62",
+      "sourceHandle": "2",
+      "target": "Wwvz5G-PN",
+      "targetHandle": null,
+      "id": "LoGZW9ROg"
+    },
+    {
+      "source": "Fy9waBI62",
+      "sourceHandle": "1",
+      "target": "Wwvz5G-PN",
+      "targetHandle": null,
+      "id": "KO9j9Ns-Q"
+    }
+  ]
+}
