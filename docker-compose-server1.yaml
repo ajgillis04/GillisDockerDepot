@@ -153,6 +153,7 @@ include:
 #  - ${COMPOSE_DIR}/plextest.yaml
   - ${COMPOSE_DIR}/portainer.yaml
   - ${COMPOSE_DIR}/prowlarr.yaml
+  - ${COMPOSE_DIR}/profilarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
   - ${COMPOSE_DIR}/readarr.yaml
   - ${COMPOSE_DIR}/sabnzbd.yaml
