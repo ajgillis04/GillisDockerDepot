@@ -1,0 +1,45 @@
+services:
+  profilarr:
+    container_name: profilarr.${HOST_NAME}
+    hostname: profilarr.${HOST_NAME}.local
+    image: santiagosayshey/profilarr:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    networks:
+      - mediaserver
+    ports:
+      - ${PROFILARR_PORT}:6868
+    volumes:
+      # Uncomment if needed
+      # - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKERDIR}/profilarr/config:/config
+      - ${DOCKERDIR}/logs/profilarr:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.profilarr-rtr.entrypoints=https"
+      ## Middlewares
+      - "traefik.http.routers.profilarr-rtr.rule=Host(profilarr${HOST_SUFFIX}.${DOMAINNAME})"
+      - "traefik.http.routers.profilarr-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.profilarr-rtr.service=profilarr-svc"
+      - "traefik.http.services.profilarr-svc.loadbalancer.server.port=6868" # Replace with the internal port of the service
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=profilarr"
+      - "homepage.icon=profilarr.png"
+      - "homepage.href=http://profilarr.${HOST_NAME}/"
+      - "homepage.description=custom format / quality profile management tool"
+      ## Homepage Widget
+      - "homepage.widget.type="
+      - "homepage.widget.url=http://profilarr.${HOST_NAME}:6868"
+      - "homepage.widget.key=${PROFILARR_API_KEY}"
