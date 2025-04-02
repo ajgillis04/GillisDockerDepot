@@ -24,11 +24,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.profilarr-rtr.entrypoints=https"
       ## Middlewares
-<<<<<<< HEAD
-      - "traefik.http.routers.profilarr-rtr.rule=Host(profilarr${HOST_SUFFIX}.${DOMAINNAME})"
-=======
-      - "traefik.http.routers.profilarr-rtr.rule=Host(`profilarr.${DOMAINNAME}`)"
->>>>>>> 22d5a4a02b9bd7c2112a250f85fbdfb4d3b52d29
+      - "traefik.http.routers.profilarr-rtr.rule=Host(profilarr.${HOST_SUFFIX}.${DOMAINNAME})"
       - "traefik.http.routers.profilarr-rtr.middlewares=chain-oauth@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
