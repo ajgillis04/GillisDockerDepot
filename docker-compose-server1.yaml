@@ -31,12 +31,12 @@ networks:
  #   ipam:
  #     config:
  #       - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
- #         gateway: 192.168.2.1        
+ #         gateway: 192.168.2.1
  #   external: true # use if not managing network with docker-compose.yaml
   pihole_network:
     name: pihole_network
     #driver: bridge
-    driver: macvlan #does not work on windows    
+    driver: macvlan #does not work on windows
     driver_opts:
       parent: eth4  # Replace with your actual network interface
     ipam:
@@ -44,13 +44,13 @@ networks:
         - subnet: 192.168.2.0/24
           gateway: 192.168.2.1
           ip_range: 192.168.2.0/26
-    external: false # use if not managing network with docker-compose.yaml    
+    external: false # use if not managing network with docker-compose.yaml
 #  nextcloud-aio:
  #   name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
  #   driver: bridge
     #external: true # If you create outside the docker compose file you need to use this
 
-# *************************** SECRETS ****************************************** 
+# *************************** SECRETS ******************************************
 # Any secrets that are used across containers put here. All others in indivdiual yaml(s)
 secrets:
   awl_cf_token:
@@ -100,7 +100,7 @@ secrets:
   plex_claim:
     file: ${SECRETSDIR}/plex_claim
   plextest_claim:
-    file: ${SECRETSDIR}/plextest_claim  
+    file: ${SECRETSDIR}/plextest_claim
   plex_token:
     file: ${SECRETSDIR}/plex_token
   spotify_client_id:
@@ -118,7 +118,7 @@ secrets:
   vaultwarden_admin_token:
     file: ${SECRETSDIR}/vaultwarden_admin_token
 
-# *************************** SERVICES ****************************************** 
+# *************************** SERVICES ******************************************
 include:
   - ${COMPOSE_DIR}/bazarr.yaml
 #  - ${COMPOSE_DIR}/bookbounty.yaml
@@ -153,7 +153,7 @@ include:
 #  - ${COMPOSE_DIR}/plextest.yaml
   - ${COMPOSE_DIR}/portainer.yaml
   - ${COMPOSE_DIR}/prowlarr.yaml
-  - ${COMPOSE_DIR}/profilarr.yaml
+#  - ${COMPOSE_DIR}/profilarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
   - ${COMPOSE_DIR}/readarr.yaml
   - ${COMPOSE_DIR}/sabnzbd.yaml
