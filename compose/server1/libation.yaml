@@ -8,6 +8,7 @@ services:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      UMASK: 002
     networks:
       - mediaserver
     ports:
