@@ -3,7 +3,6 @@ services:
     container_name: libation.${HOST_NAME}
     hostname: libation.${HOST_NAME}.local
     image:  rmcrackan/libation:latest
-    user: ${PUID}:${PGID}
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
