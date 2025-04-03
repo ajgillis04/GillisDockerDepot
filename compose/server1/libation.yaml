@@ -3,6 +3,7 @@ services:
     container_name: libation.${HOST_NAME}
     hostname: libation.${HOST_NAME}.local
     image:  rmcrackan/libation:latest
+    user: ${PUID}:${PGID}
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
@@ -10,7 +11,7 @@ services:
     networks:
       - mediaserver
     ports:
-      - ${SERVICE_PORT}:3000  # Replace SERVICE_PORT with the actual port you want to expose. Add SERVICE_PORT to your .env file.
+      - ${LIBATION_PORT}:3000  # Replace SERVICE_PORT with the actual port you want to expose. Add SERVICE_PORT to your .env file.
     volumes:
       # Uncomment if needed
       # - /var/run/docker.sock:/var/run/docker.sock
