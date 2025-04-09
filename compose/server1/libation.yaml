@@ -2,12 +2,14 @@ services:
   libation:
     container_name: libation.${HOST_NAME}
     hostname: libation.${HOST_NAME}.local
-    image:  rmcrackan/libation:latest
+    image:  ghcr.io/bcnelson/libation_docker:latest
+    user: "1000:100"
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      UMASK: 002
+      LIBATION_CREATE_DB: true
+      SLEEP_TIME: 1440m
     networks:
       - mediaserver
     ports:
@@ -17,7 +19,7 @@ services:
       # - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERDIR}/libation/config:/config
       - ${DOCKERDIR}/logs/libation:/var/log
-      - ${MEDIASHARE}/Books/audiobooks:/audiobooks
+      - ${MEDIASHARE}/Books/audiobooks:/data
     restart: always
     security_opt:
       - no-new-privileges:true
