@@ -37,7 +37,7 @@ services:
       - "homepage.group=Media"
       - "homepage.name=profilarr"
       - "homepage.icon=profilarr.png"
-      - "homepage.href=http://profilarr.${HOST_NAME}/"
+      - "homepage.href=http://profilarr.${DOMAINNAME}/"
       - "homepage.description=custom format / quality profile management tool"
       ## Homepage Widget
       - "homepage.widget.type="

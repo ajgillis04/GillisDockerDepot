@@ -39,9 +39,9 @@ services:
       - "homepage.group=Media"
       - "homepage.name=libation"
       - "homepage.icon=libation.png"
-      - "homepage.href=http://libation.gillisonline.com"
+      - "homepage.href=http://libation.${DOMAINNAME}/"
       - "homepage.description=Audible audiobook manager"
       ## Homepage Widget
       - "homepage.widget.type=Other"
-      - "homepage.widget.url=http://libation.GillisNAS:3000" # Replace with the internal port of the service
+      - "homepage.widget.url=http://libation.${HOST_NAME}:3000" # Replace with the internal port of the service
       - "homepage.widget.key=${libation_API_KEY}"
