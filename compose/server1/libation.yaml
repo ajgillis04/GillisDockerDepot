@@ -2,7 +2,7 @@ services:
   libation:
     container_name: libation.${HOST_NAME}
     hostname: libation.${HOST_NAME}.local
-    image:  ghcr.io/bcnelson/libation_docker:latest
+    image: rmcrackan/libation:latest
     user: "1000:100"
     environment:
       TZ: ${TZ}

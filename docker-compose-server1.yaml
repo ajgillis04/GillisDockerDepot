@@ -134,7 +134,7 @@ include:
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/homepage.yaml
   - ${COMPOSE_DIR}/jellyfin.yaml
-#  - ${COMPOSE_DIR}/libation.yaml
+  - ${COMPOSE_DIR}/libation.yaml
   - ${COMPOSE_DIR}/lidarr.yaml
 #  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
