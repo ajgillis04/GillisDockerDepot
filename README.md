@@ -35,6 +35,7 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 ## Installation
 
 1. **Clone the repository:**
+   Note: For a qnap server create a Docker share from shared folders under Control Panel, Privlege
    ```bash   
    git clone git clone https://<your_token>@github.com/ajgillis04/GillisDockerDepot.git
    cd GillisDockerDepot  
