@@ -15,10 +15,10 @@
 #
 
 services:
-  plextest:
-    container_name: plextest.${HOST_NAME}
-    hostname: plextest.${HOST_NAME}.local
-    image: plexinc/pms-docker:plexpass
+  plex:
+    container_name: plex.${HOST_NAME}
+    hostname: plex.${HOST_NAME}.local
+    image: binhex/arch-plexpass:latest
     devices:
       - /dev/dri:/dev/dri
     environment:
@@ -27,49 +27,65 @@ services:
       PGID: 0
       DOMAINNAME: ${DOMAINNAME}
       UMASK: 002
-      ADVERTISE_IP: "https://plextest.${HOST_NAME}.${DOMAINNAME}:443,https://${SERVER_IP}:32400"
+      ADVERTISE_IP: "https://plex.${HOST_NAME}.${DOMAINNAME}:443,https://${SERVER_IP}:32400"
       ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks
-      HOSTNAME: plextest.${HOST_NAME}
-      #PLEX_CLAIM_FILE: /run/secrets/plextest_claim # Claim _file does not seem to be working with binhex version
-      PLEX_CLAIM: "claim-96XgTe_fsjF3m1rg12xp"
-      PLEX_SERVER_NAME: plextest.${HOST_NAME}
+      HOSTNAME: plex.${HOST_NAME}
+      PLEX_CLAIM_FILE: /run/secrets/plex_claim # input claim number into file after first run
+      PLEX_SERVER_NAME: plex.${HOST_NAME}
+      TV_SHOWS_PATH: /media/Videos/TV 
+      MOVIES_PATH: /media/Videos/Movies 
+      MUSIC_PATH: /media/Music 
+      PHOTOS_PATH: /media/Photos
+      ANIMATED_TV_PATH: /media/Videos/KidsTV
+      ANIMATED_MOVIES_PATH: /media/Videos/KidsMovies
       VERSION: docker
       TRANS_DIR: /transcode # offload transcoding to memory
     networks:
       - mediaserver
-    dns:
-      - 8.8.8.8  # Google DNS
-      - 1.1.1.1  # Cloudflare DNS
     ports:
-      - "32401:32400/tcp"
-      - "1902:1900/udp"
-      - "32415:32410/udp"
-      - "32416:32412/udp"
-      - "32417:32413/udp"
-      - "32418:32414/udp"
-      - "32470:32469/tcp"
+      - "${PLEX_PORT}:32400/tcp"
+      - "3005:3005/tcp"
+      - "8324:8324/tcp"
+      - "32469:32469/tcp"
+      - "1901:1900/udp"
+      - "32410:32410/udp"
+      - "32412:32412/udp"
+      - "32413:32413/udp"
+      - "32414:32414/udp"
+      - "33400:33400"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DOCKERDIR}/plextest/config:/config
+      - ${DOCKERDIR}/plex/config:/config
       - ${MEDIASHARE}:/media
-      - /dev/shm/plextest:/transcode # offload transcoding to memory
-      - ${DOCKERDIR}/logs/plextest:/var/log
-    restart: unless-stopped
+      - /dev/shm/plex:/transcode # offload transcoding to memory
+      - ${DOCKERDIR}/logs/plex:/var/log
+    restart: always
     secrets:
-      - plextest_claim
+      - plex_claim
     security_opt:
       - no-new-privileges:true
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.plextest-rtr.entrypoints=https"
-      - "traefik.http.routers.plextest-rtr.rule=Host(`plextest.${DOMAINNAME}`)"
-      - "traefik.http.routers.plextest-rtr.middlewares=chain-no-auth@file,plex-cors-headers@file"     
-      - "traefik.http.routers.plextest-rtr.tls.options=tls-opts@file" 
+      - "traefik.http.routers.plex-rtr.entrypoints=https"
+      - "traefik.http.routers.plex-rtr.rule=Host(`plex.${DOMAINNAME}`)"
+      - "traefik.http.routers.plex-rtr.middlewares=chain-no-auth@file,plex-cors-headers@file"     
+      - "traefik.http.routers.plex-rtr.tls.options=tls-opts@file" 
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services
-      - "traefik.http.routers.plextest-rtr.service=plextest-svc"
-      - "traefik.http.services.plextest-svc.loadbalancer.server.port=32400"
+      - "traefik.http.routers.plex-rtr.service=plex-svc"
+      - "traefik.http.services.plex-svc.loadbalancer.server.port=32400"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Plex"
+      - "homepage.icon=plex.png"
+      - "homepage.href=http://plex.${DOMAINNAME}/"
+      - "homepage.description=Stream your favorite media"
+      ## Homepage Widget
+      - "homepage.widget.type=plex"
+      - "homepage.widget.url=http://plex.${HOST_NAME}:32400"
+      - "homepage.widget.key=${PLEX_TOKEN}"
+

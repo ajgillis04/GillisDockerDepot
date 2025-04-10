@@ -1,0 +1,39 @@
+# MariaDB - A popular open-source relational database.
+
+# To reset or first run to reset the root password, follow these steps:
+# 1. docker exec -it mariadb /bin/bash
+# 2. /usr/bin/mariadb-secure-installation
+#
+
+services:
+  mariadb:
+    container_name: mariadb.${HOST_NAME}
+    hostname: mariadb.${HOST_NAME}.local
+    image: linuxserver/mariadb:latest
+    environment:      
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      FILE__MYSQL_ROOT_PASSWORD: /run/secrets/maria_root_password # bug #127 initial pass not working do password reset
+      # Uncomment these lines if you plan to create a database and user initially
+      # MYSQL_DATABASE: default
+      # MYSQL_USER_FILE: /run/secrets/maria_user
+      # MYSQL_PASSWORD_FILE: /run/secrets/maria_user_password
+    networks:
+      - mediaserver
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - ${DOCKERDIR}/mariadb/config:/config
+      - ${DOCKERDIR}/mariadb/data:/var/lib/mysql
+      - ${DOCKERDIR}/logs/mariadb:/var/log/mysql
+    restart: always
+    secrets:
+      - maria_root_password
+      # Uncomment these lines if you plan to use additional secrets
+      # - maria_user
+      # - maria_user_password
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

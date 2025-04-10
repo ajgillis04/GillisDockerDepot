@@ -1,0 +1,40 @@
+# WireGuard - A modern VPN solution.
+
+# Note: Some helpful commands
+# See connections
+#  docker exec -it wireguard.${HOST_NAME} bash
+#  wg show
+
+services:
+  wireguard:
+    container_name: wireguard.${HOST_NAME}
+    hostname: wireguard.${HOST_NAME}.local
+    image: lscr.io/linuxserver/wireguard:latest
+    cap_add:
+      - NET_ADMIN
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      DOMAIN: ${DOMAINNAME}
+      ALLOWEDIPS: 0.0.0.0/0,192.168.2.0/24
+      PEERDNS: ${PIHOLE_PRI}
+      INTERNAL_SUBNET: 192.168.10.0
+      PEERS: "AndyPhone,AndyLaptop,AaronPhone,AaronLaptop,AndrewPhone,AndrewLaptop,MichellePhone,SelenaPhone,SelenaLaptop,ColinPhone,AndyTest"
+      SERVERPORT: 51820
+      SERVERURL: vpn.${DOMAINNAME}      
+      LOG_CONFS: true
+    #network_mode: host 
+    networks:
+      pihole_network:
+        ipv4_address: ${WIREGUARD_IP}
+    volumes:
+      - ${DOCKERDIR}/wireguard/config:/config
+      - ${DOCKERDIR}/wireguard/lib/modules:/lib/modules
+      - ${DOCKERDIR}/logs/wireguard:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+

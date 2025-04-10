@@ -1,0 +1,47 @@
+# Overseerr - A request management and media discovery tool for Plex.
+# Login to web interface and setup admin user
+services:
+  overseerr:
+    container_name: overseerr.${HOST_NAME}
+    hostname: overseerr.${HOST_NAME}.local
+    image: lscr.io/linuxserver/overseerr:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
+    networks:
+      - mediaserver
+    ports:
+      - "${OVERSEERR_PORT}:5055"
+    volumes:
+      - ${DOCKERDIR}/overseerr/config:/config
+      - ${DOCKERDIR}/logs/overseer:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.overseerr-rtr.entrypoints=https"
+      - "traefik.http.routers.overseerr-rtr.rule=Host(`overseerr.${DOMAINNAME}`)"
+      - "traefik.http.routers.overseerr-rtr.tls.options=tls-opts@file"
+      ## Middlewares
+      - "traefik.http.routers.overseerr-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.overseerr-rtr.service=overseerr-svc"
+      - "traefik.http.services.overseerr-svc.loadbalancer.server.port=5055"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Overseerr"
+      - "homepage.icon=overseerr.png"
+      - "homepage.href=http://overseerr.${DOMAINNAME}/"
+      - "homepage.description=Request and manage your media"
+      ## Homepage Widget
+      - "homepage.widget.type=overseerr"
+      - "homepage.widget.url=http://overseerr.${HOST_NAME}:5055"
+      - "homepage.widget.key=${OVERSEERR_API_KEY}"

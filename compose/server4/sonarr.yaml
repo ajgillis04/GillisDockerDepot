@@ -1,0 +1,49 @@
+# Sonarr - Automatic TV show download and management.
+services:
+  sonarr:
+    container_name: sonarr.${HOST_NAME}
+    hostname: sonarr.${HOST_NAME}.local
+    image: linuxserver/sonarr:latest
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      DOMAINNAME: ${DOMAINNAME}
+    networks:
+      - mediaserver
+    ports:
+      - "${SONARR_PORT}:8989"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/sonarr/config:/config
+      - ${USERDOWNLOAD}/Torrents:/downloads
+      - ${MEDIASHARE}:/media
+      - ${DOCKERDIR}/logs/sonarr:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"      
+      ## HTTP Routers
+      - "traefik.http.routers.sonarr-rtr.entrypoints=https"
+      - "traefik.http.routers.sonarr-rtr.rule=Host(`sonarr.${DOMAINNAME}`)"
+      - "traefik.http.routers.sonarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.sonarr-rtr.tls.options=tls-opts@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.sonarr-rtr.service=sonarr-svc"      
+      - "traefik.http.services.sonarr-svc.loadbalancer.server.port=8989"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Sonarr"
+      - "homepage.icon=sonarr.png"
+      - "homepage.href=http://sonarr.${DOMAINNAME}/"
+      - "homepage.description=TV show download manager"
+      ## Homepage Widget
+      - "homepage.widget.type=sonarr"
+      - "homepage.widget.url=http://sonarr.${HOST_NAME}:8989"
+      - "homepage.widget.key=${SONARR_API_KEY}"
+

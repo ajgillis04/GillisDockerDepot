@@ -1,0 +1,24 @@
+# CertDumper - Extract and manage SSL certificates.
+services:
+  certdumper:
+    container_name: traefik-certs-dumper.${HOST_NAME}
+    hostname: traefik_certdumper.${HOST_NAME}.local
+    image: ghcr.io/kereis/traefik-certs-dumper:edge
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      DOMAIN: ${DOMAINNAME}
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/certdumper/config:/config
+      - ${DOCKERDIR}/traefik/acme:/traefik:ro
+      - ${SHAREDDIR}:/output:rw
+      - ${DOCKERDIR}/logs/certdumper:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"

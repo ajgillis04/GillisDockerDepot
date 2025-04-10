@@ -1,0 +1,53 @@
+# Vaultwarden - A Bitwarden-compatible server.
+# Once container is up, generate a Admin Token
+#   echo -n "Your Personal Password" | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4 > secrets/vaultwarden_admin_token
+
+services:
+  vaultwarden:
+    container_name: vaultwarden.${HOST_NAME}
+    hostname: vaultwarden.${HOST_NAME}.local
+    image: vaultwarden/server:latest
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      #DOMAIN: ${DOMAINNAME}
+      ADMIN_TOKEN_FILE: /run/secrets/vaultwarden_admin_token #cant' get working look at later
+      DATABASE_URL: data/db.sqlite3
+      #DATABASE_URL_FILE: /run/secrets/vaultwarden_db_password # for use in an external database      
+      DOMAIN: "https://vault.${DOMAINNAME}"
+    networks:
+      - mediaserver
+    ports:
+      - "${VAULTWARDEN_PORT}:80" #9445
+    volumes:
+      - ${DOCKERDIR}/vaultwarden/config:/config      
+      - ${DOCKERDIR}/vaultwarden/data:/data
+      - ${DOCKERDIR}/logs/vaultwarden:/var/log
+    restart: always
+    secrets:      
+      - vaultwarden_admin_token
+#      - vaultwarden_db_password
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.vaultwarden-rtr.entrypoints=https"
+      - "traefik.http.routers.vaultwarden-rtr.rule=Host(`vault.${DOMAINNAME}`)"
+      - "traefik.http.routers.vaultwarden-rtr.tls.options=tls-opts@file"
+      ## Middlewares
+      - "traefik.http.routers.vaultwarden-rtr.middlewares=chain-oauth@file"
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.vaultwarden-rtr.service=vaultwarden-svc"
+      - "traefik.http.services.vaultwarden-svc.loadbalancer.server.port=80"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Vaultwarden"
+      - "homepage.icon=vaultwarden.png"
+      - "homepage.href=http://vault.${DOMAINNAME}/"
+      - "homepage.description=Self-hosted password management"
