@@ -7,7 +7,8 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 **GIT is required**  
 
 ### QNAP
-1. Download and install [Entware-std](https://www.myqnap.org/product/entware-std/)  
+1. Download and install [Entware-std](https://www.myqnap.org/product/entware-std/)
+   Note: Please close any open putty sessions as opkg will not be on the path until you login again.
 2. SSH to the server and run the following commands:
    ```bash
    sudo opkg install git
@@ -18,6 +19,7 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
    export LD_LIBRARY_PATH=/lib:$LD_LIBRARY_PATH  
    export LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
    source ~/.bashrc
+   exit
 
 ### Windows
 1. Run the following command to install GIT:  
