@@ -141,6 +141,7 @@ include:
 #  - ${COMPOSE_DIR}/mineos.yaml
 #  - ${COMPOSE_DIR}/musicbrainz.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
+  - ${COMPOSE_DIR}/nzbhydra2.yaml
 #  - ${COMPOSE_DIR}/netdata.yaml
   - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
