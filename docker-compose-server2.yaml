@@ -121,10 +121,10 @@ include:
 #  - ${COMPOSE_DIR}/phpmyadmin.yaml
 #  - ${COMPOSE_DIR}/pihole.yaml
 #  - ${COMPOSE_DIR}/plex.yaml
-  - ${COMPOSE_DIR}/profilarr.yaml
+#  - ${COMPOSE_DIR}/profilarr.yaml
 #  - ${COMPOSE_DIR}/portainer.yaml
-  - ${COMPOSE_DIR}/radarr.yaml
-  - ${COMPOSE_DIR}/sonarr.yaml
+#  - ${COMPOSE_DIR}/radarr.yaml
+#  - ${COMPOSE_DIR}/sonarr.yaml
 #  - ${COMPOSE_DIR}/tdarr.yaml
   - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
 #  - ${COMPOSE_DIR}/traefik.yaml
