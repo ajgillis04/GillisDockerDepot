@@ -140,7 +140,7 @@ include:
   - ${COMPOSE_DIR}/prowlarr.yaml
   - ${COMPOSE_DIR}/profilarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
-  - ${COMPOSE_DIR}/sabnzbd.yaml
+ # - ${COMPOSE_DIR}/sabnzbd.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
 # - ${COMPOSE_DIR}/tdarr.yaml
