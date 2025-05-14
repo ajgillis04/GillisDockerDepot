@@ -25,6 +25,7 @@ services:
     container_name: nextcloud.${HOST_NAME}
     hostname: nextcloud.${HOST_NAME}.local
     image: nextcloud:latest    
+    user: "0:0"  # Run as root
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
