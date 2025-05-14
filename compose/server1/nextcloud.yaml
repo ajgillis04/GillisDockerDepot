@@ -30,6 +30,7 @@ services:
     container_name: nextcloud.${HOST_NAME}
     hostname: nextcloud.${HOST_NAME}.local
     image: nextcloud:latest    
+    user: "1000:0"
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
