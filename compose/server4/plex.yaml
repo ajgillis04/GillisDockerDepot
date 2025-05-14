@@ -18,7 +18,7 @@ services:
   plex:
     container_name: plex.${HOST_NAME}
     hostname: plex.${HOST_NAME}.local
-    image: binhex/arch-plexpass:latest
+    image: lscr.io/linuxserver/plex:latest
     devices:
       - /dev/dri:/dev/dri
     environment:
