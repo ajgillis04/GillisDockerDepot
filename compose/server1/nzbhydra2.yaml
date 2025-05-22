@@ -2,7 +2,7 @@ services:
   nzbhydra2:
     container_name: nzbhydra2.${HOST_NAME}
     hostname: nzbhydra2.${HOST_NAME}.local
-    image: binhex/arch-nzbhydra2:lastest
+    image: binhex/arch-nzbhydra2:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
