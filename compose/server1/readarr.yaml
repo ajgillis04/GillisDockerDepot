@@ -20,6 +20,7 @@ services:
       - ${MEDIASHARE}/Books:/books
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${DOCKERDIR}/logs/readarr:/var/log
+      - ${MEDIASHARE}:/media
     restart: always
     security_opt:
       - no-new-privileges:true
