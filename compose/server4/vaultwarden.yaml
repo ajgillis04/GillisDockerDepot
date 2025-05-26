@@ -1,6 +1,8 @@
 # Vaultwarden - A Bitwarden-compatible server.
 # Once container is up, generate a Admin Token
-#   echo -n "Your Personal Password" | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4 > secrets/vaultwarden_admin_token
+# echo -n "Your Personal Password" | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4 > secrets/vaultwarden_admin_token
+# For QNAP or any device without argon 
+# docker run --rm alpine sh -c 'apk add openssl argon2 && echo -n "YourPassword" | argon2 "$(openssl rand -hex 16)" -id -t 3 -p 4 -k 65540 -e' > secrets/vaultwarden_admin_token
 
 services:
   vaultwarden:
