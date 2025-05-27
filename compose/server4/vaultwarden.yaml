@@ -15,7 +15,7 @@ services:
       PUID: ${PUID}
       #DOMAIN: ${DOMAINNAME}
       #ADMIN_TOKEN_FILE: /run/secrets/vaultwarden_admin_token #cant' get working look at later
-      ADMIN_TOKEN='$argon2id$v=19$m=65540,t=3,p=4$5Ldm38RceopaXiRQvnTC6Gm/5/7qdMlqZquezvwqQac$NKphgVZFLYvUD2HZzLzCmunzyDxT0xhYVEBLbPkG61k'
+      ADMIN_TOKEN: $argon2id$v=19$m=65540,t=3,p=4$5Ldm38RceopaXiRQvnTC6Gm/5/7qdMlqZquezvwqQac$NKphgVZFLYvUD2HZzLzCmunzyDxT0xhYVEBLbPkG61k
       DATABASE_URL: data/db.sqlite3
       #DATABASE_URL_FILE: /run/secrets/vaultwarden_db_password # for use in an external database      
       DOMAIN: "https://vault.${DOMAINNAME}"
