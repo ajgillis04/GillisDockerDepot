@@ -1,12 +1,14 @@
-﻿#A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages. 
-#Easily configured via YAML files or through docker label discovery.
+﻿# A modern, fully static, fast, secure fully proxied, highly customizable application dashboard with integrations for over 100 services and translations into multiple languages. 
+# Easily configured via YAML files or through docker label discovery.
+# I was having problems writting files running as root
+# docker exec -it homepage.TheIgloo chmod -R 777 /app/.next
 
 services:
   homepage:
     container_name: homepage.${HOST_NAME}
     hostname: homepage.${HOST_NAME}.local
-    image: ghcr.io/gethomepage/homepage:latest
-    environment:
+    image: ghcr.io/gethomepage/homepage:latest    
+    environment:      
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: 0
