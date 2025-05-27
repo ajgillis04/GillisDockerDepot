@@ -3,7 +3,10 @@
 # echo -n "Your Personal Password" | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4 > secrets/vaultwarden_admin_token
 # For QNAP or any device without argon 
 # docker run --rm alpine sh -c 'apk add openssl argon2 && echo -n "YourPassword" | argon2 "$(openssl rand -hex 16)" -id -t 3 -p 4 -k 65540 -e' > secrets/vaultwarden_admin_token
-
+# Found _File not working correctly right now so i created it manually
+# docker exec -it vaultwarden.TheIgloo /vaultwarden hash
+# Enter password twice
+# copy that password into 
 services:
   vaultwarden:
     container_name: vaultwarden.${HOST_NAME}
@@ -15,7 +18,7 @@ services:
       PUID: ${PUID}
       #DOMAIN: ${DOMAINNAME}
       #ADMIN_TOKEN_FILE: /run/secrets/vaultwarden_admin_token #cant' get working look at later
-      ADMIN_TOKEN: '$$argon2id$$v=19$$m=65540,t=3,p=4$$5Ldm38RceopaXiRQvnTC6Gm/5/7qdMlqZquezvwqQac$$NKphgVZFLYvUD2HZzLzCmunzyDxT0xhYVEBLbPkG61k'
+      ADMIN_TOKEN: ${VAULTWARDEN_ADMIN_TOKEN}
       DATABASE_URL: data/db.sqlite3
       #DATABASE_URL_FILE: /run/secrets/vaultwarden_db_password # for use in an external database      
       DOMAIN: "https://vault.${DOMAINNAME}"
