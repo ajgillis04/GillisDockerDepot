@@ -44,4 +44,4 @@ services:
       ## Homepage Widget
       - "homepage.widget.type=prowlarr"
       - "homepage.widget.url=http://prowlarr.${HOST_NAME}:9696"
-      - "homepage.widget.key=4badff9537724d5e931361875d30f236"
+      - "homepage.widget.key=${PROWLARR_API_KEY}"
