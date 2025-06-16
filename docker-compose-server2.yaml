@@ -3,7 +3,7 @@
 # Date:    Apr 20, 2020
 # Purpose: A Docker Compose to create containers
 # Clone:   git clone https://github.com/ajgillis04/GillisDockerDepot.git
-# Usage:   docker compose -p mediaserver -f docker-compose.yaml up --detach
+# Usage:   docker compose -p mediaserver -f docker-compose-server2.yaml up --detach
 # Prereqs: Ensure Docker and Docker Compose are installed
 # Prereqs 2: You need to create a .env in your root folder with all $variables below
 # Prereqs 3: required a /secrets folder with all you sensitive data
@@ -110,7 +110,9 @@ secrets:
 
 # *************************** SERVICES ****************************************** 
 include:
+  - ${COMPOSE_DIR}/bazarr.yaml
 #  - ${COMPOSE_DIR}/cloudflare-ddns.yaml
+  - ${COMPOSE_DIR}/cloudflared.yaml
 #  - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/heimdallint.yaml
 #  - ${COMPOSE_DIR}/jaegertracing.yaml
