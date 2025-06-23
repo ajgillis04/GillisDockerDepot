@@ -9,6 +9,7 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
+      HOST_SUFFIX: ${HOST_SUFFIX}
     networks:
       - mediaserver
     ports:
@@ -24,9 +25,9 @@ services:
       - "traefik.enable=true"      
       ## HTTP Routers
       - "traefik.http.routers.bazarr-rtr.entrypoints=https"
-      - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.${DOMAINNAME}`)"      
-      - "traefik.http.routers.bazarr-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.bazarr-rtr.tls.options=tls-opts@file"
+      - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr${HOST_SUFFIX}.${DOMAINNAME}`)"      
+      #- "traefik.http.routers.bazarr-rtr.middlewares=chain-oauth@file"
+      #- "traefik.http.routers.bazarr-rtr.tls.options=tls-opts@file"
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## HTTP Services

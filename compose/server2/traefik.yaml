@@ -1,0 +1,147 @@
+# Traefik - A modern reverse proxy and load balancer.
+
+# Notes:
+# Make sure acme.json is created before first run
+#   New-Item -ItemType File -Path "C:\path\to\your\docker\directory\acme.json" -Force
+#   mkdir traefik
+#   mkdir traefik/acme
+#   mkdir traefik/rules
+#   touch traefik/acme/acme.json
+#   chmod 600 traefik/acme/acme.json
+#   mkdir ${DOCKERDIR}/logs/traefik
+#   touch ${DOCKERDIR}/logs/traefik/traefik.log
+#   touch ${DOCKERDIR}/logs/traefik//access.log
+#   if testing find line below and uncomment
+#    -TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
+#
+#   Check logs/traefik.log and logs/access.log for errors and connections.
+
+services:
+  traefik:
+    container_name: traefik.${HOST_NAME}
+    hostname: traefik.${HOST_NAME}.local
+    image: traefik:v3.3
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    networks:
+      - mediaserver
+      #- pihole_network
+    environment:
+      # COMMON load these from .env into container to use variables in rules
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      SERVER_IP: ${SERVER_IP}
+      PLEX_TOKEN: ${PLEX_TOKEN} #adding for dynamic config in plex-cors-headers.yml
+      HOST_SUFFIX: ${HOST_SUFFIX}      
+
+      TRAEFIK_GLOBAL_CHECKNEWVERSION: true
+      TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: true
+      
+      # ENTRYPOINTS
+      TRAEFIK_ENTRYPOINTS_HTTP_ADDRESS: ":80"
+      TRAEFIK_ENTRYPOINTS_HTTPS_ADDRESS: ":443"
+      TRAEFIK_ENTRYPOINTS_TRAEFIK_ADDRESS: ":8085"
+      TRAEFIK_ENTRYPOINTS_PING_ADDRESS: ":8089"
+      
+      # REDIRECTIONS TO HTTPS
+      TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_TO: https
+      TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: https
+      TRAEFIK_ENTRYPOINTS_HTTP_HTTP_REDIRECTIONS_ENTRYPOINT_PERMANENT: true
+      
+      # API
+      TRAEFIK_API: true
+      TRAEFIK_API_DASHBOARD: true
+      # Disable once up and running for security
+      TRAEFIK_API_INSECURE: false
+      
+      # LOGGING
+      TRAEFIK_LOG: true
+      TRAEFIK_LOG_FILEPATH: /logs/traefik.log
+      TRAEFIK_LOG_LEVEL: DEBUG # DEBUG, INFO, WARN, ERROR, FATAL, PANIC. Set debug for testing
+      
+      # ACCESS LOG
+      TRAEFIK_ACCESSLOG: true
+      TRAEFIK_ACCESSLOG_FILEPATH: /logs/access.log
+      TRAEFIK_ACCESSLOG_BUFFERINGSIZE: 100
+      TRAEFIK_ACCESSLOG_FILTERS_STATUSCODES: 204-299,400-499,500-599
+      
+      # PROVIDERS
+      TRAEFIK_PROVIDERS_DOCKER: true
+      TRAEFIK_PROVIDERS_DOCKER_ENDPOINT: unix:///var/run/docker.sock
+      TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: false
+      #TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver #if you want route other networks leave this
+      TRAEFIK_PROVIDERS_FILE_DIRECTORY: /rules
+      TRAEFIK_PROVIDERS_FILE_WATCH: true
+      
+      # TLS & CERTIFICATES
+      TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS: true
+      TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_CERTRESOLVER: dnscloudflare
+      TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_DOMAINS[0]_MAIN: ${DOMAINNAME}
+      TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_DOMAINS[0]_SANS: "*.${DOMAINNAME}"
+      TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_STORAGE: /acme.json
+      TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROVIDER: cloudflare
+      TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_RESOLVERS: 1.1.1.1:53,1.0.0.1:53
+      TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROPAGATION_DELAYBEFORECHECKS: 90
+      # Testing Let's Encrypt Staging Server ENABLE after testing
+      TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      #TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-v02.api.letsencrypt.org/directory"
+
+      
+      # FORWARDED HEADERS
+      TRAEFIK_ENTRYPOINTS_HTTPS_FORWARDEDHEADERS_TRUSTEDIPS: ${CLOUDFLARE_IPS},${LOCAL_NETWORK}
+      
+      # ENVIRONMENT VARIABLES
+      CF_DNS_API_TOKEN_FILE: /run/secrets/cf_dns_api_token
+      HTPASSWD_FILE: /run/secrets/basic_auth_credentials
+      # SECONDDOMAINNAME: ${SECONDDOMAINNAME}
+
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+      - target: 8085
+        published: 8085
+        protocol: tcp
+        mode: host    
+    volumes:
+      - ${DOCKERDIR}/traefik/rules:/rules
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKERDIR}/traefik/acme/acme.json:/acme.json
+      - ${DOCKERDIR}/logs/traefik:/logs
+#      - ${DOCKERDIR}/traefik/tracing.yml:/tracing.yml  # Mount the tracing configuration file
+    secrets:
+      - cf_dns_api_token
+      - basic_auth_credentials
+    labels:
+      - "traefik.enable=true"
+      ## HTTP → HTTPS redirect
+      - "traefik.http.routers.http-catchall.entrypoints=http"
+      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
+      #- "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      #- "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      ## Dashboard router on the traefik entrypoint (8085)
+      - "traefik.http.routers.traefik-rtr.entrypoints=traefik"
+      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik${HOST_SUFFIX}.${DOMAINNAME}`)"
+      - "traefik.http.routers.traefik-rtr.service=api@internal"  
+      ## Docker network
+      - "traefik.docker.network=mediaserver"
+      ## Watchtower
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage metadata
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Traefik"
+      - "homepage.icon=traefik.png"
+      - "homepage.href=http://traefik.${DOMAINNAME}/"
+      - "homepage.description=Manage Traefik reverse proxy"
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "7"
