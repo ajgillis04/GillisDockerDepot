@@ -4,9 +4,10 @@ services:
     container_name: cloudflared.${HOST_NAME}
     hostname: cloudflared.${HOST_NAME}.local
     image: cloudflare/cloudflared:latest
-    command: tunnel run test-tunnel
+    command: tunnel --config /home/nonroot/.cloudflared/config.yml run Gillis-Dev
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}  # You’ll get this after `cloudflared tunnel login`
+      #TUNNEL_TRANSPORT_PROTOCOL: http2 # Default is quic, if not defined. quic does not work with all services.
     networks:
       - mediaserver
     volumes:
