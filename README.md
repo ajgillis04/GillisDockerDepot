@@ -42,91 +42,69 @@ To get started, **Git must be installed** on your system:
 
 ---
 
-## 📡 Optional: Share Docker Folder via NFS (Linux/Ubuntu)
+## 🧾 Samba Share Setup for DockerDepot (Linux → Windows)
 
-If you want to access your `~/Docker` folder from other machines (like Windows or QNAP), you can share it using **NFS** and set up a **persistent mount** so it reconnects automatically. This makes it easy to copy and paste your .env or secrets folder if you setup on another machine. 
+### 📍 Server: Linux (Ubuntu/Debian)
 
-### 🛠️ Install NFS Server on Ubuntu
-
+#### 1. **Install Samba**
 ```bash
-sudo apt update
-sudo apt install nfs-kernel-server
+sudo apt install samba
 ```
 
-### 📁 Share the Docker Folder
-
-Make sure the folder exists and has open permissions (you can tighten later):
-
+#### 2. **Create the Share Folder**
 ```bash
-mkdir -p ~/Docker
-sudo chown nobody:nogroup ~/Docker
-sudo chmod 777 ~/Docker
+mkdir -p /home/ajgillis/Docker
 ```
 
-### 📜 Configure `/etc/exports`
-
-Edit the exports file:
-
-```bash
-sudo nano /etc/exports
+#### 3. **Configure Samba Share**
+Edit `/etc/samba/smb.conf` and add this at the end:
+```ini
+[DockerDepot]
+path = /home/ajgillis/Docker
+browseable = yes
+read only = no
+guest ok = no
 ```
 
-Add this line:
-
+#### 4. **Create Samba User**
 ```bash
-/home/yourusername/Docker 192.168.1.0/24(rw,sync,no_subtree_check)
+sudo smbpasswd -a ajgillis
 ```
 
-> Replace `yourusername` with your actual Linux username and `192.168.1.0/24` with your local subnet or specific client IP.
-
-Apply the changes:
-
+#### 5. **Restart Samba**
 ```bash
-sudo exportfs -a
-sudo systemctl restart nfs-kernel-server
+sudo systemctl restart smbd
 ```
 
 ---
 
-### 🔁 Persistent Mount on Windows
+### 🖥️ Client: Windows
 
-To mount the share persistently on Windows:
-
-1. Open **Command Prompt as Administrator**
-2. Run:
-
-```cmd
-net use Z: \\192.168.1.x\home\yourusername\Docker /persistent:yes
+#### 1. **Access the Share**
+Open File Explorer and enter:
+```
+\\192.168.0.102\DockerDepot
 ```
 
-> Replace `192.168.1.x` with your Ubuntu IP and `yourusername` with your actual username.
+#### 2. **Authenticate**
+- **Username**: `ajgillis`
+- **Password**: Samba password you just set
+
+Check “Remember my credentials” for seamless access.
+
+#### 3. **Map the Drive (Optional)**
+- Right-click “This PC” → “Map network drive”
+- Choose a drive letter (e.g., `Z:`)
+- Enter: `\\192.168.0.102\DockerDepot`
+- Check “Reconnect at sign-in”
 
 ---
 
-### 🔁 Persistent Mount on Linux
+### 🧠 Notes
 
-Create a mount point:
-
-```bash
-sudo mkdir -p /mnt/docker
-```
-
-Add this line to `/etc/fstab`:
-
-```bash
-192.168.1.x:/home/yourusername/Docker /mnt/docker nfs defaults 0 0
-```
-
-Then mount it:
-
-```bash
-sudo mount -a
-```
-
----
-
-Now your Docker folder will be available across machines — even after reboot. 🔄
-```
+- NFS is not required for Windows clients — Samba is native.
+- You can add more shares by repeating the `[ShareName]` block in `smb.conf`.
+- For tighter security, disable guest access and restrict by user/group.
 
 ## Installation  
 
