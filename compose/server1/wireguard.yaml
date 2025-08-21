@@ -9,7 +9,8 @@ services:
   wireguard:
     container_name: wireguard.${HOST_NAME}
     hostname: wireguard.${HOST_NAME}.local
-    image: lscr.io/linuxserver/wireguard:latest
+    # image: lscr.io/linuxserver/wireguard:latest # July 29, 2025 at 4:36 PM update broke WireGuard due to iptables v1.8.11 switching to nf_tables, which caused legacy PostUp rules to fail
+    image: lscr.io/linuxserver/wireguard:1.0.20210914-r4-ls80
     cap_add:
       - NET_ADMIN
     environment:
@@ -20,7 +21,7 @@ services:
       ALLOWEDIPS: 0.0.0.0/0,192.168.2.0/24
       PEERDNS: ${PIHOLE_PRI}
       INTERNAL_SUBNET: 192.168.10.0
-      PEERS: "AndyPhone,AndyLaptop,AaronPhone,AaronLaptop,AndrewPhone,AndrewLaptop,MichellePhone,SelenaPhone,SelenaLaptop,ColinPhone,AndyTest"
+      PEERS: "AndyPhone,AndyLaptop,AaronPhone,AaronLaptop,AndrewPhone,AndrewLaptop,MichellePhone,SelenaPhone,SelenaLaptop,ColinPhone,CottageDDWRT,AndyTest"
       SERVERPORT: 51820
       SERVERURL: vpn.${DOMAINNAME}      
       LOG_CONFS: true
