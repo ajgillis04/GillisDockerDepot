@@ -8,7 +8,7 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 
 ## Prerequisites  
 
-To get started, **Git must be installed** on your system:  
+To get started, **Git** and **Docker** must be installed on your system:  
 
 ### 📦 **QNAP**  
 1. **Download and install [Entware-std](https://www.myqnap.org/product/entware-std/)**
@@ -34,10 +34,25 @@ To get started, **Git must be installed** on your system:
    ```  
 
 ### 🐧 **Linux**  
-1. Install Git using package manager:  
+1. Install Git && Docker using package manager:  
    ```bash
    sudo apt-get update  
-   sudo apt-get install git  
+   sudo apt-get install git
+   sudo apt update
+   sudo apt install ca-certificates curl gnupg
+   sudo install -m 0755 -d /etc/apt/keyrings
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+   echo \
+     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+     $(lsb_release -cs) stable" | \
+     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   sudo apt update
+   sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+   sudo groupadd docker
+   sudo usermod -aG docker $USER
+   logout
+   login
+  
    ```  
 
 ---
