@@ -53,14 +53,14 @@ sudo apt install samba
 
 #### 2. **Create the Share Folder**
 ```bash
-mkdir -p /home/ajgillis/Docker
+mkdir -p /home/<username>/Docker
 ```
 
 #### 3. **Configure Samba Share**
 Edit `/etc/samba/smb.conf` and add this at the end:
 ```ini
 [DockerDepot]
-path = /home/ajgillis/Docker
+path = /home/<username>/Docker
 browseable = yes
 read only = no
 guest ok = no
@@ -68,7 +68,7 @@ guest ok = no
 
 #### 4. **Create Samba User**
 ```bash
-sudo smbpasswd -a ajgillis
+sudo smbpasswd -a <username>
 ```
 
 #### 5. **Restart Samba**
@@ -83,11 +83,11 @@ sudo systemctl restart smbd
 #### 1. **Access the Share**
 Open File Explorer and enter:
 ```
-\\192.168.0.102\DockerDepot
+\\<linux-ip-address>\DockerDepot
 ```
 
 #### 2. **Authenticate**
-- **Username**: `ajgillis`
+- **Username**: `<username>`
 - **Password**: Samba password you just set
 
 Check “Remember my credentials” for seamless access.
@@ -95,7 +95,7 @@ Check “Remember my credentials” for seamless access.
 #### 3. **Map the Drive (Optional)**
 - Right-click “This PC” → “Map network drive”
 - Choose a drive letter (e.g., `Z:`)
-- Enter: `\\192.168.0.102\DockerDepot`
+- Enter: `\\<linux-ip-address>\DockerDepot`
 - Check “Reconnect at sign-in”
 
 ---
@@ -105,6 +105,7 @@ Check “Remember my credentials” for seamless access.
 - NFS is not required for Windows clients — Samba is native.
 - You can add more shares by repeating the `[ShareName]` block in `smb.conf`.
 - For tighter security, disable guest access and restrict by user/group.
+
 
 ## Installation  
 
