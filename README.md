@@ -42,13 +42,101 @@ To get started, **Git must be installed** on your system:
 
 ---
 
+## 📡 Optional: Share Docker Folder via NFS (Linux/Ubuntu)
+
+If you want to access your `~/Docker` folder from other machines (like Windows or QNAP), you can share it using **NFS** and set up a **persistent mount** so it reconnects automatically. This makes it easy to copy and paste your .env or secrets folder if you setup on another machine. 
+
+### 🛠️ Install NFS Server on Ubuntu
+
+```bash
+sudo apt update
+sudo apt install nfs-kernel-server
+```
+
+### 📁 Share the Docker Folder
+
+Make sure the folder exists and has open permissions (you can tighten later):
+
+```bash
+mkdir -p ~/Docker
+sudo chown nobody:nogroup ~/Docker
+sudo chmod 777 ~/Docker
+```
+
+### 📜 Configure `/etc/exports`
+
+Edit the exports file:
+
+```bash
+sudo nano /etc/exports
+```
+
+Add this line:
+
+```bash
+/home/yourusername/Docker 192.168.1.0/24(rw,sync,no_subtree_check)
+```
+
+> Replace `yourusername` with your actual Linux username and `192.168.1.0/24` with your local subnet or specific client IP.
+
+Apply the changes:
+
+```bash
+sudo exportfs -a
+sudo systemctl restart nfs-kernel-server
+```
+
+---
+
+### 🔁 Persistent Mount on Windows
+
+To mount the share persistently on Windows:
+
+1. Open **Command Prompt as Administrator**
+2. Run:
+
+```cmd
+net use Z: \\192.168.1.x\home\yourusername\Docker /persistent:yes
+```
+
+> Replace `192.168.1.x` with your Ubuntu IP and `yourusername` with your actual username.
+
+---
+
+### 🔁 Persistent Mount on Linux
+
+Create a mount point:
+
+```bash
+sudo mkdir -p /mnt/docker
+```
+
+Add this line to `/etc/fstab`:
+
+```bash
+192.168.1.x:/home/yourusername/Docker /mnt/docker nfs defaults 0 0
+```
+
+Then mount it:
+
+```bash
+sudo mount -a
+```
+
+---
+
+Now your Docker folder will be available across machines — even after reboot. 🔄
+```
+
 ## Installation  
 
 ### 🔄 **Clone the Repository**  
 🚨 **For QNAP Users**: Before cloning, **create a "Docker" shared folder** via **Control Panel → Shared Folders → Privileges**.  
+🚨 **For all other OS**:  mkdir ~/Docker/
 
 1. **Clone the repo:**  
    ```bash
+   cd ~/Docker
    git clone https://<your_token>@github.com/ajgillis04/GillisDockerDepot.git  
    cd GillisDockerDepot  
    ```  
