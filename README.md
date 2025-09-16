@@ -8,7 +8,7 @@ A comprehensive repository for managing and orchestrating a diverse range of Doc
 
 ## Prerequisites  
 
-To get started, **Git must be installed** on your system:  
+To get started, **Git** and **Docker** must be installed on your system:  
 
 ### 📦 **QNAP**  
 1. **Download and install [Entware-std](https://www.myqnap.org/product/entware-std/)**
@@ -34,21 +34,103 @@ To get started, **Git must be installed** on your system:
    ```  
 
 ### 🐧 **Linux**  
-1. Install Git using package manager:  
+1. Install Git && Docker using package manager:  
    ```bash
    sudo apt-get update  
-   sudo apt-get install git  
+   sudo apt-get install git
+   sudo apt update
+   sudo apt install ca-certificates curl gnupg
+   sudo install -m 0755 -d /etc/apt/keyrings
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+   echo \
+     "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+     $(lsb_release -cs) stable" | \
+     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   sudo apt update
+   sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+   sudo groupadd docker
+   sudo usermod -aG docker $USER
+   logout
+   login
+  
    ```  
 
 ---
+
+## 🧾 Samba Share Setup for DockerDepot (Linux → Windows)
+
+### 📍 Server: Linux (Ubuntu/Debian)
+
+#### 1. **Install Samba**
+```bash
+sudo apt install samba
+```
+
+#### 2. **Create the Share Folder**
+```bash
+mkdir -p /home/<username>/Docker
+```
+
+#### 3. **Configure Samba Share**
+Edit `/etc/samba/smb.conf` and add this at the end:
+```ini
+[DockerDepot]
+path = /home/<username>/Docker
+browseable = yes
+read only = no
+guest ok = no
+```
+
+#### 4. **Create Samba User**
+```bash
+sudo smbpasswd -a <username>
+```
+
+#### 5. **Restart Samba**
+```bash
+sudo systemctl restart smbd
+```
+
+---
+
+### 🖥️ Client: Windows
+
+#### 1. **Access the Share**
+Open File Explorer and enter:
+```
+\\<linux-ip-address>\DockerDepot
+```
+
+#### 2. **Authenticate**
+- **Username**: `<username>`
+- **Password**: Samba password you just set
+
+Check “Remember my credentials” for seamless access.
+
+#### 3. **Map the Drive (Optional)**
+- Right-click “This PC” → “Map network drive”
+- Choose a drive letter (e.g., `Z:`)
+- Enter: `\\<linux-ip-address>\DockerDepot`
+- Check “Reconnect at sign-in”
+
+---
+
+### 🧠 Notes
+
+- NFS is not required for Windows clients — Samba is native.
+- You can add more shares by repeating the `[ShareName]` block in `smb.conf`.
+- For tighter security, disable guest access and restrict by user/group.
+
 
 ## Installation  
 
 ### 🔄 **Clone the Repository**  
 🚨 **For QNAP Users**: Before cloning, **create a "Docker" shared folder** via **Control Panel → Shared Folders → Privileges**.  
+🚨 **For all other OS**:  mkdir ~/Docker/
 
 1. **Clone the repo:**  
    ```bash
+   cd ~/Docker
    git clone https://<your_token>@github.com/ajgillis04/GillisDockerDepot.git  
    cd GillisDockerDepot  
    ```  

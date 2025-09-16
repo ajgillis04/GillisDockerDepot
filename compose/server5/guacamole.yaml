@@ -1,0 +1,56 @@
+services:
+  guacamole:
+    container_name: guacamole.${HOST_NAME}
+    hostname: guacamole.${HOST_NAME}.local
+    image: guacamole/guacamole:latest
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      GUACD_HOSTNAME: guacd.${HOST_NAME}
+      MYSQL_DATABASE: guacamole
+      MYSQL_HOSTNAME: mariadb.${HOST_NAME}
+      MYSQL_PORT: 3306
+      MYSQL_USER_FILE: /run/secrets/guac_mysql_user
+      MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password      
+    depends_on:
+      - guacd
+      - mariadb
+    networks:
+      - mediaserver
+    ports:
+      - "${GUACAMOLE_PORT}:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/guacamole/home:/home/guacamole
+      - ${DOCKERDIR}/guacamole/etc:/etc/guacamole
+      - ${DOCKERDIR}/logs/guacamole:/var/log
+    restart: unless-stopped
+    secrets:
+      - guac_mysql_user
+      - guac_mysql_password
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.guacamole-rtr.entrypoints=https"
+      - "traefik.http.routers.guacamole-rtr.rule=Host(`guac.${DOMAINNAME}`)"      
+      - "traefik.http.routers.guacamole-rtr.middlewares=chain-oauth@file,add-guacamole"
+      - "traefik.http.routers.guacamole-rtr.tls.options=tls-opts@file"
+      ## Middlewares      
+      - "traefik.http.middlewares.add-guacamole.addPrefix.prefix=/guacamole"      
+      ## Docker Network
+      - "traefik.docker.network=mediaserver"
+      ## HTTP Services
+      - "traefik.http.routers.guacamole-rtr.service=guacamole-svc"
+      - "traefik.http.services.guacamole-svc.loadbalancer.server.port=8080"
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Guacamole"
+      - "homepage.icon=guacamole.png"
+      - "homepage.href=http://guac.${DOMAINNAME}/"
+      - "homepage.description=Remote desktop gateway"

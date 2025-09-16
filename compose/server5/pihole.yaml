@@ -1,0 +1,73 @@
+# Pi-hole - A network-wide ad blocker.
+
+# Notes:
+# This may need to change if you are running on windows or linux. Hence the commented variables etc
+# Windows: Suggested, new-NetFirewallRule -DisplayName "Docker Desktop Backend" -Direction Inbound -Program "C:\program files\docker\docker\resources\com.docker.backend.exe" -Action Allow -Profile Private,Public
+#
+
+services:
+  pihole:
+    container_name: pihole.${HOST_NAME}
+    hostname: pihole.${HOST_NAME}.local
+    image: pihole/pihole:latest 
+    cap_add:
+         # Required if you are using Pi-hole as your DHCP server, else not needed    
+      - NET_ADMIN
+      - SYS_TIME
+      - SYS_NICE
+      - CAP_NET_RAW
+    environment:
+      TZ: ${TZ}      
+      HOSTNAME: pihole.${HOST_NAME}
+      #WEBPASSWORD_FILE: /run/secrets/pihole_password
+      FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
+      FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
+      FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,local
+      FTLCONF_debug_api: false
+      TAIL_FTL_LOG: '1' # or '0' to disable
+      FTLCONF_dhcp_active: true      
+      FTLCONF_dhcp_start: 192.168.2.50
+      FTLCONF_dhcp_end: 192.168.2.254
+      FTLCONF_dhcp_router: 192.168.2.1
+      FTLCONF_dhcp_leaseTime: 30d
+      FTLCONF_dns_domain: local
+      FTLCONF_dhcp_ipv6: true
+      TEMPERATUREUNIT: c
+    networks:
+      pihole_network:
+        ipv4_address: ${PIHOLE_IP}
+    volumes:
+      - ${DOCKERDIR}/pihole/etc:/etc/pihole
+      - ${DOCKERDIR}/pihole/dnsmasq.d:/etc/dnsmasq.d
+      - ${DOCKERDIR}/logs/pihole:/var/log/pihole
+      - ${DOCKERDIR}/logs/pihole-FTL:/var/log/pihole-FTL
+    restart: always
+    secrets:
+      - pihole_password    
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.pihole-rtr.entrypoints=https"
+      - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.${DOMAINNAME}`)"            
+      - "traefik.http.routers.pihole-rtr.tls.options=tls-opts@file"
+      ## Middlewares
+      - "traefik.http.routers.pihole-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.middlewares.add-pihole.addPrefix.prefix=/admin"      
+      ## Docker Network
+      - "traefik.docker.network=pihole_network"
+      ## HTTP Services
+      - "traefik.http.routers.pihole-rtr.service=pihole-svc"      
+      - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Network"
+      - "homepage.name=Pi-hole"
+      - "homepage.icon=pi-hole.png"
+      - "homepage.href=http://pihole.${DOMAINNAME}/"
+      - "homepage.description=Network-wide ad blocker"
+      ## Homepage Widget
+      - "homepage.widget.type=pihole"
+      - "homepage.widget.url=https://pihole.${HOST_NAME}"
+      - "homepage.widget.version=6"  
+      - "homepage.widget.key=${PIHOLE_TOKEN}"
