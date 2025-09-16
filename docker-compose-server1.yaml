@@ -133,8 +133,8 @@ include:
   - ${COMPOSE_DIR}/guacamole.yaml
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/homepage.yaml
-  - ${COMPOSE_DIR}/jellyfin.yaml
-  - ${COMPOSE_DIR}/libation.yaml
+  #- ${COMPOSE_DIR}/jellyfin.yaml
+  #- ${COMPOSE_DIR}/libation.yaml
   - ${COMPOSE_DIR}/lidarr.yaml
 #  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
@@ -148,6 +148,7 @@ include:
 #  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
+  - ${COMPOSE_DIR}/php-apache-storiesbeyondstone.yaml
 #  - ${COMPOSE_DIR}/picard.yaml
   - ${COMPOSE_DIR}/pihole.yaml
 #  - ${COMPOSE_DIR}/pinchflat.yaml

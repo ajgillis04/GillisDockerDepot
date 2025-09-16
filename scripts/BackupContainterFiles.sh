@@ -1,56 +1,29 @@
 #!/bin/bash
 
 # If script does not run, encoding might be wrong. Run:
-# sed -i -e 's/\r$//' BackupContainterFiles.sh
-# chmod +x /scritps/BackupContainterFiles.sh
-# sudo ./scritps/BackupContainterFiles.sh
+# sed -i -e 's/\r$//' scritps/BackupContainterFiles.sh
+# chmod +x scripts/BackupContainterFiles.sh
+# sudo ./scripts/BackupContainterFiles.sh
 # sudo crontab -e
-# 0 3 * * * /share/Backups/GillisNAS/ContainerNew/BackupContainterFiles.sh
+# 0 3 * * * /share/Docker/GillisDockerDepot/scripts/BackupContainterFiles.sh
 
 # Set the script to exit immediately if any command fails
 set -e
 
 DATE=$(date +%F-%H%M%S)
-BACKUP_DIR=/share/Backups/GillisNAS/ContainerNew
+BACKUP_DIR=/share/Backups/GillisNAS/Docker/GillisDockerDepot
 CONTAINER_DIR=/share/Docker/GillisDockerDepot/appdata
 ENV_PATH="/share/Docker/GillisDockerDepot/.env"
 SECRETS_PATH="/share/Docker/GillisDockerDepot/secrets"
 LOG_FILE="$BACKUP_DIR/backup_log.txt"
 EMAIL="andy.gillis@gmail.com"  # Replace with your email
 
-# Containers to backup
-CRITICAL_CONTAINERS=(
-    vaultwarden.GillisNAS
-    transmission-openvpn.GillisNAS
-    sonarr.GillisNAS
-    tautulli.GillisNAS
-    lidarr.GillisNAS
-    calibre.GillisNAS
-    heimdall.GillisNAS
-    pihole.GillisNAS
-    heimdallint.GillisNAS
-    guacamole.GillisNAS
-    prowlarr.GillisNAS
-    radarr.GillisNAS
-    readarr.GillisNAS
-    sabnzbd.GillisNAS
-    bazarr.GillisNAS
-    overseerr.GillisNAS
-    plex.GillisNAS
-    tdarr.GillisNAS
-    wizarr.GillisNAS
-)
-
-# Function to check container health
-check_container_status() {
-    CONTAINER=$1
-    STATUS=$(docker ps --filter "name=$CONTAINER" --format "{{.Status}}")
-    if [[ "$STATUS" == *healthy* || "$STATUS" == *Up* ]]; then
-        echo "$CONTAINER is running and healthy" | tee -a "$LOG_FILE"
-    else
-        echo "$CONTAINER has issues: $STATUS" | tee -a "$LOG_FILE"
-    fi
+# Logging function with timestamp
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
 }
+
+trap 'log "Script exited with status $? at $(date)"' EXIT
 
 # Ensure the backup directory exists
 echo "Ensuring backup directory exists: $BACKUP_DIR"
@@ -62,92 +35,144 @@ if [ -f "$LOG_FILE" ]; then
     rm -f "$LOG_FILE"
 fi
 
-echo "Starting backup process at $DATE"
-echo "Backup started at: $DATE" | tee -a "$LOG_FILE"
+START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+log "Backup started at: $START_TIME"
+
+
+# Containers to backup
+# Dynamically build list of containers with matching appdata folders
+CRITICAL_CONTAINERS=()
+while IFS= read -r dir; do
+    base=$(basename "$dir")
+    if docker ps -a --format "{{.Names}}" | grep -q "^${base}\.GillisNAS$"; then
+        CRITICAL_CONTAINERS+=("${base}.GillisNAS")
+    fi
+done < <(find "$CONTAINER_DIR" -mindepth 1 -maxdepth 1 -type d)
+
+# Function to check container health
+check_container_status() {
+    CONTAINER=$1
+    STATUS=$(docker ps --filter "name=$CONTAINER" --format "{{.Status}}")
+    if [[ "$STATUS" == *healthy* || "$STATUS" == *Up* ]]; then
+        log "$CONTAINER is running and healthy"
+    else
+        log "$CONTAINER has issues: $STATUS"
+    fi
+}
 
 # Perform pre-backup health checks
-echo "Performing pre-backup health checks..." | tee -a "$LOG_FILE"
+log "Performing pre-backup health checks..."
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
-    echo "Checking health of $CONTAINER..."
+    log "Checking health of $CONTAINER..."
     check_container_status $CONTAINER
 done
 
 # Stop critical containers
-echo "Stopping critical containers for final backup..." | tee -a "$LOG_FILE"
+log "Stopping critical containers for final backup..."
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
-    echo "Stopping container: $CONTAINER"
-    docker stop $CONTAINER >> "$LOG_FILE" 2>&1 && \
-        echo "Stopped $CONTAINER" | tee -a "$LOG_FILE" || \
-        echo "Failed to stop $CONTAINER" | tee -a "$LOG_FILE"
+    log "Stopping container: $CONTAINER"
+    if docker stop "$CONTAINER" >> "$LOG_FILE" 2>&1; then
+        log "Stopped $CONTAINER"
+    else
+        log "Failed to stop $CONTAINER"
+    fi
 done
 
 # Backup critical containers
-echo "Backing up critical containers..." | tee -a "$LOG_FILE"
+log "Backing up critical containers..."
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
     BACKUP_PATH="$CONTAINER_DIR/${CONTAINER%.*}"
     DEST_PATH="$BACKUP_DIR/${CONTAINER%.*}/"
-    echo "Backing up $CONTAINER from $BACKUP_PATH to $DEST_PATH..."
-    sudo rsync -a --ignore-existing "$BACKUP_PATH/" "$DEST_PATH/" 2>>"$LOG_FILE" && \
-        echo "Successfully backed up $CONTAINER" | tee -a "$LOG_FILE" || \
-        echo "Failed to back up $CONTAINER" | tee -a "$LOG_FILE"
+    log "Backing up $CONTAINER from $BACKUP_PATH to $DEST_PATH..."
+    if sudo rsync -a --ignore-existing "$BACKUP_PATH/" "$DEST_PATH/" >> "$LOG_FILE" 2>&1; then
+        log "Successfully backed up $CONTAINER"
+    else
+        log "Failed to back up $CONTAINER"
+    fi
 done
 
 # Special backup for Plex
-echo "Backing up Plex configuration..." | tee -a "$LOG_FILE"
+log "Backing up Plex configuration..."
 PlexBackupPath="$CONTAINER_DIR/plex/Plex Media Server"
-echo "Backing up Plex files from $PlexBackupPath"
-rsync -a \
+log "Backing up Plex files from $PlexBackupPath"
+
+if rsync -a \
     --include='.LocalAdminToken' \
     --include='Preferences.xml' \
     --include='Setup Plex.html' \
     --exclude='*' \
-    "$PlexBackupPath/" "$BACKUP_DIR/plex/" 2>>"$LOG_FILE" && \
-    echo "Successfully backed up Plex" | tee -a "$LOG_FILE" || \
-    echo "Failed to back up Plex" | tee -a "$LOG_FILE"
+    "$PlexBackupPath/" "$BACKUP_DIR/plex/" >> "$LOG_FILE" 2>&1; then
+    log "Successfully backed up Plex"
+else
+    log "Failed to back up Plex"
+fi
 
 # Backup secrets
 if [ -d "$SECRETS_PATH" ]; then
-    echo "Backing up secrets from $SECRETS_PATH..."
-    rsync -a --ignore-existing "$SECRETS_PATH/" "$BACKUP_DIR/secrets/" 2>>"$LOG_FILE" && \
-        echo "Successfully backed up secrets" | tee -a "$LOG_FILE" || \
-        echo "Failed to back up secrets" | tee -a "$LOG_FILE"
+    log "Backing up secrets from $SECRETS_PATH..."
+    if rsync -a --ignore-existing "$SECRETS_PATH/" "$BACKUP_DIR/secrets/" >> "$LOG_FILE" 2>&1; then
+        log "Successfully backed up secrets"
+    else
+        log "Failed to back up secrets"
+    fi
 else
-    echo "Secrets directory does not exist at $SECRETS_PATH. Skipping..." | tee -a "$LOG_FILE"
+    log "Secrets directory does not exist at $SECRETS_PATH. Skipping..."
 fi
 
 # Backup .env file(s)
 if [ -f "$ENV_PATH" ]; then
-    echo "Backing up .env file from $ENV_PATH..."
-    cp "$ENV_PATH" "$BACKUP_DIR/.env" && \
-        echo "Successfully backed up .env file" | tee -a "$LOG_FILE" || \
-        echo "Failed to back up .env file" | tee -a "$LOG_FILE"
+    log "Backing up .env file from $ENV_PATH..."
+    if cp "$ENV_PATH" "$BACKUP_DIR/.env"; then
+        log "Successfully backed up .env file"
+    else
+        log "Failed to back up .env file"
+    fi
 else
-    echo ".env file does not exist at $ENV_PATH. Skipping..." | tee -a "$LOG_FILE"
+    log ".env file does not exist at $ENV_PATH. Skipping..."
 fi
 
 # Restart containers after backup
-echo "Restarting critical containers after backup..." | tee -a "$LOG_FILE"
+log "Restarting critical containers after backup..."
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
-    echo "Restarting container: $CONTAINER"
-    docker start $CONTAINER >> "$LOG_FILE" 2>&1 && \
-        echo "Restarted $CONTAINER" | tee -a "$LOG_FILE" || \
-        echo "Failed to restart $CONTAINER" | tee -a "$LOG_FILE"
+    log "Restarting container: $CONTAINER"
+    if docker start "$CONTAINER" >> "$LOG_FILE" 2>&1; then
+        log "Restarted $CONTAINER"
+    else
+        log "Failed to restart $CONTAINER"
+    fi
 done
 
+
 # Perform post-backup health checks
-echo "Performing post-backup health checks..." | tee -a "$LOG_FILE"
+log "Performing post-backup health checks..."
 for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
-    echo "Checking health of $CONTAINER after restart..."
+    log "Checking health of $CONTAINER after restart..."
     check_container_status $CONTAINER
 done
 
 # Log completion
-DATE=$(date +%F-%H%M%S)
-echo "Backup finished at: $DATE" | tee -a "$LOG_FILE"
+END_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+log "Backup finished at: $END_TIME"
+
+# Summary report
+FAIL_COUNT=$(grep -c "Failed" "$LOG_FILE")
+SUCCESS_COUNT=$(grep -c "Successfully" "$LOG_FILE")
+TOTAL_CONTAINERS=${#CRITICAL_CONTAINERS[@]}
+
+log "Summary Report:"
+log "Total containers targeted: $TOTAL_CONTAINERS"
+log "Successful operations: $SUCCESS_COUNT"
+log "Failures detected: $FAIL_COUNT"
+
+if [ "$FAIL_COUNT" -eq 0 ]; then
+    log "All backup operations completed successfully."
+else
+    log "Some issues were encountered during backup. See details above."
+fi
 
 # Send email if any failures occurred
 if grep -q "Failed" "$LOG_FILE"; then
-    echo "Backup script encountered issues. Sending email..." | tee -a "$LOG_FILE"
+    log "Backup script encountered issues. Sending email..."
     SUBJECT="Backup Script Issues - $DATE"
     {
         echo "To: $EMAIL"
