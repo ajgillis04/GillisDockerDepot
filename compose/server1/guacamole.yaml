@@ -12,8 +12,10 @@ services:
       MYSQL_DATABASE: guacamole
       MYSQL_HOSTNAME: mariadb.${HOST_NAME}
       MYSQL_PORT: 3306
-      MYSQL_USER_FILE: /run/secrets/guac_mysql_user
-      MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password      
+      #MYSQL_USER_FILE: /run/secrets/guac_mysql_user #stopped working
+      #MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password #stopped working
+      MYSQL_USER: ${MYSQL_GUAC_USER}
+      MYSQL_PASSWORD: ${MYSQL_GUAC_PASS}
     depends_on:
       - guacd
       - mariadb
@@ -33,24 +35,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.guacamole-rtr.entrypoints=https"
-      - "traefik.http.routers.guacamole-rtr.rule=Host(`guac.${DOMAINNAME}`)"      
-      - "traefik.http.routers.guacamole-rtr.middlewares=chain-oauth@file,add-guacamole"
-      - "traefik.http.routers.guacamole-rtr.tls.options=tls-opts@file"
-      ## Middlewares      
-      - "traefik.http.middlewares.add-guacamole.addPrefix.prefix=/guacamole"      
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.guacamole-rtr.service=guacamole-svc"
-      - "traefik.http.services.guacamole-svc.loadbalancer.server.port=8080"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Infrastructure"
       - "homepage.name=Guacamole"
       - "homepage.icon=guacamole.png"
-      - "homepage.href=http://guac.${DOMAINNAME}/"
+      - "homepage.href=https://guac.${DOMAINNAME}/guacamole/"
       - "homepage.description=Remote desktop gateway"

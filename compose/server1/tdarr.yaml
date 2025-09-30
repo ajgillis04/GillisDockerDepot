@@ -55,23 +55,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.tdarr-rtr.entrypoints=https"
-      - "traefik.http.routers.tdarr-rtr.rule=Host(`tdarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.tdarr-rtr.tls.options=tls-opts@file"
-      ## Middlewares
-      - "traefik.http.routers.tdarr-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.tdarr-rtr.service=tdarr-svc"
-      - "traefik.http.services.tdarr-svc.loadbalancer.server.port=8265"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=false" #Client and Server versions must match so should be carefully updating
       ## Homepage Labels
       - "homepage.group=Other"
       - "homepage.name=Tdarr"
       - "homepage.icon=tdarr.png"
-      - "homepage.href=http://tdarr.${DOMAINNAME}/"
+      - "homepage.href=https://tdarr.${DOMAINNAME}/#/"
       - "homepage.description=Automate transcoding of media"

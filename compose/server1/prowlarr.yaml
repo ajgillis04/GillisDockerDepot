@@ -22,26 +22,15 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.prowlarr-rtr.entrypoints=https"
-      - "traefik.http.routers.prowlarr-rtr.rule=Host(`prowlarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.prowlarr-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.prowlarr-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.prowlarr-rtr.service=prowlarr-svc"
-      - "traefik.http.services.prowlarr-svc.loadbalancer.server.port=9696"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
       - "homepage.name=Prowlarr"
       - "homepage.icon=prowlarr.png"
-      - "homepage.href=http://prowlarr.${DOMAINNAME}/"
+      - "homepage.href=https://prowlarr.${DOMAINNAME}/"
       - "homepage.description=Indexer manager"
       ## Homepage Widget
       - "homepage.widget.type=prowlarr"
       - "homepage.widget.url=http://prowlarr.${HOST_NAME}:9696"
-      - "homepage.widget.key=4badff9537724d5e931361875d30f236"
+      - "homepage.widget.key=${PROWLARR_API_KEY}"

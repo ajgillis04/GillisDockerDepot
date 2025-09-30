@@ -11,7 +11,7 @@
 set -e
 
 DATE=$(date +%F-%H%M%S)
-BACKUP_DIR=/share/Backups/GillisNAS/Docker/GillisDockerDepot
+BACKUP_DIR=/share/Backups/GillisNAS/Docker/appdata/GillisDockerDepot
 CONTAINER_DIR=/share/Docker/GillisDockerDepot/appdata
 ENV_PATH="/share/Docker/GillisDockerDepot/.env"
 SECRETS_PATH="/share/Docker/GillisDockerDepot/secrets"

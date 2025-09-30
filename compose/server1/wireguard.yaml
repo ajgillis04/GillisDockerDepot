@@ -13,6 +13,8 @@ services:
     image: lscr.io/linuxserver/wireguard:1.0.20210914-r4-ls80
     cap_add:
       - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
@@ -29,11 +31,17 @@ services:
     networks:
       pihole_network:
         ipv4_address: ${WIREGUARD_IP}
+      mediaserver: {}
     volumes:
       - ${DOCKERDIR}/wireguard/config:/config
       - ${DOCKERDIR}/wireguard/lib/modules:/lib/modules
       - ${DOCKERDIR}/logs/wireguard:/var/log
     restart: always
+    healthcheck:
+      test: ["CMD", "dig", "@127.0.0.1", "google.com"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     security_opt:
       - no-new-privileges:true
     labels:

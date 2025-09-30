@@ -19,7 +19,7 @@ services:
     networks:
       - mediaserver
     ports:
-      - "${VAULTWARDEN_PORT}:80" #9445
+      - "${VAULTWARDEN_PORT}:80"
     volumes:
       - ${DOCKERDIR}/vaultwarden/config:/config      
       - ${DOCKERDIR}/vaultwarden/data:/data
@@ -31,23 +31,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.vaultwarden-rtr.entrypoints=https"
-      - "traefik.http.routers.vaultwarden-rtr.rule=Host(`vault.${DOMAINNAME}`)"
-      - "traefik.http.routers.vaultwarden-rtr.tls.options=tls-opts@file"
-      ## Middlewares
-      - "traefik.http.routers.vaultwarden-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.vaultwarden-rtr.service=vaultwarden-svc"
-      - "traefik.http.services.vaultwarden-svc.loadbalancer.server.port=80"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Infrastructure"
       - "homepage.name=Vaultwarden"
       - "homepage.icon=vaultwarden.png"
-      - "homepage.href=http://vault.${DOMAINNAME}/"
+      - "homepage.href=https://vault.${DOMAINNAME}/"
       - "homepage.description=Self-hosted password management"

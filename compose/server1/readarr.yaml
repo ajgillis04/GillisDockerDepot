@@ -25,24 +25,13 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.readarr-rtr.entrypoints=https"
-      - "traefik.http.routers.readarr-rtr.rule=Host(`readarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.readarr-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.readarr-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.readarr-rtr.service=readarr-svc"
-      - "traefik.http.services.readarr-svc.loadbalancer.server.port=8787"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
       - "homepage.name=Readarr"
       - "homepage.icon=readarr.png"
-      - "homepage.href=http://readarr.gillisonline.com/"
+      - "homepage.href=https://readarr.gillisonline.com/"
       - "homepage.description=Book download manager"
       ## Homepage Widget
       - "homepage.widget.type=readarr"

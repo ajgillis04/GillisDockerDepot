@@ -21,22 +21,16 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.portainer-rtr.entrypoints=https"
-      - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.${DOMAINNAME}`)"
-      - "traefik.http.routers.portainer-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.portainer-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.portainer-rtr.service=portainer-svc"
-      - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Infrastructure"
       - "homepage.name=Portainer"
       - "homepage.icon=portainer.png"
-      - "homepage.href=http://portainer.${DOMAINNAME}/"
+      - "homepage.href=https://portainer.${DOMAINNAME}/"
       - "homepage.description=Manage your Docker containers"
+      ## Homepage Widget
+      - "homepage.widget.type=portainer"
+      - "homepage.widget.url=http://portainer.${HOST_NAME}:9000"
+      - "homepage.widget.env=1"
+      - "homepage.widget.key=${PORTAINER_API_KEY}"

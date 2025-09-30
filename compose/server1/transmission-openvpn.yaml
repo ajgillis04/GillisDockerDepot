@@ -61,24 +61,13 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.transmission-vpn-rtr.entrypoints=https"
-      - "traefik.http.routers.transmission-vpn-rtr.rule=Host(`trans.${DOMAINNAME}`)"
-      - "traefik.http.routers.transmission-vpn-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.transmission-openvpn-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.transmission-vpn-rtr.service=transmission-vpn-svc"
-      - "traefik.http.services.transmission-vpn-svc.loadbalancer.server.port=9091"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Other"
       - "homepage.name=Transmission-OpenVPN"
       - "homepage.icon=transmission.png"
-      - "homepage.href=http://trans.${DOMAINNAME}/"
+      - "homepage.href=https://trans.${DOMAINNAME}/"
       - "homepage.description=Torrent client with OpenVPN"
     logging:
       driver: json-file

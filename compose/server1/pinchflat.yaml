@@ -22,17 +22,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.pinchflat-rtr.entrypoints=https"
-      - "traefik.http.routers.pinchflat-rtr.rule=Host(`pinchflat.${DOMAINNAME}`)"
-      - "traefik.http.routers.pinchflat-rtr.tls=true"
-      ## Middlewares
-      - "traefik.http.routers.pinchflat-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services 
-      - "traefik.http.routers.pinchflat-rtr.service=pinchflat-svc"
-      - "traefik.http.services.pinchflat-svc.loadbalancer.server.port=8945"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Pinchflat"
+      - "homepage.icon=youtube"
+      - "homepage.href=https://pinchflat.${DOMAINNAME}/"
+      - "homepage.description=YouTube media manager with podcast feed support"

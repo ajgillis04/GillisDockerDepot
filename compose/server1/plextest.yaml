@@ -60,16 +60,5 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.plextest-rtr.entrypoints=https"
-      - "traefik.http.routers.plextest-rtr.rule=Host(`plextest.${DOMAINNAME}`)"
-      - "traefik.http.routers.plextest-rtr.middlewares=chain-no-auth@file,plex-cors-headers@file"     
-      - "traefik.http.routers.plextest-rtr.tls.options=tls-opts@file" 
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.plextest-rtr.service=plextest-svc"
-      - "traefik.http.services.plextest-svc.loadbalancer.server.port=32400"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"

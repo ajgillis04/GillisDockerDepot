@@ -1,0 +1,25 @@
+# Cloudflare Tunnel - Secure outbound tunnel to Cloudflare edge
+services:
+  cloudflared:
+    container_name: cloudflared.${HOST_NAME}
+    hostname: cloudflared.${HOST_NAME}.local
+    image: cloudflare/cloudflared:latest
+    command: tunnel --config /home/nonroot/.cloudflared/config.yml run ${HOST_NAME}
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}  # You’ll get this after `cloudflared tunnel login`
+      HOST_NAME: ${HOST_NAME}
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/cloudflared:/home/nonroot/.cloudflared
+      - ${DOCKERDIR}/logs/cloudflared:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:2000/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

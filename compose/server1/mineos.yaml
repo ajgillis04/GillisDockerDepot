@@ -27,18 +27,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.mineos-rtr.entrypoints=https"
-      - "traefik.http.routers.mineos-rtr.rule=Host(`mineos.${DOMAINNAME}`)"
-      - "traefik.http.routers.mineos-rtr.tls=true"
-      ## Middlewares
-#      - "traefik.http.routers.mineos-rtr.middlewares=chain-oauth@file"
-#      - "traefik.http.middlewares.add-mineos.addPrefix.prefix=/admin"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.mineos-rtr.service=mineos-svc"      
-      - "traefik.http.services.mineos-svc.loadbalancer.server.port=8443"
        ## Watchtower enabled?cd      
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=MineOS"
+      - "homepage.icon=minecraft"
+      - "homepage.href=https://mineos.${DOMAINNAME}/"
+      - "homepage.description=Manage Minecraft servers via web UI"    

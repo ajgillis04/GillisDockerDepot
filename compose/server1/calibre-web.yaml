@@ -12,6 +12,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+      HOST_NAME: ${HOST_NAME}
       DOMAINNAME: ${DOMAINNAME}
       DOCKER_MODS: linuxserver/mods:universal-calibre
     networks:
@@ -28,17 +29,16 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.calibre-web-rtr.entrypoints=https"
-      - "traefik.http.routers.calibre-web-rtr.rule=Host(`calibre-web.${DOMAINNAME}`)"
-      - "traefik.http.routers.calibre-web-rtr.tls.options=tls-opts@file"
-      ## Middlewares
-      - "traefik.http.routers.calibre-web-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.calibre-web-rtr.service=calibre-web-svc"
-      - "traefik.http.services.calibre-web-svc.loadbalancer.server.port=8083"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Calibre-Web"
+      - "homepage.icon=calibre-web.png"
+      - "homepage.href=https://calibre-web.${DOMAINNAME}/"
+      - "homepage.description=Browser-based eBook library"
+      ## Homepage Widget
+      - "homepage.widget.type=calibreweb"
+      - "homepage.widget.url=http://calibre-web.${HOST_NAME}:8083"
+      - "homepage.widget.username=${CALIBRE_WEB_USER}"
+      - "homepage.widget.password=${CALIBRE_WEB_PASS}"

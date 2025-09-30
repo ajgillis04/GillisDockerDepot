@@ -19,6 +19,7 @@ services:
     environment:
       TZ: ${TZ}      
       HOSTNAME: pihole.${HOST_NAME}
+      DOMAINNAME: ${DOMAINNAME}
       #WEBPASSWORD_FILE: /run/secrets/pihole_password
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
       FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
@@ -36,6 +37,9 @@ services:
     networks:
       pihole_network:
         ipv4_address: ${PIHOLE_IP}
+      mediaserver: {}
+    ports:
+      - "${PIHOLE_WEB_PORT}:80"
     volumes:
       - ${DOCKERDIR}/pihole/etc:/etc/pihole
       - ${DOCKERDIR}/pihole/dnsmasq.d:/etc/dnsmasq.d
@@ -45,29 +49,16 @@ services:
     secrets:
       - pihole_password    
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.pihole-rtr.entrypoints=https"
-      - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.${DOMAINNAME}`)"            
-      - "traefik.http.routers.pihole-rtr.tls.options=tls-opts@file"
-      ## Middlewares
-      - "traefik.http.routers.pihole-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.middlewares.add-pihole.addPrefix.prefix=/admin"      
-      ## Docker Network
-      - "traefik.docker.network=pihole_network"
-      ## HTTP Services
-      - "traefik.http.routers.pihole-rtr.service=pihole-svc"      
-      - "traefik.http.services.pihole-svc.loadbalancer.server.port=80"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Network"
       - "homepage.name=Pi-hole"
       - "homepage.icon=pi-hole.png"
-      - "homepage.href=http://pihole.${DOMAINNAME}/"
+      - "homepage.href=https://pihole.${DOMAINNAME}/admin"
       - "homepage.description=Network-wide ad blocker"
       ## Homepage Widget
       - "homepage.widget.type=pihole"
-      - "homepage.widget.url=https://pihole.${HOST_NAME}"
-      - "homepage.widget.version=6"  
+      - "homepage.widget.url=http://pihole.${HOST_NAME}"
+      - "homepage.widget.version=6"
       - "homepage.widget.key=${PIHOLE_TOKEN}"

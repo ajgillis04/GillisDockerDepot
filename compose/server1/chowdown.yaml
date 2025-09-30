@@ -20,23 +20,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.chowdown-rtr.entrypoints=https"
-      - "traefik.http.routers.chowdown-rtr.rule=Host(`chowdown.${DOMAINNAME}`)"
-      - "traefik.http.routers.chowdown-rtr.tls.options=tls-opts@file"
-      ## Middlewares
-      - "traefik.http.routers.chowdown-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.chowdown-rtr.service=chowdown-svc"
-      - "traefik.http.services.chowdown-svc.loadbalancer.server.port=4000"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Other"
       - "homepage.name=Chowdown"
       - "homepage.icon=chowdown.png"
-      - "homepage.href=http://chowdown.${DOMAINNAME}/"
+      - "homepage.href=https://chowdown.${DOMAINNAME}/"
       - "homepage.description=Cookbook and recipe manager"

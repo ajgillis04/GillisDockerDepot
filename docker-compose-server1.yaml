@@ -107,6 +107,8 @@ secrets:
     file: ${SECRETSDIR}/spotify_client_id
   spotify_client_secret:
     file: ${SECRETSDIR}/spotify_client_secret
+  storiesbeyondstone_cf_token:
+    file: ${SECRETSDIR}/storiesbeyondstone_cf_token
   traefik_forward_auth:
     file: ${SECRETSDIR}/traefik_forward_auth
   tautulli_user:
@@ -126,8 +128,10 @@ include:
   - ${COMPOSE_DIR}/calibre.yaml
   - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
   - ${COMPOSE_DIR}/chowdown.yaml
+  - ${COMPOSE_DIR}/cloudflared.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
   - ${COMPOSE_DIR}/cloudflare-ddnsawl.yaml
+  - ${COMPOSE_DIR}/cloudflare-ddnsstoriesbeyondstone.yaml
   - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/ersatztv.yaml
   - ${COMPOSE_DIR}/guacamole.yaml
@@ -143,7 +147,7 @@ include:
   - ${COMPOSE_DIR}/nextcloud.yaml
   - ${COMPOSE_DIR}/nzbhydra2.yaml
 #  - ${COMPOSE_DIR}/netdata.yaml
-  - ${COMPOSE_DIR}/oauth.yaml
+#  - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
@@ -165,7 +169,7 @@ include:
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
   - ${COMPOSE_DIR}/tdarr_node.yaml
-  - ${COMPOSE_DIR}/traefik.yaml
+  #- ${COMPOSE_DIR}/traefik.yaml
   - ${COMPOSE_DIR}/transmission-openvpn.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml

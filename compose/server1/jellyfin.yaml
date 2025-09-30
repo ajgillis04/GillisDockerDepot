@@ -29,25 +29,13 @@ services:
     security_opt:
       - no-new-privileges:true    
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.jellyfin-rtr.entrypoints=https"
-      - "traefik.http.routers.jellyfin-rtr.rule=Host(`jellyfin.${DOMAINNAME}`)"
-      - "traefik.http.routers.jellyfin-rtr.tls.options=tls-opts@file"
-      ## Middlewares
-      - "traefik.http.routers.jellyfin-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.jellyfin-rtr.service=jellyfin-svc"
-      - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
       - "homepage.name=Jellyfin"
       - "homepage.icon=jellyfin.png"
-      - "homepage.href=http://jellyfin.${DOMAINNAME}"
+      - "homepage.href=https://jellyfin.${DOMAINNAME}"
       - "homepage.description=The Free Software Media System"
       ## Homepage Widget
       - "homepage.widget.type=jellyfin"

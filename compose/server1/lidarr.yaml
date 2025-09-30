@@ -23,24 +23,13 @@ services:
     security_opt:
       - no-new-privileges:true    
     labels:
-      - "traefik.enable=true"      
-      ## HTTP Routers
-      - "traefik.http.routers.lidarr-rtr.entrypoints=https"
-      - "traefik.http.routers.lidarr-rtr.rule=Host(`lidarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.lidarr-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.lidarr-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.lidarr-rtr.service=lidarr-svc"      
-      - "traefik.http.services.lidarr-svc.loadbalancer.server.port=8686"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
       - "homepage.name=Lidarr"
       - "homepage.icon=lidarr.png"
-      - "homepage.href=http://lidarr.${DOMAINNAME}/"
+      - "homepage.href=https://lidarr.${DOMAINNAME}/"
       - "homepage.description=Music download manager"
       ## Homepage Widget
       - "homepage.widget.type=lidarr"

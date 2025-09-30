@@ -22,24 +22,13 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.sabnzbd-rtr.entrypoints=https"
-      - "traefik.http.routers.sabnzbd-rtr.rule=Host(`sabnzbd.${DOMAINNAME}`)"
-      - "traefik.http.routers.sabnzbd-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.sabnzbd-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.sabnzbd-rtr.service=sabnzbd-svc"
-      - "traefik.http.services.sabnzbd-svc.loadbalancer.server.port=8080"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
       - "homepage.name=Sabnzbd"
       - "homepage.icon=sabnzbd.png"
-      - "homepage.href=http://sabnzbd.${DOMAINNAME}/"
+      - "homepage.href=https://sabnzbd.${DOMAINNAME}/"
       - "homepage.description=NZB downloader"
       ## Homepage Widget
       - "homepage.widget.type=sabnzbd"

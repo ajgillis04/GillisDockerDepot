@@ -21,16 +21,5 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.heimdallint-rtr.entrypoints=https"
-      - "traefik.http.routers.heimdallint-rtr.rule=Host(`heimdallint.${DOMAINNAME}`)"
-      ## Middlewares
-      - "traefik.http.routers.heimdallint-rtr.middlewares=chain-oauth@file"
-      ## Docker Network      
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services      
-      - "traefik.http.routers.heimdallint-rtr.service=heimdallint-svc"
-      - "traefik.http.services.heimdallint-svc.loadbalancer.server.port=80"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"

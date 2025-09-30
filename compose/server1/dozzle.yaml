@@ -20,22 +20,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.dozzle-rtr.entrypoints=https"      
-      - "traefik.http.routers.dozzle-rtr.rule=Host(`dozzle.${DOMAINNAME}`)"
-      - "traefik.http.routers.dozzle-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.dozzle-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.dozzle-rtr.service=dozzle-svc"
-      - "traefik.http.services.dozzle-svc.loadbalancer.server.port=8080"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Infrastructure"
       - "homepage.name=Dozzle"
       - "homepage.icon=dozzle.png"
-      - "homepage.href=http://dozzle.${DOMAINNAME}/"
+      - "homepage.href=https://dozzle.${DOMAINNAME}/"
       - "homepage.description=Stream container logs in real-time"

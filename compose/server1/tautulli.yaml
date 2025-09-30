@@ -47,24 +47,13 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"    
-      ## HTTP Routers
-      - "traefik.http.routers.tautulli-rtr.entrypoints=https"
-      - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.${DOMAINNAME}`)"      
-      - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.tautulli-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.tautulli-rtr.service=tautulli-svc"      
-      - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
       - "homepage.name=Tautulli"
       - "homepage.icon=tautulli.png"
-      - "homepage.href=http://tautulli.${DOMAINNAME}/"
+      - "homepage.href=https://tautulli.${DOMAINNAME}/"
       - "homepage.description=Plex monitoring and analytics"
       ## Homepage Widget
       - "homepage.widget.type=tautulli"

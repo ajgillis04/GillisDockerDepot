@@ -19,16 +19,11 @@
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.musicbrainz-rtr.entrypoints=https"
-      ## Middlewares
-      - "traefik.http.routers.musicbrainz-rtr.rule=Host(`musicbrainz${HOST_SUFFIX}.${DOMAINNAME}`)"
-      - "traefik.http.routers.musicbrainz-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.musicbrainz-rtr.service=musicbrainz-svc"
-      - "traefik.http.services.musicbrainz-svc.loadbalancer.server.port=80"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=MusicBrainz"
+      - "homepage.icon=music"
+      - "homepage.href=https://musicbrainz.${DOMAINNAME}/"
+      - "homepage.description=Open music metadata server"

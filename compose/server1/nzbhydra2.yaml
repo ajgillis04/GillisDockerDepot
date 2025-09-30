@@ -7,6 +7,7 @@ services:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      HOST_NAME: ${HOST_NAME}
       UMASK: 002
     networks:
       - mediaserver
@@ -22,27 +23,22 @@ services:
     restart: always
     security_opt:
       - no-new-privileges:true
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.nzbhydra2-rtr.entrypoints=https"
-      ## Middlewares
-      - "traefik.http.routers.nzbhydra2-rtr.rule=Host(nzbhydra2${HOST_SUFFIX}.${DOMAINNAME})"
-      - "traefik.http.routers.nzbhydra2-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.nzbhydra2-rtr.service=nzbhydra2-svc"
-      - "traefik.http.services.nzbhydra2-svc.loadbalancer.server.port=5076" # Replace with the internal port of the service
-      ## Watchtower enabled?
+    labels:      
+    ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
-      - "homepage.name=nzbhydra2"
+      - "homepage.name=NZBHydra2"
       - "homepage.icon=nzbhydra2.png"
-      - "homepage.href=http://nzbhydra2.gillisonline.com/"
+      - "homepage.href=https://nzbhydra2.${DOMAINNAME}/"
       - "homepage.description=NZBHydra 2 is a meta search for NZB indexers"
-      ## Homepage Widget
-      - "homepage.widget.type="
-      - "homepage.widget.url=http://nzbhydra2.GillisNAS:5076/" # Replace with the internal port of the service
-      - "homepage.widget.key="
+      ## Homepage Widget currently not working until post supported
+   #   - "homepage.widget.type=customapi"
+   #   - "homepage.widget.url=http://nzbhydra2.${HOST_NAME}:5076/internalapi/stats?apikey=${NZBHYDRA2_API_KEY}"
+   #   - "homepage.widget.key=${NZBHYDRA2_API_KEY}"
+   #   - "homepage.widget.mappings[0].field=numberOfConfiguredIndexers"
+   #   - "homepage.widget.mappings[0].label=Configured"
+   #   - "homepage.widget.mappings[0].format=number"
+   #   - "homepage.widget.mappings[1].field=numberOfEnabledIndexers"
+   #   - "homepage.widget.mappings[1].label=Enabled"
+   #   - "homepage.widget.mappings[1].format=number"

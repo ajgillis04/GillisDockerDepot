@@ -65,24 +65,13 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.plex-rtr.entrypoints=https"
-      - "traefik.http.routers.plex-rtr.rule=Host(`plex.${DOMAINNAME}`)"
-      - "traefik.http.routers.plex-rtr.middlewares=chain-no-auth@file,plex-cors-headers@file"     
-      - "traefik.http.routers.plex-rtr.tls.options=tls-opts@file" 
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.plex-rtr.service=plex-svc"
-      - "traefik.http.services.plex-svc.loadbalancer.server.port=32400"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
       - "homepage.name=Plex"
       - "homepage.icon=plex.png"
-      - "homepage.href=http://plex.${DOMAINNAME}/"
+      - "homepage.href=https://plex.${DOMAINNAME}/"
       - "homepage.description=Stream your favorite media"
       ## Homepage Widget
       - "homepage.widget.type=plex"

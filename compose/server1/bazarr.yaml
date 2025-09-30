@@ -9,6 +9,8 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
+      BAZARR_API_KEY: ${BAZARR_API_KEY}
+      HOST_NAME: ${HOST_NAME}
     networks:
       - mediaserver
     ports:
@@ -21,17 +23,6 @@ services:
     security_opt:
       - no-new-privileges:true   
     labels:
-      - "traefik.enable=true"      
-      ## HTTP Routers
-      - "traefik.http.routers.bazarr-rtr.entrypoints=https"
-      - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.${DOMAINNAME}`)"      
-      - "traefik.http.routers.bazarr-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.bazarr-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.bazarr-rtr.service=bazarr-svc"      
-      - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels

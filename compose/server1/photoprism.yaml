@@ -70,17 +70,16 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.photoprism-rtr.entrypoints=https"
-      - "traefik.http.routers.photoprism-rtr.rule=Host(`photos.${DOMAINNAME}`)"
-      - "traefik.http.routers.photoprism-rtr.tls.options=tls-opts@file"
-      ## Middlewares
-      - "traefik.http.routers.photoprism-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services 
-      - "traefik.http.routers.photoprism-rtr.service=photoprism-svc"
-      - "traefik.http.services.photoprism-svc.loadbalancer.server.port=2342"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=PhotoPrism"
+      - "homepage.icon=photoprism"
+      - "homepage.href=https://photoprism.${DOMAINNAME}/"
+      - "homepage.description=AI-powered photo management"
+      ## Homepage Widget
+      - "homepage.widget.type=photoprism"
+      - "homepage.widget.url=http://photoprism.${HOST_NAME}:2342"
+      - "homepage.widget.username=${PHOTOPRISM_ADMIN_USER}"
+      - "homepage.widget.password=${PHOTOPRISM_APP_PASSWORD}"
