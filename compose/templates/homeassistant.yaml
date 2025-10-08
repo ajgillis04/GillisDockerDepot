@@ -1,0 +1,60 @@
+# ------------------------------------------------------------------------------
+# Home Assistant - Smart Home Control Center
+# ------------------------------------------------------------------------------
+# This container runs Home Assistant, a powerful local-first platform for
+# managing smart devices, automations, dashboards, and integrations.
+#
+# Key Features:
+# - Local control of Zigbee, Z-Wave, Wi-Fi, and cloud-based devices
+# - Unified dashboard for sensors, cameras, media, and energy
+# - Automation engine with triggers, conditions, and actions
+# - Extensible via integrations (Nest, Harmony, MQTT, etc.)
+#
+# Notes:
+# - Uses host networking for device discovery and mDNS support
+# - Requires privileged mode for USB access (e.g., Zigbee/Z-Wave sticks)
+# - Configuration lives in ${DOCKERDIR}/homeassistant/config
+# - Access UI at http://homeassistant.${DOMAINNAME}:8123
+# ------------------------------------------------------------------------------
+
+services:
+  homeassistant:
+    container_name: homeassistant.${HOST_NAME}
+    hostname: homeassistant.${HOST_NAME}.local
+    image: ghcr.io/home-assistant/home-assistant:stable
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}      
+      HOST_NAME: ${HOST_NAME}
+    volumes:
+      - ${DOCKERDIR}/homeassistant/config:/config
+      - ${DOCKERDIR}/logs/homeassistant:/var/log
+    restart: always
+    network_mode: host
+    privileged: true
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8123"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Home Assistant"
+      - "homepage.icon=home-assistant.png"
+      - "homepage.href=http://homeassistant.${DOMAINNAME}:8123"
+      - "homepage.description=Smart home control center"
+      ## Homepage Widget
+      - "homepage.widget.type=generic"
+      - "homepage.widget.url=http://homeassistant.${HOST_NAME}:8123"

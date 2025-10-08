@@ -45,6 +45,12 @@ networks:
           gateway: 192.168.2.1
           ip_range: 192.168.2.0/26
     external: false # use if not managing network with docker-compose.yaml
+  sbs_network:
+    name: sbs_network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.0.0/24
 #  nextcloud-aio:
  #   name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
  #   driver: bridge
@@ -136,6 +142,7 @@ include:
 #  - ${COMPOSE_DIR}/ersatztv.yaml
   - ${COMPOSE_DIR}/guacamole.yaml
   - ${COMPOSE_DIR}/guacd.yaml
+  - ${COMPOSE_DIR}/homeassistant.yaml
   - ${COMPOSE_DIR}/homepage.yaml
   #- ${COMPOSE_DIR}/jellyfin.yaml
   #- ${COMPOSE_DIR}/libation.yaml
@@ -152,7 +159,7 @@ include:
 #  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
-  - ${COMPOSE_DIR}/php-apache-storiesbeyondstone.yaml
+#  - ${COMPOSE_DIR}/php-apache-storiesbeyondstone.yaml
 #  - ${COMPOSE_DIR}/picard.yaml
   - ${COMPOSE_DIR}/pihole.yaml
 #  - ${COMPOSE_DIR}/pinchflat.yaml
@@ -164,6 +171,8 @@ include:
   - ${COMPOSE_DIR}/radarr.yaml
   - ${COMPOSE_DIR}/readarr.yaml
   - ${COMPOSE_DIR}/sabnzbd.yaml
+  - ${COMPOSE_DIR}/sbs-web.yaml
+  - ${COMPOSE_DIR}/sbs-app.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
 #  - ${COMPOSE_DIR}/tailscale.yaml
   - ${COMPOSE_DIR}/tautulli.yaml

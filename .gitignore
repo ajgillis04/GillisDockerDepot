@@ -11,6 +11,8 @@ php-apache-awl.yaml
 php-apache-gillisonline.yaml
 php-apache-storiesbeyondstone.yaml
 cloudflare-ddnsstoriesbeyondstone.yaml
+sbs-web.yaml
+sbs-app.yaml
 create_users_nextcloud.sh
 create_shares_nextcloud.sh
 QNAP_NAS_Restore.sh
@@ -42,6 +44,7 @@ shared/
 !appdata/traefik2/rules/*.example.yml
 # Ignore everything else in the appdata directory
 appdata/
+.docker
 
 # Visual Studio Code settings
 .vscode/

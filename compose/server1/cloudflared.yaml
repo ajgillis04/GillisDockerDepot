@@ -6,10 +6,11 @@ services:
     image: cloudflare/cloudflared:latest
     command: tunnel --config /home/nonroot/.cloudflared/config.yml run ${HOST_NAME}
     environment:
-      TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}  # You’ll get this after `cloudflared tunnel login`
+      #TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}  # You’ll get this after `cloudflared tunnel login`
       HOST_NAME: ${HOST_NAME}
     networks:
       - mediaserver
+      - sbs_network # if you need to access other containers on this network
     volumes:
       - ${DOCKERDIR}/cloudflared:/home/nonroot/.cloudflared
       - ${DOCKERDIR}/logs/cloudflared:/var/log

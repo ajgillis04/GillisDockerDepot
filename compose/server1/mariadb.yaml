@@ -21,6 +21,7 @@ services:
       # MYSQL_PASSWORD_FILE: /run/secrets/maria_user_password
     networks:
       - mediaserver
+      - sbs_network # if you need to access other containers on this network
     ports:
       - "${DB_PORT}:3306"
     volumes:
