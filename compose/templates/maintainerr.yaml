@@ -1,0 +1,38 @@
+# NOTE:
+# Maintainerr v2+ no longer runs as root inside the container.
+# You MUST set PUID and PGID to match a valid user/group on the host
+# and ensure the mounted volumes are owned by that UID:GID.
+# Example: id GilAdmin -> uid=1000, gid=100
+# Then chown -R 1000:100 ${DOCKERDIR}/maintainerr
+# Without this, the container cannot write to /opt/data and will crash-loop.
+
+# Maintainerr - Automated media cleanup and maintenance
+services:
+  maintainerr:
+    container_name: maintainerr.${HOST_NAME}
+    hostname: maintainerr.${HOST_NAME}.local
+    image: ghcr.io/jorenn92/maintainerr:latest
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      HOST_NAME: ${HOST_NAME}
+      # optional: BASE_PATH=/maintainerr
+    networks:
+      - mediaserver
+    ports:
+      - "${MAINTAINERR_PORT}:6246"
+    volumes:
+      - ${DOCKERDIR}/maintainerr/data:/opt/data
+      - ${DOCKERDIR}/logs/maintainerr:/var/log
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Media"
+      - "homepage.name=Maintainerr"
+      - "homepage.icon=maintainerr.png"
+      - "homepage.href=https://maintainerr.${DOMAINNAME}/"
+      - "homepage.description=Automated media cleanup and maintenance"
