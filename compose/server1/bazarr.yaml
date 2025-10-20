@@ -8,9 +8,9 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-      DOMAINNAME: ${DOMAINNAME}
-      BAZARR_API_KEY: ${BAZARR_API_KEY}
+      DOMAINNAME: ${DOMAINNAME}      
       HOST_NAME: ${HOST_NAME}
+      BAZARR_API_KEY: ${BAZARR_API_KEY}      
     networks:
       - mediaserver
     ports:

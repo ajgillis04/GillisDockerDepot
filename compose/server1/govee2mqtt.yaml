@@ -1,0 +1,41 @@
+# ------------------------------------------------------------------------------
+# Govee2MQTT - LAN Control for Govee Lights
+# ------------------------------------------------------------------------------
+# This container bridges Govee LAN-enabled lights to MQTT, enabling
+# real-time control and automation via Home Assistant.
+#
+# Key Features:
+# - Local control of Govee lights (no cloud required)
+# - Supports color, brightness, effects, and transitions
+# - Publishes device state and listens for commands via MQTT
+#
+# Notes:
+# - Requires LAN control enabled in Govee app
+# - MQTT broker must be reachable at ${MQTT_HOST}
+# ------------------------------------------------------------------------------
+services:
+  govee2mqtt:
+    container_name: govee2mqtt.${HOST_NAME}
+    hostname: govee2mqtt.${HOST_NAME}.local
+    image: ghcr.io/wez/govee2mqtt:latest
+    environment:
+      TZ: ${TZ}
+      GOVEE_MQTT_HOST: ${SERVER_IP}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      MQTT_PORT: 1883
+      GOVEE_MAC: ${GOVEE_MAC} # Replace with your MAC
+      GOVEE_MODEL: H705E
+      GOVEE_NAME: govee_outdoor
+      GOVEE_CONFIG: /config/config.yaml
+    volumes:
+      - /opt/govee2mqtt/config:/config
+    restart: always
+    network_mode: host
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

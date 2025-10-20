@@ -1,0 +1,39 @@
+# ------------------------------------------------------------------------------
+# Mosquitto - MQTT Broker
+# ------------------------------------------------------------------------------
+# This container runs Eclipse Mosquitto, a lightweight MQTT broker for
+# local messaging between smart devices and services.
+#
+# Key Features:
+# - Lightweight and fast
+# - Local-first messaging for IoT and automation
+# - Compatible with Home Assistant, Govee2MQTT, Zigbee2MQTT, etc.
+#
+# Notes:
+# - Listens on port 1883 (MQTT) and 9001 (WebSocket)
+# - Configuration lives in ${DOCKERDIR}/mosquitto/config
+# ------------------------------------------------------------------------------
+services:
+  mosquitto:
+    container_name: mosquitto.${HOST_NAME}
+    hostname: mosquitto.${HOST_NAME}.local
+    image: eclipse-mosquitto:latest
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKERDIR}/mosquitto/config:/mosquitto/config
+      - ${DOCKERDIR}/mosquitto/data:/mosquitto/data
+      - ${DOCKERDIR}/logs/mosquitto:/mosquitto/log
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

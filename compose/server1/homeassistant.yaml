@@ -53,8 +53,5 @@ services:
       - "homepage.group=Infrastructure"
       - "homepage.name=Home Assistant"
       - "homepage.icon=home-assistant.png"
-      - "homepage.href=http://homeassistant.${DOMAINNAME}:8123"
+      - "homepage.href=http://ha.${DOMAINNAME}/"
       - "homepage.description=Smart home control center"
-      ## Homepage Widget
-      - "homepage.widget.type=generic"
-      - "homepage.widget.url=http://homeassistant.${HOST_NAME}:8123"

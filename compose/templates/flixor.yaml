@@ -1,0 +1,31 @@
+# Flixor - Backend API for Plex
+services:
+  flixor:
+    container_name: flixor.${HOST_NAME}
+    hostname: flixor.${HOST_NAME}.local
+    image: flixorui/flixor_backend:latest
+    environment:
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      HOST_NAME: ${HOST_NAME}
+      PLEX_TOKEN: ${PLEX_TOKEN}           # Your Plex token
+      PLEX_SERVER: http://${SERVER_IP}:32400         # e.g. http://192.168.1.100:32400
+      PORT: 3001
+      HOST: 0.0.0.0
+    networks:
+      - mediaserver
+    ports:
+      - "${FLIXOR_PORT_BACKEND}:3001"     # Backend API port
+    volumes:
+      - ${DOCKERDIR}/flixor/data:/app/data
+      - ${DOCKERDIR}/logs/flixor:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Media"
+      - "homepage.name=Flixor Server"
+      - "homepage.icon=plex.png"
+      - "homepage.href=http://flixor-server.${DOMAINNAME}/"
+      - "homepage.description=Flixor backend API for Plex"
