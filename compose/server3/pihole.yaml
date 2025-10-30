@@ -25,7 +25,7 @@ services:
       FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,local
       FTLCONF_debug_api: true
       TAIL_FTL_LOG: '1' # or '0' to disable
-      FTLCONF_dhcp_active: true      
+      #FTLCONF_dhcp_active: true      
       FTLCONF_dhcp_start: 192.168.2.50
       FTLCONF_dhcp_end: 192.168.2.254
       FTLCONF_dhcp_router: 192.168.2.1

@@ -12,7 +12,7 @@
 #          chmod 600 ~/path/to/secrets/*
 #          make sure PUID and PGID match the system you are in with .env
 #          After services are brought online retreive api_keys and update .env/secrets
-# Usage: docker compose -p mediaserver -f docker-compose-server1.yaml up --detach
+# Usage: docker compose -p mediaserver -f docker-compose-server3.yaml up --detach
 # **********************************************************************************
 
 # *************************** NETWORKS ****************************************** 
