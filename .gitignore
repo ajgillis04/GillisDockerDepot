@@ -11,8 +11,7 @@ php-apache-awl.yaml
 php-apache-gillisonline.yaml
 php-apache-storiesbeyondstone.yaml
 cloudflare-ddnsstoriesbeyondstone.yaml
-sbs-web.yaml
-sbs-app.yaml
+sbs-*.yaml
 create_users_nextcloud.sh
 create_shares_nextcloud.sh
 QNAP_NAS_Restore.sh

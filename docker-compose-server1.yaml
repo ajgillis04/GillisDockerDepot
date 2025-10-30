@@ -132,16 +132,15 @@ include:
 #  - ${COMPOSE_DIR}/bookbounty.yaml
   - ${COMPOSE_DIR}/calibre-web.yaml
   - ${COMPOSE_DIR}/calibre.yaml
-  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
+#  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
   - ${COMPOSE_DIR}/chowdown.yaml
   - ${COMPOSE_DIR}/cloudflared.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
-  - ${COMPOSE_DIR}/cloudflare-ddnsawl.yaml
-  - ${COMPOSE_DIR}/cloudflare-ddnsstoriesbeyondstone.yaml
-  - ${COMPOSE_DIR}/dozzle.yaml
+#  - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/ersatztv.yaml
   - ${COMPOSE_DIR}/govee2mqtt.yaml
 #  - ${COMPOSE_DIR}/flixor.yaml
+  - ${COMPOSE_DIR}/frigate.yaml
   - ${COMPOSE_DIR}/guacamole.yaml
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/homeassistant.yaml
@@ -153,10 +152,11 @@ include:
   - ${COMPOSE_DIR}/maintainerr.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
   - ${COMPOSE_DIR}/mosquitto.yaml
+#  - ${COMPOSE_DIR}/motioneye.yaml
 #  - ${COMPOSE_DIR}/mineos.yaml
 #  - ${COMPOSE_DIR}/musicbrainz.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
-  - ${COMPOSE_DIR}/nzbhydra2.yaml
+#  - ${COMPOSE_DIR}/nzbhydra2.yaml
 #  - ${COMPOSE_DIR}/netdata.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
@@ -177,6 +177,7 @@ include:
   - ${COMPOSE_DIR}/sabnzbd.yaml
   - ${COMPOSE_DIR}/sbs-web.yaml
   - ${COMPOSE_DIR}/sbs-app.yaml
+  - ${COMPOSE_DIR}/sbs-shlink.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
 #  - ${COMPOSE_DIR}/tailscale.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
@@ -184,9 +185,9 @@ include:
   - ${COMPOSE_DIR}/tdarr_node.yaml
   #- ${COMPOSE_DIR}/traefik.yaml
   - ${COMPOSE_DIR}/transmission-openvpn.yaml
-  - ${COMPOSE_DIR}/uptimekuma.yaml
+  #- ${COMPOSE_DIR}/uptimekuma.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
-  - ${COMPOSE_DIR}/wireguard.yaml
-  - ${COMPOSE_DIR}/wizarr.yaml
+  #- ${COMPOSE_DIR}/wireguard.yaml
+  #- ${COMPOSE_DIR}/wizarr.yaml
 

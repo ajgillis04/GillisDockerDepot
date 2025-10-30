@@ -1,25 +1,30 @@
-# Cloudflare DDNS - Dynamic DNS update for Cloudflare.
+# -------------------------------------------------------------------
+# Cloudflare DDNS - Dynamic DNS update for Cloudflare
+#
+# This container uses a config.json file to manage multiple domains.
+# - Place config.json in: ${DOCKERDIR}/cloudflare-ddns/config/config.json
+# - The file must include one block per domain (zone), with:
+#     * api_token: Cloudflare API token (Zone:DNS:Edit for all zones)
+#     * zone_id:   The Zone ID for that domain (from Cloudflare dashboard)
+#     * subdomains: List of records to update (e.g. "@" for root, "www")
+# Notes:
+# - The same API token can be reused in all blocks if it has access to all zones.
+# - "proxied": true enables Cloudflare's orange-cloud proxy; set false for DNS-only.
+# - Logs are written to ${DOCKERDIR}/logs/cloudflare-ddns for troubleshooting.
+# -------------------------------------------------------------------
+
 services:
   cloudflare-ddns:
+    image: timothyjmiller/cloudflare-ddns:latest
     container_name: cloudflare-ddns.${HOST_NAME}
     hostname: cloudflare-ddns.${HOST_NAME}.local
-    image: oznu/cloudflare-ddns:latest
-    environment:
-      API_KEY_FILE: /run/secrets/cf_token
-      PROXIED: 'true'
-      DOMAINNAME: ${DOMAINNAME}
-      ZONE: ${DOMAINNAME}
-      CRON: '*/15 * * * *'
     networks:
       - mediaserver
     volumes:
-      - ${DOCKERDIR}/cloudflare-ddns/config:/config
-      - ${DOCKERDIR}/logs/cloudflare-ddns:/var/log
+      - /share/Docker/GillisDockerDepot/appdata/cloudflare-ddns/config/config.json:/config.json
+      - /share/Docker/GillisDockerDepot/appdata/cloudflare-ddns/logs:/logs
     restart: always
-    secrets:
-      - cf_token
     security_opt:
       - no-new-privileges:true
     labels:
-      ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"

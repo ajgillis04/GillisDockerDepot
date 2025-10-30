@@ -26,6 +26,8 @@ services:
       - ${DOCKERDIR}/mosquitto/config:/mosquitto/config
       - ${DOCKERDIR}/mosquitto/data:/mosquitto/data
       - ${DOCKERDIR}/logs/mosquitto:/mosquitto/log
+    networks:
+      - mediaserver
     ports:
       - "1883:1883"
       - "9001:9001"
