@@ -45,6 +45,11 @@ networks:
           gateway: 192.168.2.1
           ip_range: 192.168.2.0/26
     external: false # use if not managing network with docker-compose.yaml
+  ha_bridge:    
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.32.0.0/24
   sbs_network:
     name: sbs_network
     driver: bridge

@@ -1,9 +1,21 @@
 # Pi-hole - A network-wide ad blocker.
-
-# Notes:
-# This may need to change if you are running on windows or linux. Hence the commented variables etc
-# Windows: Suggested, new-NetFirewallRule -DisplayName "Docker Desktop Backend" -Direction Inbound -Program "C:\program files\docker\docker\resources\com.docker.backend.exe" -Action Allow -Profile Private,Public
 #
+# Notes:
+# - This container is dual-homed:
+#     • pihole_network (macvlan) → gives Pi-hole its own LAN IP (192.168.2.x) for DNS/DHCP.
+#     • ha_bridge (user-defined bridge) → added so host-mode containers (like Home Assistant)
+#       can reach Pi-hole’s API. Without this, the host cannot talk to the macvlan IP due to isolation.
+#
+# - The web UI/API is published on the NAS host at ${PIHOLE_WEB_PORT} (e.g. 8080).
+#   LAN clients continue to use the macvlan IP for DNS/DHCP, while HA uses the host:port for API access.
+#
+# - Windows users: if running Docker Desktop, you may need to allow the backend through the firewall:
+#   new-NetFirewallRule -DisplayName "Docker Desktop Backend" -Direction Inbound `
+#     -Program "C:\Program Files\Docker\Docker\resources\com.docker.backend.exe" `
+#     -Action Allow -Profile Private,Public
+#
+# - Remember: overlapping host ports will prevent the container from starting.
+#   Always assign Pi-hole a unique host port for its web interface.
 
 services:
   pihole:
@@ -36,8 +48,8 @@ services:
       TEMPERATUREUNIT: c
     networks:
       pihole_network:
-        ipv4_address: ${PIHOLE_IP}
-      mediaserver: {}
+        ipv4_address: ${PIHOLE_IP}      
+      ha_bridge: {}
     ports:
       - "${PIHOLE_WEB_PORT}:80"
     volumes:
