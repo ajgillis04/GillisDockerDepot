@@ -5,7 +5,7 @@
 services:
   vaultwarden:
     container_name: vaultwarden.${HOST_NAME}
-    hostname: vaultwarden.${HOST_NAME}.local
+    hostname: vaultwarden.${HOST_NAME}.lan
     image: vaultwarden/server:latest
     environment:
       TZ: ${TZ}

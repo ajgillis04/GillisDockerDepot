@@ -17,7 +17,7 @@ services:
   cloudflare-ddns:
     image: timothyjmiller/cloudflare-ddns:latest
     container_name: cloudflare-ddns.${HOST_NAME}
-    hostname: cloudflare-ddns.${HOST_NAME}.local
+    hostname: cloudflare-ddns.${HOST_NAME}.lan
     networks:
       - mediaserver
     volumes:

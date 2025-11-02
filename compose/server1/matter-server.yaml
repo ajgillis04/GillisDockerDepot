@@ -1,0 +1,26 @@
+# ------------------------------------------------------------------------------
+# Matter Server - Local Matter Fabric for Home Assistant
+# ------------------------------------------------------------------------------
+# Provides commissioning and control of Matter devices.
+# Required for HA Container/Core installs (not bundled).
+# Exposes WebSocket API on port 5580 for HA integration.
+# ------------------------------------------------------------------------------
+
+services:
+  matter-server:
+    container_name: matter-server.${HOST_NAME}
+    hostname: matter-server.${HOST_NAME}.lan
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    network_mode: host              # Simplest way to expose port 5580
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      HOST_NAME: ${HOST_NAME}.lan
+    volumes:
+      - ${DOCKERDIR}/matter-server/data:/data
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

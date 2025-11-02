@@ -5,7 +5,7 @@
 services:
   oauth:
     container_name: oauth.${HOST_NAME}
-    hostname: oauth.${HOST_NAME}.local
+    hostname: oauth.${HOST_NAME}.lan
     image: thomseddon/traefik-forward-auth:latest
     environment:
       DOMAINNAME: ${DOMAINNAME}

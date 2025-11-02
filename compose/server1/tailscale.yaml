@@ -3,7 +3,7 @@
 services:
   tailscale:
     container_name: tailscale.${HOST_NAME}
-    hostname: tailscale.${HOST_NAME}.local
+    hostname: tailscale.${HOST_NAME}.lan
     image: tailscale/tailscale:latest
     network_mode: host
     cap_add:

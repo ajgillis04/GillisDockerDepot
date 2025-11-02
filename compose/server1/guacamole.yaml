@@ -1,16 +1,16 @@
 services:
   guacamole:
     container_name: guacamole.${HOST_NAME}
-    hostname: guacamole.${HOST_NAME}.local
+    hostname: guacamole.${HOST_NAME}.lan
     image: guacamole/guacamole:latest
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
-      GUACD_HOSTNAME: guacd.${HOST_NAME}
+      GUACD_HOSTNAME: guacd.${HOST_NAME}.lan
       MYSQL_DATABASE: guacamole
-      MYSQL_HOSTNAME: mariadb.${HOST_NAME}
+      MYSQL_HOSTNAME: mariadb.${HOST_NAME}.lan
       MYSQL_PORT: 3306
       #MYSQL_USER_FILE: /run/secrets/guac_mysql_user #stopped working
       #MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password #stopped working

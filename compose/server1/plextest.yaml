@@ -17,7 +17,7 @@
 services:
   plextest:
     container_name: plextest.${HOST_NAME}
-    hostname: plextest.${HOST_NAME}.local
+    hostname: plextest.${HOST_NAME}.lan
     image: plexinc/pms-docker:plexpass
     devices:
       - /dev/dri:/dev/dri
@@ -29,7 +29,7 @@ services:
       UMASK: 002
       ADVERTISE_IP: "https://plextest.${HOST_NAME}.${DOMAINNAME}:443,https://${SERVER_IP}:32400"
       ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks
-      HOSTNAME: plextest.${HOST_NAME}
+      HOST_NAME: plextest.${HOST_NAME}.lan
       #PLEX_CLAIM_FILE: /run/secrets/plextest_claim # Claim _file does not seem to be working with binhex version
       PLEX_CLAIM: "claim-96XgTe_fsjF3m1rg12xp"
       PLEX_SERVER_NAME: plextest.${HOST_NAME}

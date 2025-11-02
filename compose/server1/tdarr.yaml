@@ -12,7 +12,7 @@
 services:
   tdarr:
     container_name: tdarr.${HOST_NAME}
-    hostname: tdarr.${HOST_NAME}.local
+    hostname: tdarr.${HOST_NAME}.lan
     image: haveagitgat/tdarr:2.45.01
     environment:
       TZ: ${TZ}

@@ -2,7 +2,7 @@
 services:
   cloudflared:
     container_name: cloudflared.${HOST_NAME}
-    hostname: cloudflared.${HOST_NAME}.local
+    hostname: cloudflared.${HOST_NAME}.lan
     image: cloudflare/cloudflared:latest
     command: tunnel --config /home/nonroot/.cloudflared/config.yml run ${HOST_NAME}
     environment:

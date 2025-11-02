@@ -10,14 +10,14 @@
 services:
   maintainerr:
     container_name: maintainerr.${HOST_NAME}
-    hostname: maintainerr.${HOST_NAME}.local
+    hostname: maintainerr.${HOST_NAME}.lan
     image: ghcr.io/jorenn92/maintainerr:latest
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
-      HOST_NAME: ${HOST_NAME}
+      HOST_NAME: ${HOST_NAME}.lan
       # optional: BASE_PATH=/maintainerr
     networks:
       - mediaserver

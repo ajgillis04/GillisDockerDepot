@@ -2,7 +2,7 @@
 services:
   readarr:
     container_name: readarr.${HOST_NAME}
-    hostname: readarr.${HOST_NAME}.local
+    hostname: readarr.${HOST_NAME}.lan
     image: linuxserver/readarr:develop # In development so no latest
     environment:
       TZ: ${TZ}

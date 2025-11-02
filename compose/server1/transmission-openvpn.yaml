@@ -2,7 +2,7 @@
 services:
   transmission-openvpn:
     container_name: transmission-openvpn.${HOST_NAME}
-    hostname: transmission-openvpn.${HOST_NAME}.local
+    hostname: transmission-openvpn.${HOST_NAME}.lan
     image: haugene/transmission-openvpn:latest
     cap_add:
       - NET_ADMIN

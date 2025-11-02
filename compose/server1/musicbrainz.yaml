@@ -1,7 +1,7 @@
 ﻿services:
   musicbrainz:
     container_name: musicbrainz.${HOST_NAME}
-    hostname: musicbrainz.${HOST_NAME}.local
+    hostname: musicbrainz.${HOST_NAME}.lan
     image: linuxserver/musicbrainz:latest
     environment:
       TZ: ${TZ}

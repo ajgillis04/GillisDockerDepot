@@ -17,7 +17,7 @@
 services:
   plex:
     container_name: plex.${HOST_NAME}
-    hostname: plex.${HOST_NAME}.local
+    hostname: plex.${HOST_NAME}.lan
     image: binhex/arch-plexpass:latest
     devices:
       - /dev/dri:/dev/dri
@@ -29,7 +29,7 @@ services:
       UMASK: 002
       ADVERTISE_IP: "https://plex.${HOST_NAME}.${DOMAINNAME}:443,https://${SERVER_IP}:32400"
       ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks
-      HOSTNAME: plex.${HOST_NAME}
+      HOST_NAME: plex.${HOST_NAME}.lan
       PLEX_CLAIM_FILE: /run/secrets/plex_claim # input claim number into file after first run
       PLEX_SERVER_NAME: plex.${HOST_NAME}
       TV_SHOWS_PATH: /media/Videos/TV 

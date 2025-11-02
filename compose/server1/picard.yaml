@@ -2,7 +2,7 @@
 services:
   picard:
     container_name: picard.${HOST_NAME}
-    hostname: picard.${HOST_NAME}.local
+    hostname: picard.${HOST_NAME}.lan
     image: mikenye/picard:latest
     environment:
       PUID: ${PUID}

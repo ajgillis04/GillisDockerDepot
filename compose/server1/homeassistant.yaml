@@ -20,14 +20,14 @@
 services:
   homeassistant:
     container_name: homeassistant.${HOST_NAME}
-    hostname: homeassistant.${HOST_NAME}.local
+    hostname: homeassistant.${HOST_NAME}.lan
     image: ghcr.io/home-assistant/home-assistant:stable
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}      
-      HOST_NAME: ${HOST_NAME}
+      HOST_NAME: ${HOST_NAME}.lan
     volumes:
       - ${DOCKERDIR}/homeassistant/config:/config
       - ${DOCKERDIR}/logs/homeassistant:/var/log

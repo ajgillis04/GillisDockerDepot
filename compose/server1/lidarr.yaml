@@ -2,7 +2,7 @@
 services:
   lidarr:
     container_name: lidarr.${HOST_NAME}
-    hostname: lidarr.${HOST_NAME}.local
+    hostname: lidarr.${HOST_NAME}.lan
     image: linuxserver/lidarr:latest
     environment:
       TZ: ${TZ}

@@ -16,7 +16,7 @@
 services:
   mosquitto:
     container_name: mosquitto.${HOST_NAME}
-    hostname: mosquitto.${HOST_NAME}.local
+    hostname: mosquitto.${HOST_NAME}.lan
     image: eclipse-mosquitto:latest
     environment:
       PUID: ${PUID}

@@ -3,7 +3,7 @@
 services:
   mineos:
     container_name: mineos.${HOST_NAME}
-    hostname: mineos.${HOST_NAME}.local
+    hostname: mineos.${HOST_NAME}.lan
     image: hexparrot/mineos:latest
     environment:
       TZ: ${TZ}

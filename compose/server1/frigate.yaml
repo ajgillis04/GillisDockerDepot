@@ -8,7 +8,7 @@
 services:
   frigate:
     container_name: frigate.${HOST_NAME}
-    hostname: frigate.${HOST_NAME}.local
+    hostname: frigate.${HOST_NAME}.lan
     image: ghcr.io/blakeblackshear/frigate:stable
     devices:
       - /dev/dri:/dev/dri
@@ -19,7 +19,7 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
-      HOST_NAME: ${HOST_NAME}
+      HOST_NAME: ${HOST_NAME}.lan
     networks:
       - mediaserver
     ports:

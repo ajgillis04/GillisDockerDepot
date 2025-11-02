@@ -17,14 +17,14 @@
 services:
   tautulli:
     container_name: tautulli.${HOST_NAME}
-    hostname: tautulli.${HOST_NAME}.local
+    hostname: tautulli.${HOST_NAME}.lan
     image: linuxserver/tautulli:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
       PUID: ${PUID}
       DOMAINNAME: ${DOMAINNAME}
-      TAUTULLI_PLEX_SERVER_IP: plex.${HOST_NAME}.local # Can use docker name if same host, recommended
+      TAUTULLI_PLEX_SERVER_IP: plex.${HOST_NAME}.lan # Can use docker name if same host, recommended
       TAUTULLI_PLEX_SERVER_PORT: 32400
       #FILE__TAUTULLI_PLEX_TOKEN: /run/secrets/plex_token # currently not working, container sees file
       TAUTULLI_PLEX_TOKEN: ${PLEX_TOKEN}

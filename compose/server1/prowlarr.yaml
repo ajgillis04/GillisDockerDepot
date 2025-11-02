@@ -2,7 +2,7 @@
 services:
   prowlarr:
     container_name: prowlarr.${HOST_NAME}
-    hostname: prowlarr.${HOST_NAME}.local
+    hostname: prowlarr.${HOST_NAME}.lan
     image: ghcr.io/linuxserver/prowlarr:latest
     environment:
       TZ: ${TZ}

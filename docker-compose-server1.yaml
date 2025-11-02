@@ -34,17 +34,18 @@ networks:
  #         gateway: 192.168.2.1
  #   external: true # use if not managing network with docker-compose.yaml
   pihole_network:
+    #docker network create --driver=macvlan --subnet=192.168.2.0/24 --gateway=192.168.2.1 --ip-range=192.168.2.0/26 --ipv6 --subnet=fd00:abcd:1234::/64 --gateway=fd00:abcd:1234::1 -o parent=eth4 pihole_network
     name: pihole_network
     #driver: bridge
-    driver: macvlan #does not work on windows
-    driver_opts:
-      parent: eth4  # Replace with your actual network interface
-    ipam:
-      config:
-        - subnet: 192.168.2.0/24
-          gateway: 192.168.2.1
-          ip_range: 192.168.2.0/26
-    external: false # use if not managing network with docker-compose.yaml
+    #driver: macvlan #does not work on windows
+    #driver_opts:
+    #  parent: eth4  # Replace with your actual network interface
+    #ipam:
+    #  config:
+    #    - subnet: 192.168.2.0/24
+    #      gateway: 192.168.2.1
+    #      ip_range: 192.168.2.0/26
+    external: true # use if not managing network with docker-compose.yaml
   ha_bridge:    
     driver: bridge
     ipam:
@@ -156,6 +157,7 @@ include:
 #  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/maintainerr.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
+  - ${COMPOSE_DIR}/matter-server.yaml
   - ${COMPOSE_DIR}/mosquitto.yaml
 #  - ${COMPOSE_DIR}/motioneye.yaml
 #  - ${COMPOSE_DIR}/mineos.yaml
@@ -190,6 +192,7 @@ include:
   - ${COMPOSE_DIR}/tdarr_node.yaml
   #- ${COMPOSE_DIR}/traefik.yaml
   - ${COMPOSE_DIR}/transmission-openvpn.yaml
+  #- ${COMPOSE_DIR}/unbound.yaml
   #- ${COMPOSE_DIR}/uptimekuma.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml

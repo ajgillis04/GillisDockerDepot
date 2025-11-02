@@ -28,7 +28,7 @@
 services:
   nextcloud:
     container_name: nextcloud.${HOST_NAME}
-    hostname: nextcloud.${HOST_NAME}.local
+    hostname: nextcloud.${HOST_NAME}.lan
     image: nextcloud:latest    
     user: "0:0"
     environment:

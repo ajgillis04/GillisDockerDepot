@@ -20,7 +20,7 @@
 services:
   pihole:
     container_name: pihole.${HOST_NAME}
-    hostname: pihole.${HOST_NAME}.local
+    hostname: pihole.${HOST_NAME}.lan
     image: pihole/pihole:latest 
     cap_add:
          # Required if you are using Pi-hole as your DHCP server, else not needed    
@@ -30,7 +30,7 @@ services:
       - CAP_NET_RAW
     environment:
       TZ: ${TZ}      
-      HOSTNAME: pihole.${HOST_NAME}
+      HOST_NAME: pihole.${HOST_NAME}.lan
       DOMAINNAME: ${DOMAINNAME}
       #WEBPASSWORD_FILE: /run/secrets/pihole_password
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}

@@ -16,7 +16,7 @@
 services:
   govee2mqtt:
     container_name: govee2mqtt.${HOST_NAME}
-    hostname: govee2mqtt.${HOST_NAME}.local
+    hostname: govee2mqtt.${HOST_NAME}.lan
     image: ghcr.io/wez/govee2mqtt:latest
     environment:
       TZ: ${TZ}

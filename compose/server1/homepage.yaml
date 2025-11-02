@@ -4,7 +4,7 @@
 services:
   homepage:
     container_name: homepage.${HOST_NAME}
-    hostname: homepage.${HOST_NAME}.local
+    hostname: homepage.${HOST_NAME}.lan
     image: ghcr.io/gethomepage/homepage:latest
     environment:
       TZ: ${TZ}

@@ -2,15 +2,15 @@
 services:
   bazarr:
     container_name: bazarr.${HOST_NAME}
-    hostname: bazarr.${HOST_NAME}.local
+    hostname: bazarr.${HOST_NAME}.lan
     image: lscr.io/linuxserver/bazarr:latest
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
-      DOMAINNAME: ${DOMAINNAME}      
-      HOST_NAME: ${HOST_NAME}
-      BAZARR_API_KEY: ${BAZARR_API_KEY}      
+      DOMAINNAME: ${DOMAINNAME}
+      HOST_NAME: ${HOST_NAME}.lan
+      BAZARR_API_KEY: ${BAZARR_API_KEY}
     networks:
       - mediaserver
     ports:

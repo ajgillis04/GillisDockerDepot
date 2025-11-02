@@ -6,7 +6,7 @@
 services:
   ersatztv:
     container_name: ersatztv.${HOST_NAME}
-    hostname: ersatztv.${HOST_NAME}.local
+    hostname: ersatztv.${HOST_NAME}.lan
     image: jasongdove/ersatztv:develop-vaapi
     devices:
       #- /dev/dri:/dev/dri

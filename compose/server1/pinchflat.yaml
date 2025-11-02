@@ -3,7 +3,7 @@
 services:
   pinchflat:
     container_name: pinchflat.${HOST_NAME}
-    hostname: pinchflat.${HOST_NAME}.local
+    hostname: pinchflat.${HOST_NAME}.lan
     image: ghcr.io/kieraneglin/pinchflat:latest
     environment:
       PGID: ${PGID}

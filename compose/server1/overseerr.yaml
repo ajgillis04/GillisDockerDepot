@@ -3,7 +3,7 @@
 services:
   overseerr:
     container_name: overseerr.${HOST_NAME}
-    hostname: overseerr.${HOST_NAME}.local
+    hostname: overseerr.${HOST_NAME}.lan
     image: lscr.io/linuxserver/overseerr:latest
     environment:
       TZ: ${TZ}

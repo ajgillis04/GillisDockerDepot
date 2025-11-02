@@ -19,7 +19,7 @@
 services:
   traefik:
     container_name: traefik.${HOST_NAME}
-    hostname: traefik.${HOST_NAME}.local
+    hostname: traefik.${HOST_NAME}.lan
     image: traefik:v3.3
     security_opt:
       - no-new-privileges:true

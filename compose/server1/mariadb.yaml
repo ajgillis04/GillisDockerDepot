@@ -8,7 +8,7 @@
 services:
   mariadb:
     container_name: mariadb.${HOST_NAME}
-    hostname: mariadb.${HOST_NAME}.local
+    hostname: mariadb.${HOST_NAME}.lan
     image: linuxserver/mariadb:latest
     environment:      
       TZ: ${TZ}

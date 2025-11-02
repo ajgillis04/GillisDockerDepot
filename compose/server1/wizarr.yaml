@@ -2,7 +2,7 @@
 services:
   wizarr:
     container_name: wizarr.${HOST_NAME}
-    hostname: wizarr.${HOST_NAME}.local
+    hostname: wizarr.${HOST_NAME}.lan
     image: ghcr.io/wizarrrr/wizarr:latest
     environment:
       TZ: ${TZ}

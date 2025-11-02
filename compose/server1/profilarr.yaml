@@ -1,7 +1,7 @@
 services:
   profilarr:
     container_name: profilarr.${HOST_NAME}
-    hostname: profilarr.${HOST_NAME}.local
+    hostname: profilarr.${HOST_NAME}.lan
     image: santiagosayshey/profilarr:latest
     environment:
       TZ: ${TZ}

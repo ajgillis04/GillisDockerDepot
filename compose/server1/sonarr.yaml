@@ -2,7 +2,7 @@
 services:
   sonarr:
     container_name: sonarr.${HOST_NAME}
-    hostname: sonarr.${HOST_NAME}.local
+    hostname: sonarr.${HOST_NAME}.lan
     image: linuxserver/sonarr:latest
     environment:
       TZ: ${TZ}

@@ -4,7 +4,7 @@
 services:
   calibre:
     container_name: calibre.${HOST_NAME}
-    hostname: calibre.${HOST_NAME}.local
+    hostname: calibre.${HOST_NAME}.lan
     image: ghcr.io/linuxserver/calibre:latest
     environment:
       TZ: ${TZ}

@@ -2,7 +2,7 @@
 services:
   portainer:
     container_name: portainer.${HOST_NAME}
-    hostname: portainer.${HOST_NAME}.local
+    hostname: portainer.${HOST_NAME}.lan
     image: portainer/portainer-ce:latest
     command: -H unix:///var/run/docker.sock
     environment:

@@ -2,7 +2,7 @@
 services:
   sabnzbd:
     container_name: sabnzbd.${HOST_NAME}
-    hostname: sabnzbd.${HOST_NAME}.local
+    hostname: sabnzbd.${HOST_NAME}.lan
     image: lscr.io/linuxserver/sabnzbd:latest
     environment:
       TZ: ${TZ}
