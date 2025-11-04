@@ -13,13 +13,13 @@ services:
     devices:
       - /dev/dri:/dev/dri
     privileged: true
-    shm_size: "512m"   # Shared memory for ffmpeg
+    shm_size: "1024m"   # Shared memory for ffmpeg
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
-      HOST_NAME: ${HOST_NAME}.lan
+      HOST_NAME: frigate.${HOST_NAME}.lan
     networks:
       - mediaserver
     ports:
