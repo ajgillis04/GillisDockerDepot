@@ -2,7 +2,7 @@
 services:
   watchtower:
     container_name: watchtower.${HOST_NAME}
-    hostname: watchtower.${HOST_NAME}.local
+    hostname: watchtower.${HOST_NAME}.lan
     image: containrrr/watchtower:latest
     environment:
       TZ: ${TZ}

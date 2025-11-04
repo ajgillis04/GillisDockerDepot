@@ -2,7 +2,7 @@
 services:
   tdarr_node:
     container_name: tdarr_node.${HOST_NAME}
-    hostname: tdarr_node.${HOST_NAME}.local
+    hostname: tdarr_node.${HOST_NAME}.lan
     image: haveagitgat/tdarr_node:latest
     environment:
       TZ: ${TZ}
@@ -10,7 +10,7 @@ services:
       PUID: ${PUID}
       inContainer: true # Tell tdarr its running in docker      
       nodeID: tdarr_node.${HOST_NAME}
-      nodeIP: tdarr.${HOST_NAME}.local
+      nodeIP: tdarr.${HOST_NAME}.lan
       nodePort: ${TDARR_NODE_PORT}
       serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}

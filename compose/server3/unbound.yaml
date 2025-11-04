@@ -1,0 +1,37 @@
+# ------------------------------------------------------------------------------ 
+# Unbound - Recursive DNS Resolver (IPv4 + IPv6)
+# ------------------------------------------------------------------------------ 
+# Provides secure, privacy-respecting DNS resolution for Pi-hole and LAN clients.
+# Resolves queries from root servers, supports DNSSEC, and bypasses upstream DNS.
+# IPv6-ready with static ULA address for AAAA resolution and Matter compatibility.
+# ------------------------------------------------------------------------------ 
+
+services:
+  unbound:
+    container_name: unbound.${HOST_NAME}
+    hostname: unbound.${HOST_NAME}.lan
+    image: ghcr.io/klutchell/unbound:latest
+    command: ["-d", "-vvv", "-c", "/etc/unbound/unbound.conf"]
+    #command: ["-d", "-vvv"]
+    cap_add:
+      - NET_ADMIN
+    environment:
+      TZ: ${TZ}
+      #PUID: ${PUID}
+      #PGID: ${PGID}
+      HOST_NAME: unbound.${HOST_NAME}.lan
+      DOMAINNAME: ${DOMAINNAME}
+ #   networks:
+ #     pihole_network:
+ #       ipv4_address: ${UNBOUND_IP}
+ #       ipv6_address: fd00:abcd:1234::54
+ #     ha_bridge: {}
+    network_mode: host
+ #   ports:
+ #    - "5335:5335/udp"  # DNS over UDP
+ #    - "5335:5335/tcp"  # DNS over TCP
+    volumes:      
+      - ${DOCKERDIR}/unbound/etc/unbound:/etc/unbound      
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

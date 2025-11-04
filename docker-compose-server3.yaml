@@ -32,17 +32,17 @@ networks:
  #     config:
  #       - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
  #         gateway: 192.168.2.1        
-    external: true # use if not managing network with docker-compose.yaml
-  pihole_network:
-    name: pihole_network
+    external: false # use if not managing network with docker-compose.yaml
+#  pihole_network:
+#    name: pihole_network
     #driver: bridge
-    driver: macvlan #does not work on windows    
-    driver_opts:
-      parent: eth0  # Replace with your actual network interface
-    ipam:
-      config:
-        - subnet: 192.168.2.0/24
-          gateway: 192.168.2.1          
+#    driver: macvlan #does not work on windows    
+#    driver_opts:
+#      parent: eth0  # Replace with your actual network interface
+#    ipam:
+#      config:
+#        - subnet: 192.168.2.0/24
+#          gateway: 192.168.2.1          
  #   external: true # use if not managing network with docker-compose.yaml    
   #nextcloud-aio:
   #  name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
@@ -157,6 +157,7 @@ include:
 #  - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
 #  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
+  - ${COMPOSE_DIR}/unbound.yaml
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
 #  - ${COMPOSE_DIR}/wireguard.yaml
