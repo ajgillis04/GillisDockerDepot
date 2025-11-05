@@ -29,6 +29,7 @@ services:
       DOMAINNAME: ${DOMAINNAME}      
       HOST_NAME: ${HOST_NAME}.lan
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERDIR}/homeassistant/config:/config
       - ${DOCKERDIR}/logs/homeassistant:/var/log
     restart: always

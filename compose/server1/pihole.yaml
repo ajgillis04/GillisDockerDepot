@@ -31,14 +31,17 @@ services:
     environment:
       TZ: ${TZ}      
       HOST_NAME: pihole.${HOST_NAME}.lan
-      DOMAINNAME: ${DOMAINNAME}
+      DOMAINNAME: ${DOMAINNAME}      
       #WEBPASSWORD_FILE: /run/secrets/pihole_password
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
-      FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
+      #FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1            
+      FTLCONF_dns_listeningMode: all
+      FTLCONF_dns_upstreams: ${PIHOLE_SECONDARY}#5335;${PIHOLE_SECONDARY_V6}#5335
+      FTLCONF_dns_dnssec: true
       FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,local
       FTLCONF_debug_api: false
       TAIL_FTL_LOG: '1' # or '0' to disable
-      FTLCONF_dhcp_active: true      
+      FTLCONF_dhcp_active: true
       FTLCONF_dhcp_start: 192.168.2.50
       FTLCONF_dhcp_end: 192.168.2.254
       FTLCONF_dhcp_router: 192.168.2.1
