@@ -1,0 +1,31 @@
+# ------------------------------------------------------------------------------ 
+# Kometa - Plex Metadata, Collections, and Overlays
+# ------------------------------------------------------------------------------ 
+# Automates Plex collections, overlays, and metadata fixes using YAML configs.
+# ------------------------------------------------------------------------------ 
+
+services:
+  kometa:
+    container_name: kometa.${HOST_NAME}
+    hostname: kometa.${HOST_NAME}.lan
+    image: kometateam/kometa:latest
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      HOST_NAME: kometa.${HOST_NAME}.lan
+      CRON: "0 4 * * *"  # run daily at 4 AM
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/kometa/config:/config   # YAML configs live here
+      - ${DOCKERDIR}/kometa/logs:/logs       # optional logs
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

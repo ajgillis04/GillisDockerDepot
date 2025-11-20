@@ -1,36 +1,35 @@
 ﻿services:
   orbital-sync:
     container_name: orbital-sync.${HOST_NAME}
-    hostname: orbital-sync.${HOST_NAME}.local
+    hostname: orbital-sync.${HOST_NAME}.lan
     image: mattwebbio/orbital-sync:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      DOMAINNAME: ${DOMAINNAME}
+      PRIMARY_HOST_BASE_URL: http://${PIHOLE_PRI}
+      PRIMARY_HOST_PASSWORD_FILE: /run/secrets/pihole_password
+      SECONDARY_HOSTS_1_BASE_URL: http://${PIHOLE_SECONDARY}
+      SECONDARY_HOSTS_1_PASSWORD_FILE: /run/secrets/pihole_password
+      SYNC_V5_STATIC_DHCP_LEASES: true
+      SYNC_V5_AUDIT_LOG: true
+      INTERVAL_MINUTES: 60
+      UPDATE_GRAVITY: true
+      NOTIFY_ON_SUCCESS: true
+      NOTIFY_ON_FAILURE: true
+      NOTIFY_VIA_SHOOUTR: true
+      SHOOUTR_CHANNEL: ${DISCORD_TOKEN}
+      SHOOUTR_TOKEN: ${DISCORD_ID}
     networks:
       - mediaserver
-    ports:
-      - ${SERVICE_PORT}:80  # Replace SERVICE_PORT with the actual port you want to expose. Add SERVICE_PORT to your .env file.
     volumes:
-      # Uncomment if needed
-      # - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERDIR}/orbital-sync/config:/config
       - ${DOCKERDIR}/logs/orbital-sync:/var/log
     restart: always
+    secrets:
+      - pihole_password
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.orbital-sync-rtr.entrypoints=https"
-      ## Middlewares
-      - "traefik.http.routers.orbital-sync-rtr.rule=Host(orbital-sync${HOST_SUFFIX}.${DOMAINNAME})"
-      - "traefik.http.routers.orbital-sync-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.orbital-sync-rtr.service=orbital-sync-svc"
-      - "traefik.http.services.orbital-sync-svc.loadbalancer.server.port=80"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"

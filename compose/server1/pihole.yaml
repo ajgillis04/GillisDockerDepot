@@ -34,10 +34,10 @@ services:
       DOMAINNAME: ${DOMAINNAME}      
       #WEBPASSWORD_FILE: /run/secrets/pihole_password
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
-      #FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1            
+      FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
       FTLCONF_dns_listeningMode: all
-      FTLCONF_dns_upstreams: ${PIHOLE_SECONDARY}#5335;${PIHOLE_SECONDARY_V6}#5335
-      FTLCONF_dns_dnssec: true
+      #FTLCONF_dns_upstreams: ${PIHOLE_SECONDARY}#5335;${PIHOLE_SECONDARY_V6}#5335
+      #FTLCONF_dns_dnssec: true
       FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,local
       FTLCONF_debug_api: false
       TAIL_FTL_LOG: '1' # or '0' to disable
@@ -47,7 +47,7 @@ services:
       FTLCONF_dhcp_router: 192.168.2.1
       FTLCONF_dhcp_leaseTime: 30d
       FTLCONF_dns_domain: local
-      FTLCONF_dhcp_ipv6: true
+      FTLCONF_dhcp_ipv6: false
       TEMPERATUREUNIT: c
     networks:
       pihole_network:

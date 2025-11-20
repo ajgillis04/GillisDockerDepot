@@ -1,18 +1,61 @@
 # Plex - A media server to organize and stream your media.
-# Note: Some stuff has to be set manually
-#       Settings, Remote Access, Intenet upload speeds: set to your speed
-#       Settings, Library, Select: Scan my library Auto, Run a Partial, Scan my library perd, 
-#         Video played threshold 95%
-#       Settings, Network, LAN Networks: 127.0.0.1/32,10.0.27.0/24,172.29.0.0/16,192.168.2.0/24, uncheck enable Relay, 
-#         Custom server access URLs: https://plex.YOURNAME.gillisonline.com:443,https://YOURIP:32400
-#         List of IP addresses and networks that are allowed without auth: 127.0.0.1/32,10.0.27.0/24,172.29.0.0/16,192.168.2.0/24
-#       Settings, Transcode, Transcoder temporary directory: /transcode
-#         If you paid for plex pass ensure these are selected Use hardware-accelerated video encoding, Use hardware acceleration when available
-#       Settings, Extras, Include Cinema Trailers from new and upcoming movies in theaters
-#       to restore playlists from old plex server https://soundiiz.com/webapp/playlists/spotify
-# 
-#       Get Token:  sudo grep 'PlexOnlineToken=' appdata/plex/config/Plex\ Media\ Server/Preferences.xml | sed 's/.*PlexOnlineToken="\([^"]*\)".*/\1/'
+# -------------------------------------------------------------------
+# General Notes:
+# - Some settings must be set manually in Plex Web UI.
+# - Remote Access: set Internet upload speeds to match your ISP.
+# - Library: enable "Scan my library automatically", "Run partial scans",
+#   and set Video played threshold to 95%.
+# - Network:
+#   LAN Networks: 127.0.0.1/32,10.0.27.0/24,172.29.0.0/16,192.168.2.0/24
+#   Disable Relay
+#   Custom server access URLs:
+#     https://plex.YOURNAME.gillisonline.com:443, https://YOURIP:32400
+#   Allowed IPs without auth: same LAN ranges above.
+# - Transcode:
+#   Temporary directory = /transcode
+#   If Plex Pass: enable hardware-accelerated video encoding/decoding.
+# - Extras:
+#   Enable Cinema Trailers for upcoming movies.
+# - Playlists:
+#   Restore from old server via https://soundiiz.com/webapp/playlists/spotify
+# - Token retrieval:
+#   sudo grep 'PlexOnlineToken=' appdata/plex/config/Plex\ Media\ Server/Preferences.xml \
+#   | sed 's/.*PlexOnlineToken="\([^"]*\)".*/\1/'
 #
+# -------------------------------------------------------------------
+# Recommended Scanner/Agent Combos:
+# Movies:
+#   Scanner: Plex Movie Scanner
+#   Agent:   The Movie Database (Movies)
+#   Notes:   TMDb is Plex’s default for movies; provides tmdb:// IDs.
+#
+# TV Shows:
+#   Scanner: Plex TV Shows
+#   Agent:   The Movie Database (TV)
+#   Notes:   Future-proof choice; provides tmdb:// IDs.
+#            Keep TheTVDB enabled as fallback for tricky numbering.
+#
+# Anime:
+#   Scanner: Absolute Series Scanner (ASS)
+#   Agent:   The Movie Database (TV) or Hama + AniDB (advanced setups)
+#   Notes:   ASS handles absolute numbering (Episode 1, 2, 3…).
+#
+# Music:
+#   Scanner: Plex Music Scanner
+#   Agent:   Last.fm or Plex Music agent
+#   Notes:   Metadata less critical; Plex agent is fine.
+#
+# Personal Media:
+#   Scanner: Personal Media Scanner
+#   Agent:   Personal Media Shows / Plex Personal Media
+#   Notes:   For home videos or custom files; no external IDs.
+#
+# General Guidance:
+# - Always use Plex TV Shows scanner for standard TV libraries.
+# - Prefer TMDb agents for future-proofing and Kometa integration.
+# - Enable TVDb agent as backup for Sonarr alignment or odd series.
+# - Refresh metadata after switching agents to populate external GUIDs.
+# -------------------------------------------------------------------
 
 services:
   plex:

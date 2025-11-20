@@ -42,7 +42,10 @@ services:
     networks:
       - mediaserver
     ports:
-      - "${TRANSMISSION_PORT}:9091"
+      - "${TRANSMISSION_PORT}:9091"      
+      - "${SLSKD_HTTP_PORT}:5030"   # Soulseek web UI putting behind openvpn for privacy
+      - "${SLSKD_HTTPS_PORT}:5031"  # Soulseek HTTPS UI  putting behind openvpn for privacy
+
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/transmission-openvpn/data:/data

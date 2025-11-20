@@ -1,0 +1,63 @@
+# ------------------------------------------------------------------------------
+# spotify-to-plex - Sync Spotify playlists into Plex
+# ------------------------------------------------------------------------------
+# Imports Spotify playlists, requests missing tracks via Lidarr or Soulseek,
+# and keeps Plex playlists in sync automatically.
+# ------------------------------------------------------------------------------
+services:
+  spotify-to-plex:
+    container_name: spotifytoplex.${HOST_NAME}
+    hostname: spotifytoplex.${HOST_NAME}.lan
+    image: jjdenhertog/spotify-to-plex:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      HOST_NAME: spotifytoplex.${HOST_NAME}.lan
+
+      # --- Spotify API credentials ---
+      SPOTIFY_API_CLIENT_ID: ${SPOTIFY_API_CLIENT_ID}
+      SPOTIFY_API_CLIENT_SECRET: ${SPOTIFY_API_CLIENT_SECRET}
+      SPOTIFY_API_REDIRECT_URI: http://127.0.0.1:9030/api/spotify/token
+
+      # --- Optional integrations ---
+      LIDARR_API_KEY: ${LIDARR_API_KEY}
+      SLSKD_API_KEY: ${LIDARR_API_KEY}       # Reusing LIDARR_API_KEY for convenience
+      SLSKD_URL: http://soulseek.${HOST_NAME}:5030  # point to your slskd service
+
+      # --- Plex details ---
+      PLEX_URL: http://plex.${HOST_NAME}:32400
+      PLEX_TOKEN: ${PLEX_TOKEN}
+      PLEX_APP_ID: eXf+f9ktw3CZ8i45OY468WxriOCtoFxuNPzVeDcAwfw=
+
+      # --- General options ---
+      PORT: 9030
+      LOG_LEVEL: INFO
+      SYNC_INTERVAL: 3600
+
+    networks:
+      - mediaserver
+
+    ports:
+      - "${SPOTIPLEX_PORT}:9030"
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "7"
+
+    volumes:
+      - ${DOCKERDIR}/spotify-to-plex/config:/app/config
+
+    restart: on-failure:4
+    security_opt:
+      - no-new-privileges:true
+
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Media"
+      - "homepage.name=Spotify-to-Plex"
+      - "homepage.icon=https://raw.githubusercontent.com/jjdenhertog/spotify-to-plex/main/icon.png"
+      - "homepage.href=http://spotifytoplex.${HOST_NAME}:${SPOTIPLEX_PORT}"
+      - "homepage.description=Sync Spotify playlists into Plex"

@@ -152,6 +152,7 @@ include:
   - ${COMPOSE_DIR}/homeassistant.yaml
   - ${COMPOSE_DIR}/homepage.yaml
   #- ${COMPOSE_DIR}/jellyfin.yaml
+  #- ${COMPOSE_DIR}/kometa.yaml
   #- ${COMPOSE_DIR}/libation.yaml
   - ${COMPOSE_DIR}/lidarr.yaml
 #  - ${COMPOSE_DIR}/lidify.yaml
@@ -168,6 +169,7 @@ include:
 #  - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
+  - ${COMPOSE_DIR}/php-apache-agf.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
 #  - ${COMPOSE_DIR}/php-apache-storiesbeyondstone.yaml
@@ -186,6 +188,8 @@ include:
   - ${COMPOSE_DIR}/sbs-app.yaml
   - ${COMPOSE_DIR}/sbs-shlink.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
+  - ${COMPOSE_DIR}/soulseek.yaml
+  - ${COMPOSE_DIR}/spotifytoplex.yaml
 #  - ${COMPOSE_DIR}/tailscale.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml

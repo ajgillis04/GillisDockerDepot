@@ -1,0 +1,47 @@
+# ------------------------------------------------------------------------------
+# slskd - Soulseek daemon with web GUI
+# ------------------------------------------------------------------------------
+# Provides a headless Soulseek client with API and web interface.
+# Can integrate with Spotify-to-Plex for missing track acquisition.
+# ------------------------------------------------------------------------------
+services:
+  slskd:
+    container_name: soulseek.${HOST_NAME}
+ #   hostname: soulseek.${HOST_NAME}.lan
+    image: slskd/slskd:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+
+      # --- Soulseek credentials ---
+      SLSKD_USERNAME: ${SLSKD_USERNAME}
+      SLSKD_PASSWORD: ${SLSKD_PASSWORD}
+
+      # --- Optional integration key for Spotify-to-Plex ---
+      SLSKD_API_KEY: ${LIDARR_API_KEY} # Reusing LIDARR_API_KEY for convenience
+      SLSKD_REMOTE_CONFIGURATION: true
+
+    # Use the transmission-openvpn network for privacy    
+    network_mode: "service:transmission-openvpn"
+
+#    ports:
+#      - "${SLSKD_HTTP_PORT}:5030"   # HTTP web UI
+#      - "${SLSKD_HTTPS_PORT}:5031"  # HTTPS web UI
+#      - "${SLSKD_P2P_PORT}:50300"   # Soulseek P2P listen port
+
+    volumes:
+      - ${DOCKERDIR}/soulseek/app:/app      
+      - ${USERDOWNLOAD}/Torrents:/downloads
+
+    restart: on-failure:4
+    security_opt:
+      - no-new-privileges:true
+
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Media"
+      - "homepage.name=Soulseek"
+      - "homepage.icon=https://raw.githubusercontent.com/slskd/slskd/master/docs/icon.png"
+      - "homepage.href=http://soulseek.${HOST_NAME}:${SLSKD_HTTP_PORT}"
+      - "homepage.description=Soulseek daemon with web GUI"
