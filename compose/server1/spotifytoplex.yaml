@@ -26,7 +26,7 @@ services:
       SLSKD_URL: http://soulseek.${HOST_NAME}:5030  # point to your slskd service
 
       # --- Plex details ---
-      PLEX_URL: http://plex.${HOST_NAME}:32400
+      PLEX_URL: http://${SERVER_IP}:32400
       PLEX_TOKEN: ${PLEX_TOKEN}
       PLEX_APP_ID: eXf+f9ktw3CZ8i45OY468WxriOCtoFxuNPzVeDcAwfw=
 

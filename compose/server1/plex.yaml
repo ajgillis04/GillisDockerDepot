@@ -65,6 +65,8 @@ services:
     devices:
       - /dev/dri:/dev/dri
     environment:
+      #DEBUG: true
+      #PLEX_LOG_LEVEL: DEBUG
       TZ: ${TZ}
       PUID: 0
       PGID: 0
@@ -73,7 +75,8 @@ services:
       ADVERTISE_IP: "https://plex.${HOST_NAME}.${DOMAINNAME}:443,https://${SERVER_IP}:32400"
       ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks
       HOST_NAME: plex.${HOST_NAME}.lan
-      PLEX_CLAIM_FILE: /run/secrets/plex_claim # input claim number into file after first run
+      #PLEX_CLAIM_FILE: /run/secrets/plex_claim # input claim number into file after first run
+      #CLAIM_SERVER: yes #first run
       PLEX_SERVER_NAME: plex.${HOST_NAME}
       TV_SHOWS_PATH: /media/Videos/TV 
       MOVIES_PATH: /media/Videos/Movies 

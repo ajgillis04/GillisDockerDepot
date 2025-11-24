@@ -11,14 +11,15 @@
 set -e
 
 DATE=$(date +%F-%H%M%S)
-BACKUP_DIR=/share/Backups/GillisNAS/Docker/appdata/GillisDockerDepot
-CONTAINER_DIR=/share/Docker/GillisDockerDepot/appdata
-ENV_PATH="/share/Docker/GillisDockerDepot/.env"
-SECRETS_PATH="/share/Docker/GillisDockerDepot/secrets"
-LOG_FILE="$BACKUP_DIR/backup_log.txt"
-EMAIL="andy.gillis@gmail.com"  # Replace with your email
+SRC_ROOT="/share/Docker/GillisDockerDepot"
+CONTAINER_DIR="$SRC_ROOT/appdata"
+BACKUP_ROOT="/share/Backups/GillisNAS/Docker/GillisDockerDepot"
+BACKUP_DIR="$BACKUP_ROOT/appdata"
+BACKUP_EXCLUDES="--exclude='appdata/'"
+LOG_FILE="$BACKUP_ROOT/backup_log.txt"
+EMAIL="andy.gillis@gmail.com"
 
-# Logging function with timestamp
+# Logging function with timestamp\
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
 }
@@ -27,6 +28,7 @@ trap 'log "Script exited with status $? at $(date)"' EXIT
 
 # Ensure the backup directory exists
 echo "Ensuring backup directory exists: $BACKUP_DIR"
+mkdir -p "$BACKUP_ROOT"
 mkdir -p "$BACKUP_DIR"
 
 # Delete the log file if it exists
@@ -38,6 +40,24 @@ fi
 START_TIME=$(date '+%Y-%m-%d %H:%M:%S')
 log "Backup started at: $START_TIME"
 
+# Default rsync options
+RSYNC_OPTS="-a"
+RSYNC_APPDATA_OPTS="-a --ignore-existing"
+
+# If user passes "delete" as first arg, enable mirroring
+if [[ "$1" == "delete" ]]; then
+    RSYNC_OPTS="-a --delete"
+    RSYNC_APPDATA_OPTS="-a --delete"
+    log "Delete mode enabled: destination will be mirrored (stale files removed)."
+fi
+
+log "Backing up GillisDockerDepot (excluding appdata)..."
+# Phase 1: configs, composes, secrets, etc.
+if rsync $RSYNC_OPTS $BACKUP_EXCLUDES "$SRC_ROOT/" "$BACKUP_ROOT/" >> "$LOG_FILE" 2>&1; then
+    log "Successfully backed up GillisDockerDepot (excluding appdata)"
+else
+    log "Failed to back up GillisDockerDepot (excluding appdata)"
+fi
 
 # Containers to backup
 # Dynamically build list of containers with matching appdata folders
@@ -84,7 +104,7 @@ for CONTAINER in "${CRITICAL_CONTAINERS[@]}"; do
     BACKUP_PATH="$CONTAINER_DIR/${CONTAINER%.*}"
     DEST_PATH="$BACKUP_DIR/${CONTAINER%.*}/"
     log "Backing up $CONTAINER from $BACKUP_PATH to $DEST_PATH..."
-    if sudo rsync -a --ignore-existing "$BACKUP_PATH/" "$DEST_PATH/" >> "$LOG_FILE" 2>&1; then
+    if sudo rsync $RSYNC_APPDATA_OPTS "$BACKUP_PATH/" "$DEST_PATH/" >> "$LOG_FILE" 2>&1; then
         log "Successfully backed up $CONTAINER"
     else
         log "Failed to back up $CONTAINER"
@@ -93,43 +113,20 @@ done
 
 # Special backup for Plex
 log "Backing up Plex configuration..."
-PlexBackupPath="$CONTAINER_DIR/plex/Plex Media Server"
-log "Backing up Plex files from $PlexBackupPath"
+PLEX_PATH="$CONTAINER_DIR/plex/Plex Media Server"
+log "Backing up Plex files from $PLEX_PATH"
 
 if rsync -a \
     --include='.LocalAdminToken' \
     --include='Preferences.xml' \
     --include='Setup Plex.html' \
     --exclude='*' \
-    "$PlexBackupPath/" "$BACKUP_DIR/plex/" >> "$LOG_FILE" 2>&1; then
+    "$PLEX_PATH/" "$BACKUP_DIR/plex/" >> "$LOG_FILE" 2>&1; then
     log "Successfully backed up Plex"
 else
     log "Failed to back up Plex"
 fi
 
-# Backup secrets
-if [ -d "$SECRETS_PATH" ]; then
-    log "Backing up secrets from $SECRETS_PATH..."
-    if rsync -a --ignore-existing "$SECRETS_PATH/" "$BACKUP_DIR/secrets/" >> "$LOG_FILE" 2>&1; then
-        log "Successfully backed up secrets"
-    else
-        log "Failed to back up secrets"
-    fi
-else
-    log "Secrets directory does not exist at $SECRETS_PATH. Skipping..."
-fi
-
-# Backup .env file(s)
-if [ -f "$ENV_PATH" ]; then
-    log "Backing up .env file from $ENV_PATH..."
-    if cp "$ENV_PATH" "$BACKUP_DIR/.env"; then
-        log "Successfully backed up .env file"
-    else
-        log "Failed to back up .env file"
-    fi
-else
-    log ".env file does not exist at $ENV_PATH. Skipping..."
-fi
 
 # Restart containers after backup
 log "Restarting critical containers after backup..."

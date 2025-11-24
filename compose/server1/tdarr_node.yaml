@@ -13,7 +13,7 @@ services:
       serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
       inContainer: true # Tell tdarr its running in docker      
-      serverURL: http://tdarr.${HOST_NAME}:8266
+      serverURL: http://${TDARR_SERVERIP}:${TDARR_SERVER_PORT}
       # NVIDIA_DRIVER_CAPABILITIES: all
       # NVIDIA_VISIBLE_DEVICES: all
     networks:
