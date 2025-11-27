@@ -171,7 +171,7 @@ include:
 #  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-agf.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
-  - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
+  #- ${COMPOSE_DIR}/php-apache-gillisonline.yaml
 #  - ${COMPOSE_DIR}/php-apache-storiesbeyondstone.yaml
 #  - ${COMPOSE_DIR}/picard.yaml
   - ${COMPOSE_DIR}/pihole.yaml
@@ -200,6 +200,7 @@ include:
   #- ${COMPOSE_DIR}/uptimekuma.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
+  - ${COMPOSE_DIR}/wordpress_agf.yaml
   #- ${COMPOSE_DIR}/wireguard.yaml
   #- ${COMPOSE_DIR}/wizarr.yaml
 

@@ -1,0 +1,56 @@
+# ------------------------------------------------------------------------------
+# wordpress - Bitnami WordPress all-in-one
+# ------------------------------------------------------------------------------
+# Self-contained WordPress stack with bundled MariaDB.
+# Provides drag-and-drop editing via wp-admin and isolates DB from other services.
+# ------------------------------------------------------------------------------
+services:
+  wordpress:
+    container_name: wordpress_agf.${HOST_NAME}
+    hostname: wordpress_agf.${HOST_NAME}.lan
+    image: bitnami/wordpress:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      HOST_NAME: wordpress_agf.${HOST_NAME}.lan
+
+      # --- WordPress setup ---
+      WORDPRESS_USERNAME: admin
+      WORDPRESS_PASSWORD: ${WORDPRESS_AGF_PASSWORD}
+      WORDPRESS_EMAIL: ${WORDPRESS_AGF_EMAIL}
+      WORDPRESS_AGF_BLOG_NAME: ${WORDPRESS_AGF_BLOG_NAME}
+
+      # --- WordPress DB connection (external MariaDB) ---
+      WORDPRESS_DATABASE_NAME: ${WORDPRESS_AGF_DATABASE_NAME}
+      WORDPRESS_DATABASE_USER: ${WORDPRESS_AGF_DATABASE_USER}
+      WORDPRESS_DATABASE_PASSWORD: ${WORDPRESS_AGF_DATABASE_PASSWORD}
+      WORDPRESS_DATABASE_HOST: ${WORDPRESS_AGF_DATABASE_HOST}
+
+    networks:
+      - mediaserver
+
+    ports:
+      - "${WORDPRESS_AGF_PORT}:8080"
+    # - "${WORDPRESS_AGF_SSL_PORT}:8443"
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "7"
+
+    volumes:
+      - ${DOCKERDIR}/wordpress_agf:/bitnami/wordpress
+
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Infrastrture"
+      - "homepage.name=AGF WordPress"
+      - "homepage.icon=https://s.w.org/style/images/about/WordPress-logotype-wmark.png"
+      - "homepage.href=https://wordpress_agf.${HOST_NAME}:${WORDPRESS_AGF_PORT}"
+      - "homepage.description=WordPress site"
