@@ -49,7 +49,7 @@ services:
 
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-      - "homepage.group=Infrastrture"
+      - "homepage.group=Infrastructure"
       - "homepage.name=AGF WordPress"
       - "homepage.icon=https://s.w.org/style/images/about/WordPress-logotype-wmark.png"
       - "homepage.href=https://wordpress_agf.${HOST_NAME}:${WORDPRESS_AGF_PORT}"
