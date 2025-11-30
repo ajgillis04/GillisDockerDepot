@@ -1,3 +1,10 @@
+# ------------------------------------------------------------------------------
+# profilarr - Custom Format / Quality Profile Manager
+# ------------------------------------------------------------------------------
+# Companion tool for Radarr/Sonarr that centralizes scoring rules and profiles.
+# Runs as a lightweight service with persistent config and log volumes.
+# Provides a web UI for managing custom formats and quality tiers.
+# ------------------------------------------------------------------------------
 services:
   profilarr:
     container_name: profilarr.${HOST_NAME}
@@ -12,14 +19,14 @@ services:
     ports:
       - ${PROFILARR_PORT}:6868
     volumes:
-      # Uncomment if needed
+      # Uncomment if you want Profilarr to interact with Docker directly
       # - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERDIR}/profilarr/config:/config
       - ${DOCKERDIR}/logs/profilarr:/var/log
     restart: always
     security_opt:
       - no-new-privileges:true
-    labels:  
+    labels:
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
