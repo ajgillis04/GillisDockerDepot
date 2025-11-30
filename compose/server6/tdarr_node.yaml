@@ -20,6 +20,9 @@ services:
       - mediaserver
     ports:
       - "${TDARR_NODE_PORT}:8267"
+    cap_add:
+      - SYS_NICE
+      - SYS_RESOURCE
     volumes:
       - ${DOCKERDIR}/tdarr/app/configs:/app/configs
       - ${DOCKERDIR}/tdarr/cache:/cache
