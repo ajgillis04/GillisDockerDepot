@@ -36,6 +36,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr/app/server:/app/server
+      - ${DOCKERDIR}/tdarr/cache:/cache
       - /dev/shm/tdarr:/temp # offload transcoding to memory
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr:/app/logs
