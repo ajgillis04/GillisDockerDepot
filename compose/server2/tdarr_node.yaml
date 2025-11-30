@@ -4,6 +4,7 @@ services:
     container_name: tdarr_node.${HOST_NAME}
     hostname: tdarr_node.${HOST_NAME}.lan
     image: haveagitgat/tdarr_node:2.45.01
+    runtime: nvidia
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
@@ -14,8 +15,8 @@ services:
       serverPort: ${TDARR_SERVER_PORT}
       inContainer: true # Tell tdarr its running in docker      
       serverURL: http://${TDARR_SERVERIP}:${TDARR_SERVER_PORT}
-      # NVIDIA_DRIVER_CAPABILITIES: all
-      # NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+      NVIDIA_VISIBLE_DEVICES: all
     networks:
       - mediaserver
     ports:
@@ -27,18 +28,6 @@ services:
       - /dev/shm/tdarr:/temp # offload transcoding to memory
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr_node:/app/logs
-    # Hardware transcoding
-    devices:
-      - /dev/dri:/dev/dri
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-    #      - driver: nvidia # Pick one
-#          - driver: vaapi # Pick one
-    #      - driver: qsv # Pick one
-#            count: all
-#            capabilities: [gpu] 
     restart: always
     security_opt:
       - no-new-privileges:true
