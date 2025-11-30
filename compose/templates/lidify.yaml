@@ -3,7 +3,7 @@
 services:
   lidify:
     container_name: lidify.${HOST_NAME}
-    hostname: lidify.${HOST_NAME}.local
+    hostname: lidify.${HOST_NAME}.lan
     image: thewicklowwolf/lidify:latest
     environment:
       TZ: ${TZ}
@@ -33,17 +33,11 @@ services:
     security_opt:
       - no-new-privileges:true    
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.lidify-rtr.entrypoints=https"
-      ## Middlewares
-      - "traefik.http.routers.lidify-rtr.rule=Host(`lidify${HOST_SUFFIX}.${DOMAINNAME}`)"
-      - "traefik.http.routers.lidify-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.lidify-rtr.tls=true"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.lidify-rtr.service=lidify-svc"
-      - "traefik.http.services.lidify-svc.loadbalancer.server.port=5000"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+    ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Lidify"
+      - "homepage.icon=music"
+      - "homepage.href=https://lidify.${DOMAINNAME}/"
+      - "homepage.description=Manage Lidarr metadata and playlists"

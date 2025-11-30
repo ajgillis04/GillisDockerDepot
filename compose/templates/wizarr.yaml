@@ -2,13 +2,13 @@
 services:
   wizarr:
     container_name: wizarr.${HOST_NAME}
-    hostname: wizarr.${HOST_NAME}.local
+    hostname: wizarr.${HOST_NAME}.lan
     image: ghcr.io/wizarrrr/wizarr:latest
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
       PUID: ${PUID}
-      DOMAINNAME: ${DOMAINNAME}
+      DOMAIN: ${DOMAINNAME}
     networks:
       - mediaserver
     ports:
@@ -22,15 +22,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.wizarr-rtr.entrypoints=https"
-      - "traefik.http.routers.wizarr-rtr.rule=Host(`wizarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.wizarr-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.wizarr-rtr.service=wizarr-svc"
-      - "traefik.http.services.wizarr-svc.loadbalancer.server.port=5690"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Wizarr"
+      - "homepage.icon=wizarr.png"
+      - "homepage.href=https://wizarr.${DOMAINNAME}/"
+      - "homepage.description=Invite manager for Plex, Jellyfin, and Emby"

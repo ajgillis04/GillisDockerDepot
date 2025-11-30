@@ -6,15 +6,15 @@
 services:
   ersatztv:
     container_name: ersatztv.${HOST_NAME}
-    hostname: ersatztv.${HOST_NAME}.local
+    hostname: ersatztv.${HOST_NAME}.lan
     image: jasongdove/ersatztv:develop-vaapi
     devices:
       #- /dev/dri:/dev/dri
       - /dev/dri/renderD128:/dev/dri/renderD128
     environment:
-      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
     networks:
       - mediaserver
@@ -29,16 +29,10 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.ersatztv-rtr.entrypoints=https"
-      - "traefik.http.routers.ersatztv-rtr.rule=Host(`ersatztv.${DOMAINNAME}`)"
-      ## Middlewares
-      - "traefik.http.routers.ersatztv-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.ersatztv-rtr.service=ersatztv-svc"
-      - "traefik.http.services.ersatztv-svc.loadbalancer.server.port=8409"
-      ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+    ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=ErsatzTV"
+      - "homepage.icon=tv"
+      - "homepage.href=https://ersatztv.${DOMAINNAME}/"
+      - "homepage.description=Virtual live TV channels from your media library"

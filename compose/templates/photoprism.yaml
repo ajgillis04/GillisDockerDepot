@@ -14,15 +14,15 @@
 services:
   photoprism:
     container_name: photoprism.${HOST_NAME}
-    hostname: photoprism.${HOST_NAME}.local
+    hostname: photoprism.${HOST_NAME}.lan
     image: photoprism/photoprism:latest
     depends_on:
       - mariadb
     environment:
-      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      DOMAINNAME: ${DOMAINNAME}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}  
       PHOTOPRISM_AUTH_MODE: password
       PHOTOPRISM_ADMIN_PASSWORD_FILE: /run/secrets/photoprism_admin_password # Photoprims does not support secrets yet
       #PHOTOPRISM_DATABASE_PASSWORD_FILE: /run/secrets/maria_root_password # Photoprims does not support secrets yet
@@ -70,17 +70,16 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.photoprism-rtr.entrypoints=https"
-      - "traefik.http.routers.photoprism-rtr.rule=Host(`photos.${DOMAINNAME}`)"
-      - "traefik.http.routers.photoprism-rtr.tls=true"
-      ## Middlewares
-      - "traefik.http.routers.photoprism-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services 
-      - "traefik.http.routers.photoprism-rtr.service=photoprism-svc"
-      - "traefik.http.services.photoprism-svc.loadbalancer.server.port=2342"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=PhotoPrism"
+      - "homepage.icon=photoprism"
+      - "homepage.href=https://photoprism.${DOMAINNAME}/"
+      - "homepage.description=AI-powered photo management"
+      ## Homepage Widget
+      - "homepage.widget.type=photoprism"
+      - "homepage.widget.url=http://photoprism.${HOST_NAME}:2342"
+      - "homepage.widget.username=${PHOTOPRISM_ADMIN_USER}"
+      - "homepage.widget.password=${PHOTOPRISM_APP_PASSWORD}"

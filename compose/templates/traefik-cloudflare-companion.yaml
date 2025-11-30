@@ -1,13 +1,13 @@
 ﻿services:
   traefik-cloudflare-companion:
     container_name: traefik-cloudflare-companion.${HOST_NAME}
-    hostname: traefik-cloudflare-companion.${HOST_NAME}.local
+    hostname: traefik-cloudflare-companion.${HOST_NAME}.lan
     image: tiredofit/traefik-cloudflare-companion:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      DOMAINNAME: ${DOMAINNAME}
+      DOMAIN: ${DOMAINNAME}
       TRAEFIK_VERSION: 2
       CF_EMAIL_FILE: /run/secrets/cf_email
       CF_TOKEN_FILE: /run/secrets/cf_token

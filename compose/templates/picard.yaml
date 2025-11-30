@@ -2,12 +2,12 @@
 services:
   picard:
     container_name: picard.${HOST_NAME}
-    hostname: picard.${HOST_NAME}.local
+    hostname: picard.${HOST_NAME}.lan
     image: mikenye/picard:latest
     environment:
-      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
       DISPLAY_HEIGHT: 1080
       DISPLAY_WIDTH: 1920
@@ -24,17 +24,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.picard-rtr.entrypoints=https"
-      - "traefik.http.routers.picard-rtr.rule=Host(`picard.${DOMAINNAME}`)"
-      - "traefik.http.routers.picard-rtr.tls=true"
-      ## Middlewares
-      - "traefik.http.routers.picard-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.picard-rtr.service=picard-svc"
-      - "traefik.http.services.picard-svc.loadbalancer.server.port=5800"
       ## Watchtower enable?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Picard"
+      - "homepage.icon=music"
+      - "homepage.href=https://picard.${DOMAINNAME}/"
+      - "homepage.description=MusicBrainz tagger and metadata editor"

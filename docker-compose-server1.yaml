@@ -158,7 +158,7 @@ include:
 #  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/maintainerr.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
-  - ${COMPOSE_DIR}/matter-server.yaml
+#  - ${COMPOSE_DIR}/matter-server.yaml
   - ${COMPOSE_DIR}/mosquitto.yaml
 #  - ${COMPOSE_DIR}/motioneye.yaml
 #  - ${COMPOSE_DIR}/mineos.yaml
@@ -169,7 +169,7 @@ include:
 #  - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
-  - ${COMPOSE_DIR}/php-apache-agf.yaml
+#  - ${COMPOSE_DIR}/php-apache-agf.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   #- ${COMPOSE_DIR}/php-apache-gillisonline.yaml
 #  - ${COMPOSE_DIR}/php-apache-storiesbeyondstone.yaml
