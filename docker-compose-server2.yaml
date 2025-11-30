@@ -110,9 +110,9 @@ secrets:
 
 # *************************** SERVICES ****************************************** 
 include:
-  - ${COMPOSE_DIR}/bazarr.yaml
+#  - ${COMPOSE_DIR}/bazarr.yaml
 #  - ${COMPOSE_DIR}/cloudflare-ddns.yaml
-  - ${COMPOSE_DIR}/cloudflared.yaml
+#  - ${COMPOSE_DIR}/cloudflared.yaml
 #  - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/heimdallint.yaml
 #  - ${COMPOSE_DIR}/jaegertracing.yaml
@@ -129,7 +129,7 @@ include:
 #  - ${COMPOSE_DIR}/sonarr.yaml
 #  - ${COMPOSE_DIR}/tdarr.yaml
   - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
-  - ${COMPOSE_DIR}/traefik.yaml
+#  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/traefik-cloudflare-companion.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
 #  - ${COMPOSE_DIR}/wireguard.yaml
