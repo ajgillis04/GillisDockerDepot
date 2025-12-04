@@ -187,6 +187,7 @@ include:
   - ${COMPOSE_DIR}/sbs-web.yaml
   - ${COMPOSE_DIR}/sbs-app.yaml
   - ${COMPOSE_DIR}/sbs-shlink.yaml
+  - ${COMPOSE_DIR}/sbs-shlink-ui.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
   - ${COMPOSE_DIR}/soulseek.yaml
   - ${COMPOSE_DIR}/spotifytoplex.yaml
