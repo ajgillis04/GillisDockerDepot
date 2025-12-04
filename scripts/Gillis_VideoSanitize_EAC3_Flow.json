@@ -1,7 +1,7 @@
 {
   "_id": "Cb2EH-RI3_R",
-  "name": "Gillis Master Flow",
-  "description": "Gillis Master Flow",
+  "name": "Gillis_VideoSanitize_EAC3_Flow",
+  "description": "Gillis_VideoSanitize_EAC3_Flow",
   "tags": "",
   "flowPlugins": [
     {
@@ -23,8 +23,8 @@
       "version": "1.0.0",
       "id": "5jSRm0JJ3",
       "position": {
-        "x": 94.17706881452864,
-        "y": 28.33340416447349
+        "x": 96.43759715801946,
+        "y": 59.98080097334467
       },
       "fpEnabled": true
     },
@@ -76,7 +76,7 @@
       "id": "zwcUdWRvZ",
       "position": {
         "x": -279.34279245231806,
-        "y": 28.611661169704405
+        "y": 63.3373365434846
       },
       "fpEnabled": true
     },
@@ -99,8 +99,8 @@
       "version": "1.0.0",
       "id": "HJV1clEqy",
       "position": {
-        "x": -97.89349112099683,
-        "y": 28.14541856925652
+        "x": -93.37243443401525,
+        "y": 61.335851786243325
       },
       "fpEnabled": true
     },
@@ -159,8 +159,8 @@
       "version": "2.0.0",
       "id": "qCCgS1WvZ",
       "position": {
-        "x": -390.1042930114868,
-        "y": -284.49047838108544
+        "x": -390.2153432671404,
+        "y": -183.27135491896655
       },
       "fpEnabled": true,
       "inputsDB": {
@@ -237,7 +237,7 @@
       "id": "Wwvz5G-PN",
       "position": {
         "x": -387.91974367974046,
-        "y": -68.00027458839513
+        "y": -18.178723970001514
       },
       "fpEnabled": true,
       "inputsDB": {
@@ -266,14 +266,29 @@
       "version": "2.0.0",
       "id": "Fy9waBI62",
       "position": {
-        "x": -389.0690381175107,
-        "y": -181.3114747592283
+        "x": -390.39761280066784,
+        "y": -114.88274060137014
       },
       "fpEnabled": true,
       "inputsDB": {
         "pluginSourceId": "Community:Tdarr_Plugin_a9hd_FFMPEG_Transcode_Specific_Audio_Stream_Codecs",
         "codec": "eac3",
         "codecs_to_transcode": "ac3,aac,mp3"
+      }
+    },
+    {
+      "name": "Remove Non AV Streams (vdka_remove_datastreams)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "id": "Mwwaimuze",
+      "position": {
+        "x": -390.41677458111167,
+        "y": -269.6184438094782
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "pluginSourceId": "Local:Tdarr_Plugin_vdka_Remove_DataStreams"
       }
     }
   ],
@@ -291,13 +306,6 @@
       "target": "t4ezIpmo4",
       "targetHandle": null,
       "id": "YVWAkoDrn"
-    },
-    {
-      "source": "eSIuagYsY",
-      "sourceHandle": "1",
-      "target": "qCCgS1WvZ",
-      "targetHandle": null,
-      "id": "IgXmDX4gB"
     },
     {
       "source": "nJUHbufln",
@@ -508,6 +516,34 @@
       "target": "Wwvz5G-PN",
       "targetHandle": null,
       "id": "KO9j9Ns-Q"
+    },
+    {
+      "source": "eSIuagYsY",
+      "sourceHandle": "1",
+      "target": "Mwwaimuze",
+      "targetHandle": null,
+      "id": "07k35hQtQ"
+    },
+    {
+      "source": "Mwwaimuze",
+      "sourceHandle": "1",
+      "target": "qCCgS1WvZ",
+      "targetHandle": null,
+      "id": "305B2Td4Y"
+    },
+    {
+      "source": "Mwwaimuze",
+      "sourceHandle": "2",
+      "target": "qCCgS1WvZ",
+      "targetHandle": null,
+      "id": "_o6imAJsN"
+    },
+    {
+      "source": "Mwwaimuze",
+      "sourceHandle": "err1",
+      "target": "zwcUdWRvZ",
+      "targetHandle": null,
+      "id": "oQI5q_rHI"
     }
   ]
 }

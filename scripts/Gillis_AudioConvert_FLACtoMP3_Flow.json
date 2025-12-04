@@ -1,0 +1,172 @@
+{
+  "_id": "PvqLaIa6o",
+  "name": "Gillis_AudioConvert_FLACtoMP3_Flow",
+  "description": "Gillis_AudioConvert_FLACtoMP3_Flow",
+  "tags": "",
+  "flowPlugins": [
+    {
+      "name": "Input File",
+      "sourceRepo": "Community",
+      "pluginName": "inputFile",
+      "version": "1.0.0",
+      "inputsDB": {
+        "fileAccessChecks": "true",
+        "pauseNodeIfAccessChecksFail": "true"
+      },
+      "fpEnabled": true,
+      "id": "iunvKS4NQ",
+      "position": {
+        "x": 624,
+        "y": 114
+      }
+    },
+    {
+      "name": "Check File Medium",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileMedium",
+      "version": "1.0.0",
+      "fpEnabled": true,
+      "id": "llYOseV1j",
+      "position": {
+        "x": 623,
+        "y": 165
+      }
+    },
+    {
+      "name": "Convert MP3 (Greg_MP3)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "inputsDB": {
+        "pluginSourceId": "Local:Tdarr_Plugin_Greg_MP3_FFMPEG_CPU"
+      },
+      "fpEnabled": true,
+      "id": "usQhpbUfJ",
+      "position": {
+        "x": 623.5,
+        "y": 225.5
+      }
+    },
+    {
+      "name": "Rename File",
+      "sourceRepo": "Community",
+      "pluginName": "renameFile",
+      "version": "1.0.0",
+      "inputsDB": {
+        "fileRename": "${fileName}.mp3"
+      },
+      "fpEnabled": true,
+      "id": "ekIxCBGq8",
+      "position": {
+        "x": 625,
+        "y": 300
+      }
+    },
+    {
+      "name": "Replace Original File",
+      "sourceRepo": "Community",
+      "pluginName": "replaceOriginalFile",
+      "version": "1.0.0",
+      "fpEnabled": true,
+      "id": "Rgnj3sg6i",
+      "position": {
+        "x": 624,
+        "y": 375
+      }
+    },
+    {
+      "name": "End",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "fpEnabled": true,
+      "id": "pS1bPHLMi",
+      "position": {
+        "x": 625,
+        "y": 448
+      }
+    },
+    {
+      "name": "Fail Flow",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "fpEnabled": true,
+      "id": "-Xt7dIJJl",
+      "position": {
+        "x": 835,
+        "y": 444
+      }
+    }
+  ],
+  "flowEdges": [
+    {
+      "source": "iunvKS4NQ",
+      "sourceHandle": "1",
+      "target": "llYOseV1j",
+      "id": "edge1"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "audio",
+      "target": "usQhpbUfJ",
+      "id": "edge2"
+    },
+    {
+      "source": "usQhpbUfJ",
+      "sourceHandle": "1",
+      "target": "ekIxCBGq8",
+      "id": "edge3"
+    },
+    {
+      "source": "ekIxCBGq8",
+      "sourceHandle": "1",
+      "target": "Rgnj3sg6i",
+      "id": "edge4"
+    },
+    {
+      "source": "Rgnj3sg6i",
+      "sourceHandle": "1",
+      "target": "pS1bPHLMi",
+      "id": "edge5"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "id": "edge6"
+    },
+    {
+      "source": "usQhpbUfJ",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "id": "edge7"
+    },
+    {
+      "source": "ekIxCBGq8",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "id": "edge8"
+    },
+    {
+      "source": "Rgnj3sg6i",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "id": "edge9"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "2",
+      "target": "usQhpbUfJ",
+      "targetHandle": null,
+      "id": "BsTqJnT_L"
+    },
+    {
+      "source": "usQhpbUfJ",
+      "sourceHandle": "2",
+      "target": "ekIxCBGq8",
+      "targetHandle": null,
+      "id": "7AYA8ZAMR"
+    }
+  ]
+}
