@@ -126,7 +126,10 @@
         "x": 182.55873216720443,
         "y": -271.3207431146052
       },
-      "fpEnabled": true
+      "fpEnabled": true,
+      "inputsDB": {
+        "lessThan": "120"
+      }
     },
     {
       "name": "Require Review",
@@ -288,7 +291,7 @@
       },
       "fpEnabled": true,
       "inputsDB": {
-        "pluginSourceId": "Local:Tdarr_Plugin_vdka_Remove_DataStreams"
+        "pluginSourceId": "Local:Tdarr_Plugin_MC99_DropNonAVStreams"
       }
     }
   ],
@@ -544,6 +547,13 @@
       "target": "zwcUdWRvZ",
       "targetHandle": null,
       "id": "oQI5q_rHI"
+    },
+    {
+      "source": "t4ezIpmo4",
+      "sourceHandle": "3",
+      "target": "SrgVUdEsr",
+      "targetHandle": null,
+      "id": "7bK0KmRqK"
     }
   ]
 }
