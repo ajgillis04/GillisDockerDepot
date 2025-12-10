@@ -21,9 +21,11 @@
 
 # Perms if you are mounting hosts home directories to nextcloud. Note this removes admins rights to read user files.
 # mkdir -p /share/nextcloud/<username>
-# sudo chown -R <username>:33 /share/nextcloud/<username>
+# sudo chown -R <userid>:33 /share/nextcloud/<username>
 # sudo chmod -R 770 /share/nextcloud/<username>
+# sudo chmod -R g+s /share/nextcloud/<username>
 # sudo ln -s /share/nextcloud/<username> /share/homes/<username>/Documents
+# 
 
 services:
   nextcloud:
@@ -35,6 +37,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
+      UMASK: 007
       DOMAINNAME: ${DOMAINNAME}
       MYSQL_HOST: mariadb.${HOST_NAME}
       MYSQL_DATABASE: nextcloud      

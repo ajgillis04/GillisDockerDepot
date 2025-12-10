@@ -48,21 +48,6 @@
       }
     },
     {
-      "name": "Rename File",
-      "sourceRepo": "Community",
-      "pluginName": "renameFile",
-      "version": "1.0.0",
-      "inputsDB": {
-        "fileRename": "${fileName}.mp3"
-      },
-      "fpEnabled": true,
-      "id": "ekIxCBGq8",
-      "position": {
-        "x": 625,
-        "y": 300
-      }
-    },
-    {
       "name": "Replace Original File",
       "sourceRepo": "Community",
       "pluginName": "replaceOriginalFile",
@@ -70,33 +55,60 @@
       "fpEnabled": true,
       "id": "Rgnj3sg6i",
       "position": {
-        "x": 624,
-        "y": 375
+        "x": 624.9420774738165,
+        "y": 444.6136442082093
       }
     },
     {
-      "name": "End",
+      "name": "Completed Succesful",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
       "fpEnabled": true,
       "id": "pS1bPHLMi",
       "position": {
-        "x": 625,
-        "y": 448
+        "x": 624.5710387369082,
+        "y": 513.4923414725588
       }
     },
     {
-      "name": "Fail Flow",
+      "name": "Fail Flow Final",
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
       "fpEnabled": true,
       "id": "-Xt7dIJJl",
       "position": {
-        "x": 835,
-        "y": 444
+        "x": 1063.979842113538,
+        "y": 238.86047365938532
       }
+    },
+    {
+      "name": "Compare File Size Ratio",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileSizeRatio",
+      "version": "2.0.0",
+      "id": "_EaMEFzyp",
+      "position": {
+        "x": 624.6034103393555,
+        "y": 298.3153442382813
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "lessThan": "120"
+      }
+    },
+    {
+      "name": "Require Review",
+      "sourceRepo": "Community",
+      "pluginName": "requireReview",
+      "version": "1.0.0",
+      "id": "HyfoWGz3q",
+      "position": {
+        "x": 824.4034103393554,
+        "y": 370.5335327148438
+      },
+      "fpEnabled": true
     }
   ],
   "flowEdges": [
@@ -111,18 +123,6 @@
       "sourceHandle": "audio",
       "target": "usQhpbUfJ",
       "id": "edge2"
-    },
-    {
-      "source": "usQhpbUfJ",
-      "sourceHandle": "1",
-      "target": "ekIxCBGq8",
-      "id": "edge3"
-    },
-    {
-      "source": "ekIxCBGq8",
-      "sourceHandle": "1",
-      "target": "Rgnj3sg6i",
-      "id": "edge4"
     },
     {
       "source": "Rgnj3sg6i",
@@ -143,12 +143,6 @@
       "id": "edge7"
     },
     {
-      "source": "ekIxCBGq8",
-      "sourceHandle": "err1",
-      "target": "-Xt7dIJJl",
-      "id": "edge8"
-    },
-    {
       "source": "Rgnj3sg6i",
       "sourceHandle": "err1",
       "target": "-Xt7dIJJl",
@@ -163,10 +157,73 @@
     },
     {
       "source": "usQhpbUfJ",
-      "sourceHandle": "2",
-      "target": "ekIxCBGq8",
+      "sourceHandle": "1",
+      "target": "_EaMEFzyp",
       "targetHandle": null,
-      "id": "7AYA8ZAMR"
+      "id": "_3BK47ECd"
+    },
+    {
+      "source": "usQhpbUfJ",
+      "sourceHandle": "2",
+      "target": "_EaMEFzyp",
+      "targetHandle": null,
+      "id": "WBUUAggpR"
+    },
+    {
+      "source": "_EaMEFzyp",
+      "sourceHandle": "2",
+      "target": "HyfoWGz3q",
+      "targetHandle": null,
+      "id": "WqzI2J0Jc"
+    },
+    {
+      "source": "_EaMEFzyp",
+      "sourceHandle": "3",
+      "target": "HyfoWGz3q",
+      "targetHandle": null,
+      "id": "FYsd4G2qs"
+    },
+    {
+      "source": "_EaMEFzyp",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "targetHandle": null,
+      "id": "S_meY3Je8"
+    },
+    {
+      "source": "HyfoWGz3q",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "targetHandle": null,
+      "id": "UIYFUAB8H"
+    },
+    {
+      "source": "_EaMEFzyp",
+      "sourceHandle": "1",
+      "target": "Rgnj3sg6i",
+      "targetHandle": null,
+      "id": "l1ZkacWRN"
+    },
+    {
+      "source": "HyfoWGz3q",
+      "sourceHandle": "1",
+      "target": "Rgnj3sg6i",
+      "targetHandle": null,
+      "id": "w5L3wPyH6"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "1",
+      "target": "-Xt7dIJJl",
+      "targetHandle": null,
+      "id": "sus4s-bp0"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "3",
+      "target": "-Xt7dIJJl",
+      "targetHandle": null,
+      "id": "ogry9IK6P"
     }
   ]
 }

@@ -19,17 +19,21 @@
 services:
   traefik:
     container_name: traefik.${HOST_NAME}
-    hostname: traefik.${HOST_NAME}.local
+    hostname: traefik.${HOST_NAME}.lan
     image: traefik:v3.3
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
     networks:
       - mediaserver
+      - pihole_network
     environment:
-      # COMMON
+      # COMMON load these from .env into container to use variables in rules
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
+      SERVER_IP: ${SERVER_IP}
+      PLEX_TOKEN: ${PLEX_TOKEN} #adding for dynamic config in plex-cors-headers.yml
+      
       TRAEFIK_GLOBAL_CHECKNEWVERSION: true
       TRAEFIK_GLOBAL_SENDANONYMOUSUSAGE: true
       
@@ -48,12 +52,12 @@ services:
       TRAEFIK_API: true
       TRAEFIK_API_DASHBOARD: true
       # Disable once up and running for security
-      TRAEFIK_API_INSECURE: true
+      TRAEFIK_API_INSECURE: false
       
       # LOGGING
       TRAEFIK_LOG: true
       TRAEFIK_LOG_FILEPATH: /logs/traefik.log
-      TRAEFIK_LOG_LEVEL: DEBUG # DEBUG, INFO, WARN, ERROR, FATAL, PANIC. Set debug for testing
+      TRAEFIK_LOG_LEVEL: INFO # DEBUG, INFO, WARN, ERROR, FATAL, PANIC. Set debug for testing
       
       # ACCESS LOG
       TRAEFIK_ACCESSLOG: true
@@ -65,30 +69,30 @@ services:
       TRAEFIK_PROVIDERS_DOCKER: true
       TRAEFIK_PROVIDERS_DOCKER_ENDPOINT: unix:///var/run/docker.sock
       TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: false
-      TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver
+      #TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver #if you want route other networks leave this
       TRAEFIK_PROVIDERS_FILE_DIRECTORY: /rules
       TRAEFIK_PROVIDERS_FILE_WATCH: true
       
       # TLS & CERTIFICATES
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS: true
-      TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_OPTIONS: tls-opts@file
-      # Testing comment next line while testing
-      # TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_CERTRESOLVER: dns-cloudflare
+      TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_CERTRESOLVER: dnscloudflare
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_DOMAINS[0]_MAIN: ${DOMAINNAME}
       TRAEFIK_ENTRYPOINTS_HTTPS_HTTP_TLS_DOMAINS[0]_SANS: "*.${DOMAINNAME}"
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_STORAGE: /acme.json
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROVIDER: cloudflare
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_RESOLVERS: 1.1.1.1:53,1.0.0.1:53
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROPAGATION_DELAYBEFORECHECKS: 90
-      # Testing Let's Encrypt Staging Server disable after testing
-      TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      # Testing Let's Encrypt Staging Server ENABLE after testing
+      #TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-v02.api.letsencrypt.org/directory"
+
       
       # FORWARDED HEADERS
       TRAEFIK_ENTRYPOINTS_HTTPS_FORWARDEDHEADERS_TRUSTEDIPS: ${CLOUDFLARE_IPS},${LOCAL_NETWORK}
       
       # ENVIRONMENT VARIABLES
       CF_DNS_API_TOKEN_FILE: /run/secrets/cf_dns_api_token
-      HTPASSWD_FILE: /run/secrets/basic_auth_credentials      
+      HTPASSWD_FILE: /run/secrets/basic_auth_credentials
       # SECONDDOMAINNAME: ${SECONDDOMAINNAME}
 
     ports:
@@ -103,12 +107,7 @@ services:
       - target: 8080
         published: 8085
         protocol: tcp
-        mode: host
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "7"
+        mode: host    
     volumes:
       - ${DOCKERDIR}/traefik/rules:/rules
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -129,15 +128,22 @@ services:
       - "traefik.http.routers.traefik-rtr.rule=Host(`traefik${HOST_SUFFIX}.${DOMAINNAME}`)"
       - "traefik.http.routers.traefik-rtr.tls=true"
       - "traefik.http.routers.traefik-rtr.service=api@internal"
-      ## Tracing
-      - "traefik.http.routers.jaeger.entrypoints=http"
-      - "traefik.http.routers.jaeger.rule=Host(`jaeger.${DOMAINNAME}`)"
-      - "traefik.http.services.jaeger.loadbalancer.server.port=16686"
-      - "traefik.http.routers.jaeger.tls=true"
+      - "traefik.http.routers.traefik-rtr.tls.options=tls-opts@file"
       ## Middlewares
-      - "traefik.http.routers.traefik-rtr.middlewares=middlewares-tracing"
-      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file,middlewares-rate-limit@file,middlewares-secure-headers@file"
+      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file"      
       ## Docker Network
       - "traefik.docker.network=mediaserver"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Traefik"
+      - "homepage.icon=traefik.png"
+      - "homepage.href=http://traefik.${DOMAINNAME}/"
+      - "homepage.description=Manage Traefik reverse proxy"
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "7"

@@ -126,10 +126,7 @@
         "x": 182.55873216720443,
         "y": -271.3207431146052
       },
-      "fpEnabled": true,
-      "inputsDB": {
-        "lessThan": "120"
-      }
+      "fpEnabled": true
     },
     {
       "name": "Require Review",
@@ -233,21 +230,6 @@
       "fpEnabled": true
     },
     {
-      "name": "Normalize Audio (NIfPZuCLU_2_Pass_Loudnorm_Audio_Normalisation)",
-      "sourceRepo": "Community",
-      "pluginName": "runClassicTranscodePlugin",
-      "version": "2.0.0",
-      "id": "Wwvz5G-PN",
-      "position": {
-        "x": -387.91974367974046,
-        "y": -18.178723970001514
-      },
-      "fpEnabled": true,
-      "inputsDB": {
-        "pluginSourceId": "Community:Tdarr_Plugin_NIfPZuCLU_2_Pass_Loudnorm_Audio_Normalisation"
-      }
-    },
-    {
       "name": "Clean Metadata (Migz2CleanTitle)",
       "sourceRepo": "Community",
       "pluginName": "runClassicTranscodePlugin",
@@ -280,7 +262,7 @@
       }
     },
     {
-      "name": "Remove Non AV Streams (vdka_remove_datastreams)",
+      "name": "Remove Non AV Streams (Custom from vdka)",
       "sourceRepo": "Community",
       "pluginName": "runClassicTranscodePlugin",
       "version": "2.0.0",
@@ -293,6 +275,18 @@
       "inputsDB": {
         "pluginSourceId": "Local:Tdarr_Plugin_MC99_DropNonAVStreams"
       }
+    },
+    {
+      "name": "Normalize Audio",
+      "sourceRepo": "Community",
+      "pluginName": "normalizeAudio",
+      "version": "1.0.0",
+      "id": "cumqUmsFr",
+      "position": {
+        "x": -387.91761890484156,
+        "y": -11.953575750317675
+      },
+      "fpEnabled": true
     }
   ],
   "flowEdges": [
@@ -430,27 +424,6 @@
       "id": "yICTCfJJW"
     },
     {
-      "source": "Wwvz5G-PN",
-      "sourceHandle": "2",
-      "target": "nJUHbufln",
-      "targetHandle": null,
-      "id": "PMsS5n-4x"
-    },
-    {
-      "source": "Wwvz5G-PN",
-      "sourceHandle": "1",
-      "target": "nJUHbufln",
-      "targetHandle": null,
-      "id": "TEJ8--A-p"
-    },
-    {
-      "source": "Wwvz5G-PN",
-      "sourceHandle": "err1",
-      "target": "zwcUdWRvZ",
-      "targetHandle": null,
-      "id": "N_a7XI2FN"
-    },
-    {
       "source": "vRkvH-KvI",
       "sourceHandle": "1",
       "target": "V3VLQejtY",
@@ -507,20 +480,6 @@
       "id": "O8XVtThkm"
     },
     {
-      "source": "Fy9waBI62",
-      "sourceHandle": "2",
-      "target": "Wwvz5G-PN",
-      "targetHandle": null,
-      "id": "LoGZW9ROg"
-    },
-    {
-      "source": "Fy9waBI62",
-      "sourceHandle": "1",
-      "target": "Wwvz5G-PN",
-      "targetHandle": null,
-      "id": "KO9j9Ns-Q"
-    },
-    {
       "source": "eSIuagYsY",
       "sourceHandle": "1",
       "target": "Mwwaimuze",
@@ -549,11 +508,39 @@
       "id": "oQI5q_rHI"
     },
     {
+      "source": "Fy9waBI62",
+      "sourceHandle": "1",
+      "target": "cumqUmsFr",
+      "targetHandle": null,
+      "id": "s7KC3rrIS"
+    },
+    {
+      "source": "Fy9waBI62",
+      "sourceHandle": "2",
+      "target": "cumqUmsFr",
+      "targetHandle": null,
+      "id": "pbpkv0icn"
+    },
+    {
+      "source": "cumqUmsFr",
+      "sourceHandle": "err1",
+      "target": "zwcUdWRvZ",
+      "targetHandle": null,
+      "id": "fyTX0emCN"
+    },
+    {
+      "source": "cumqUmsFr",
+      "sourceHandle": "1",
+      "target": "nJUHbufln",
+      "targetHandle": null,
+      "id": "aUh3RfCN3"
+    },
+    {
       "source": "t4ezIpmo4",
       "sourceHandle": "3",
       "target": "SrgVUdEsr",
       "targetHandle": null,
-      "id": "7bK0KmRqK"
+      "id": "ZbFH-1Vxk"
     }
   ]
 }
