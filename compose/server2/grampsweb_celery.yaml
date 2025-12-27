@@ -1,0 +1,37 @@
+# ------------------------------------------------------------------------------
+# Gramps Web - Celery Worker
+# ------------------------------------------------------------------------------
+# Background task processor for Gramps Web.
+# Handles GEDCOM imports, indexing, and thumbnail generation.
+# Requires Redis broker to function.
+# ------------------------------------------------------------------------------
+services:
+  grampsweb_celery:
+    container_name: grampsweb_celery.${HOST_NAME}
+    hostname: grampsweb_celery.${HOST_NAME}.lan
+    image: ghcr.io/gramps-project/grampsweb:latest
+    restart: unless-stopped
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      HOST_NAME: grampsweb_celery.${HOST_NAME}.lan
+      GRAMPSWEB_TREE: "Gramps Web"
+      GRAMPSWEB_CELERY_CONFIG__broker_url: "redis://grampsweb_redis:6379/0"
+      GRAMPSWEB_CELERY_CONFIG__result_backend: "redis://grampsweb_redis:6379/0"
+    networks:
+      - mediaserver
+    depends_on:
+      - grampsweb
+      - grampsweb_redis
+    command: celery -A gramps_webapi.celery worker --loglevel=INFO --concurrency=2
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    labels:
+#      - "com.centurylinklabs.watchtower.enable=true"
+       - "wud.managed=true"
+       - "wud.trigger.update=true"    

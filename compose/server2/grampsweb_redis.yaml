@@ -1,0 +1,23 @@
+# ------------------------------------------------------------------------------
+# Gramps Web - Redis Broker
+# ------------------------------------------------------------------------------
+# Provides message queue and caching for Gramps Web.
+# Required by Celery worker for background task coordination.
+# ------------------------------------------------------------------------------
+services:
+  grampsweb_redis:
+    container_name: grampsweb_redis.${HOST_NAME}
+    hostname: grampsweb_redis.${HOST_NAME}.lan
+    image: redis:7.2.4-alpine
+    restart: unless-stopped
+    networks:
+      - mediaserver
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "2"
+    labels:
+#      - "com.centurylinklabs.watchtower.enable=true"
+      - "wud.managed=true"
+      - "wud.trigger.update=true"
