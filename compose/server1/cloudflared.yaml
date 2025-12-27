@@ -5,6 +5,8 @@ services:
     hostname: cloudflared.${HOST_NAME}.lan
     image: cloudflare/cloudflared:latest
     command: tunnel --config /home/nonroot/.cloudflared/config.yml run ${HOST_NAME}
+    cap_add:
+      - NET_ADMIN
     environment:
       #TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}  # You’ll get this after `cloudflared tunnel login`
       HOST_NAME: ${HOST_NAME}
