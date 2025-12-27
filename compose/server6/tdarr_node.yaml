@@ -3,7 +3,7 @@ services:
   tdarr_node:
     container_name: tdarr_node.${HOST_NAME}
     hostname: tdarr_node.${HOST_NAME}.lan
-    image: haveagitgat/tdarr_node:2.45.01
+    image: haveagitgat/tdarr_node:2.58.01
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
@@ -45,5 +45,5 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      ## Watchtower Enable
-      - "com.centurylinklabs.watchtower.enable=false"
+      ## What's Up Docker
+      - wud.ignore=true
