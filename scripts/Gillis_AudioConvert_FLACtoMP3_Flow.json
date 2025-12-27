@@ -1,0 +1,229 @@
+{
+  "_id": "PvqLaIa6o",
+  "name": "Gillis_AudioConvert_FLACtoMP3_Flow",
+  "description": "Gillis_AudioConvert_FLACtoMP3_Flow",
+  "tags": "",
+  "flowPlugins": [
+    {
+      "name": "Input File",
+      "sourceRepo": "Community",
+      "pluginName": "inputFile",
+      "version": "1.0.0",
+      "inputsDB": {
+        "fileAccessChecks": "true",
+        "pauseNodeIfAccessChecksFail": "true"
+      },
+      "fpEnabled": true,
+      "id": "iunvKS4NQ",
+      "position": {
+        "x": 624,
+        "y": 114
+      }
+    },
+    {
+      "name": "Check File Medium",
+      "sourceRepo": "Community",
+      "pluginName": "checkFileMedium",
+      "version": "1.0.0",
+      "fpEnabled": true,
+      "id": "llYOseV1j",
+      "position": {
+        "x": 623,
+        "y": 165
+      }
+    },
+    {
+      "name": "Convert MP3 (Greg_MP3)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "inputsDB": {
+        "pluginSourceId": "Local:Tdarr_Plugin_Greg_MP3_FFMPEG_CPU"
+      },
+      "fpEnabled": true,
+      "id": "usQhpbUfJ",
+      "position": {
+        "x": 623.5,
+        "y": 225.5
+      }
+    },
+    {
+      "name": "Replace Original File",
+      "sourceRepo": "Community",
+      "pluginName": "replaceOriginalFile",
+      "version": "1.0.0",
+      "fpEnabled": true,
+      "id": "Rgnj3sg6i",
+      "position": {
+        "x": 624.9420774738165,
+        "y": 444.6136442082093
+      }
+    },
+    {
+      "name": "Completed Succesful",
+      "sourceRepo": "Community",
+      "pluginName": "comment",
+      "version": "1.0.0",
+      "fpEnabled": true,
+      "id": "pS1bPHLMi",
+      "position": {
+        "x": 624.5710387369082,
+        "y": 513.4923414725588
+      }
+    },
+    {
+      "name": "Fail Flow Final",
+      "sourceRepo": "Community",
+      "pluginName": "failFlow",
+      "version": "1.0.0",
+      "fpEnabled": true,
+      "id": "-Xt7dIJJl",
+      "position": {
+        "x": 1063.979842113538,
+        "y": 238.86047365938532
+      }
+    },
+    {
+      "name": "Compare File Size Ratio",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileSizeRatio",
+      "version": "2.0.0",
+      "id": "_EaMEFzyp",
+      "position": {
+        "x": 624.6034103393555,
+        "y": 298.3153442382813
+      },
+      "fpEnabled": true,
+      "inputsDB": {
+        "lessThan": "120"
+      }
+    },
+    {
+      "name": "Require Review",
+      "sourceRepo": "Community",
+      "pluginName": "requireReview",
+      "version": "1.0.0",
+      "id": "HyfoWGz3q",
+      "position": {
+        "x": 824.4034103393554,
+        "y": 370.5335327148438
+      },
+      "fpEnabled": true
+    }
+  ],
+  "flowEdges": [
+    {
+      "source": "iunvKS4NQ",
+      "sourceHandle": "1",
+      "target": "llYOseV1j",
+      "id": "edge1"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "audio",
+      "target": "usQhpbUfJ",
+      "id": "edge2"
+    },
+    {
+      "source": "Rgnj3sg6i",
+      "sourceHandle": "1",
+      "target": "pS1bPHLMi",
+      "id": "edge5"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "id": "edge6"
+    },
+    {
+      "source": "usQhpbUfJ",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "id": "edge7"
+    },
+    {
+      "source": "Rgnj3sg6i",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "id": "edge9"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "2",
+      "target": "usQhpbUfJ",
+      "targetHandle": null,
+      "id": "BsTqJnT_L"
+    },
+    {
+      "source": "usQhpbUfJ",
+      "sourceHandle": "1",
+      "target": "_EaMEFzyp",
+      "targetHandle": null,
+      "id": "_3BK47ECd"
+    },
+    {
+      "source": "usQhpbUfJ",
+      "sourceHandle": "2",
+      "target": "_EaMEFzyp",
+      "targetHandle": null,
+      "id": "WBUUAggpR"
+    },
+    {
+      "source": "_EaMEFzyp",
+      "sourceHandle": "2",
+      "target": "HyfoWGz3q",
+      "targetHandle": null,
+      "id": "WqzI2J0Jc"
+    },
+    {
+      "source": "_EaMEFzyp",
+      "sourceHandle": "3",
+      "target": "HyfoWGz3q",
+      "targetHandle": null,
+      "id": "FYsd4G2qs"
+    },
+    {
+      "source": "_EaMEFzyp",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "targetHandle": null,
+      "id": "S_meY3Je8"
+    },
+    {
+      "source": "HyfoWGz3q",
+      "sourceHandle": "err1",
+      "target": "-Xt7dIJJl",
+      "targetHandle": null,
+      "id": "UIYFUAB8H"
+    },
+    {
+      "source": "_EaMEFzyp",
+      "sourceHandle": "1",
+      "target": "Rgnj3sg6i",
+      "targetHandle": null,
+      "id": "l1ZkacWRN"
+    },
+    {
+      "source": "HyfoWGz3q",
+      "sourceHandle": "1",
+      "target": "Rgnj3sg6i",
+      "targetHandle": null,
+      "id": "w5L3wPyH6"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "1",
+      "target": "-Xt7dIJJl",
+      "targetHandle": null,
+      "id": "sus4s-bp0"
+    },
+    {
+      "source": "llYOseV1j",
+      "sourceHandle": "3",
+      "target": "-Xt7dIJJl",
+      "targetHandle": null,
+      "id": "ogry9IK6P"
+    }
+  ]
+}

@@ -21,8 +21,8 @@ services:
     networks:
       - mediaserver
     volumes:
-      - /share/Docker/GillisDockerDepot/appdata/cloudflare-ddns/config/config.json:/config.json
-      - /share/Docker/GillisDockerDepot/appdata/cloudflare-ddns/logs:/logs
+      - ${DOCKERDIR}/cloudflare-ddns/config/config.json:/config.json
+      - ${DOCKERDIR}/cloudflare-ddns/logs:/logs
     restart: always
     security_opt:
       - no-new-privileges:true
