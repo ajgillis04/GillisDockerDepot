@@ -1,0 +1,58 @@
+# ------------------------------------------------------------------------------
+# WUD - What's Up Docker
+# ------------------------------------------------------------------------------
+# Monitors running Docker containers for image updates.
+# Provides a web dashboard and optional auto-update triggers.
+# ------------------------------------------------------------------------------
+services:
+  wud:
+    container_name: wud.${HOST_NAME}
+    hostname: wud.${HOST_NAME}.lan
+    image: fmartinou/whats-up-docker:latest
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      HOST_NAME: wud.${HOST_NAME}.lan
+
+      # --- Update schedule ---
+      WUD_TRIGGER_CRON: "0 3 * * *"   # Run daily at 3 AM
+      WUD_TRIGGER_AUTOUPDATE: "true"
+      WUD_TRIGGER_NOTIFIER_LOG_LEVEL: "info"
+
+      # --- Discord notifications ---
+      WUD_TRIGGER_DISCORD_HOOK: "https://discord.com/api/webhooks/${DISCORD_ID}/${DISCORD_TOKEN}"
+      WUD_TRIGGER_DISCORD_ON: "all"
+
+      # --- Discord embed template ---
+      WUD_TRIGGER_DISCORD_TEMPLATE: |
+        {
+          "username": "WUD",
+          "embeds": [
+            {
+              "title": "Container Updated",
+              "color": 3066993,
+              "fields": [
+                { "name": "Container", "value": "{{.Container.Name}}", "inline": true },
+                { "name": "Image", "value": "{{.Container.Image}}", "inline": true },
+                { "name": "Old Version", "value": "{{.Container.PreviousVersion}}", "inline": true },
+                { "name": "New Version", "value": "{{.Container.Version}}", "inline": true },
+                { "name": "Registry", "value": "{{.Container.Registry}}", "inline": true },
+                { "name": "Updated At", "value": "{{.Time.Format \"2006-01-02 15:04:05\"}}", "inline": false }
+              ]
+            }
+          ]
+        }
+
+    networks:
+      - mediaserver
+    ports:
+      - "${WUD_PORT}:3000"   # Web UI dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    labels:
+      - "wud.managed=true"

@@ -33,4 +33,6 @@ services:
       - no-new-privileges:true
     labels:
       ## Watchtower Enable
-      - "com.centurylinklabs.watchtower.enable=false"
+#      - "com.centurylinklabs.watchtower.enable=false"
+      - "wud.managed=true"
+      - "wud.trigger.update=true"

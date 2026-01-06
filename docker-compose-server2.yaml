@@ -115,6 +115,9 @@ include:
 #  - ${COMPOSE_DIR}/cloudflared.yaml
 #  - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/heimdallint.yaml
+  - ${COMPOSE_DIR}/gramps.yaml
+  - ${COMPOSE_DIR}/grampsweb_redis.yaml
+  - ${COMPOSE_DIR}/grampsweb_celery.yaml
 #  - ${COMPOSE_DIR}/jaegertracing.yaml
 #  - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
@@ -131,5 +134,6 @@ include:
   - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
 #  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/traefik-cloudflare-companion.yaml
-  - ${COMPOSE_DIR}/watchtower.yaml
+#  - ${COMPOSE_DIR}/watchtower.yaml
 #  - ${COMPOSE_DIR}/wireguard.yaml
+  - ${COMPOSE_DIR}/wud.yaml

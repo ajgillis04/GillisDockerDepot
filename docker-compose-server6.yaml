@@ -121,9 +121,10 @@ secrets:
 # *************************** SERVICES ******************************************
 include:
 # - ${COMPOSE_DIR}/tdarr.yaml
-#  - ${COMPOSE_DIR}/tdarr_node.yaml
+  - ${COMPOSE_DIR}/tdarr_node.yaml
 #  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
-  - ${COMPOSE_DIR}/watchtower.yaml
+#  - ${COMPOSE_DIR}/watchtower.yaml
+  - ${COMPOSE_DIR}/wud.yaml
 #  - ${COMPOSE_DIR}/wireguard.yaml
