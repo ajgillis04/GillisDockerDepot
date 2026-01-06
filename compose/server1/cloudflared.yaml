@@ -10,9 +10,13 @@ services:
     environment:
       #TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}  # You’ll get this after `cloudflared tunnel login`
       HOST_NAME: ${HOST_NAME}
+      TZ: ${TZ}
     networks:
       - mediaserver
       - sbs_network # if you need to access other containers on this network
+    dns:
+      - 127.0.0.11
+      - ${PIHOLE_SECONDARY}
     volumes:
       - ${DOCKERDIR}/cloudflared:/home/nonroot/.cloudflared
       - ${DOCKERDIR}/logs/cloudflared:/var/log
@@ -20,9 +24,10 @@ services:
     security_opt:
       - no-new-privileges:true
     healthcheck:
-      test: ["CMD", "cloudflared", "--version"]
+      test: ["CMD", "cloudflared", "tunnel", "info", "${CLOUDFLARED_TUNNEL_UUID}"]
       interval: 30s
-      timeout: 10s
+      timeout: 5s
       retries: 3
+      start_period: 10s
     labels:
       - "com.centurylinklabs.watchtower.enable=true"

@@ -171,7 +171,7 @@ include:
 #  - ${COMPOSE_DIR}/photoprism.yaml
 #  - ${COMPOSE_DIR}/php-apache-agf.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
-  #- ${COMPOSE_DIR}/php-apache-gillisonline.yaml
+  - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
 #  - ${COMPOSE_DIR}/php-apache-storiesbeyondstone.yaml
 #  - ${COMPOSE_DIR}/picard.yaml
   - ${COMPOSE_DIR}/pihole.yaml
@@ -183,6 +183,7 @@ include:
   - ${COMPOSE_DIR}/profilarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
   - ${COMPOSE_DIR}/readarr.yaml
+  - ${COMPOSE_DIR}/retroassembly.yaml
   - ${COMPOSE_DIR}/sabnzbd.yaml
   - ${COMPOSE_DIR}/sbs-web.yaml
   - ${COMPOSE_DIR}/sbs-app.yaml
