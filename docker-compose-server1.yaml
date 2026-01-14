@@ -188,6 +188,7 @@ include:
   - ${COMPOSE_DIR}/sbs-web.yaml
   - ${COMPOSE_DIR}/sbs-app.yaml
   - ${COMPOSE_DIR}/sbs-app-dev.yaml
+  - ${COMPOSE_DIR}/sbs-mysql8.yaml
   - ${COMPOSE_DIR}/sbs-shlink.yaml
   - ${COMPOSE_DIR}/sbs-shlink-ui.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
@@ -203,7 +204,7 @@ include:
   #- ${COMPOSE_DIR}/uptimekuma.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
-  - ${COMPOSE_DIR}/wordpress_agf.yaml
+  #- ${COMPOSE_DIR}/wordpress_agf.yaml
   #- ${COMPOSE_DIR}/wireguard.yaml
   #- ${COMPOSE_DIR}/wizarr.yaml
 
