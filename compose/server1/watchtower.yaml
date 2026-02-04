@@ -13,7 +13,8 @@ services:
       WATCHTOWER_NOTIFICATIONS: shoutrrr
       WATCHTOWER_NOTIFICATION_TEMPLATE: '{{range .}}{{.Time.Format "12-01-2020 15:04:05"}} ({{.Level}}): {{.Message}}{{println}}{{end}}'
       WATCHTOWER_NOTIFICATION_URL: discord://${DISCORD_TOKEN}@${DISCORD_ID}
-      WATCHTOWER_POLL_INTERVAL: 36000
+      #WATCHTOWER_POLL_INTERVAL: 36000 #ever 10 hours
+      WATCHTOWER_SCHEDULE: "0 6 * * 1"
       WATCHTOWER_REMOVE_VOLUMES: true
     networks:
       - mediaserver
