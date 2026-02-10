@@ -14,9 +14,9 @@ services:
     networks:
       - mediaserver
       - sbs_network # if you need to access other containers on this network
-    dns:
-      - 127.0.0.11
+    dns:      
       - ${PIHOLE_SECONDARY}
+      - 1.1.1.1
     volumes:
       - ${DOCKERDIR}/cloudflared:/home/nonroot/.cloudflared
       - ${DOCKERDIR}/logs/cloudflared:/var/log
