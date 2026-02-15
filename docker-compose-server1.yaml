@@ -138,41 +138,32 @@ include:
 #  - ${COMPOSE_DIR}/bookbounty.yaml
   - ${COMPOSE_DIR}/calibre-web.yaml
   - ${COMPOSE_DIR}/calibre.yaml
-#  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
   - ${COMPOSE_DIR}/chowdown.yaml
   - ${COMPOSE_DIR}/cloudflared.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
-#  - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/ersatztv.yaml
   - ${COMPOSE_DIR}/govee2mqtt.yaml
-#  - ${COMPOSE_DIR}/flixor.yaml
   - ${COMPOSE_DIR}/frigate.yaml
   - ${COMPOSE_DIR}/guacamole.yaml
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/homeassistant.yaml
   - ${COMPOSE_DIR}/homepage.yaml
   #- ${COMPOSE_DIR}/jellyfin.yaml
-  #- ${COMPOSE_DIR}/kometa.yaml
   #- ${COMPOSE_DIR}/libation.yaml
   - ${COMPOSE_DIR}/lidarr.yaml
 #  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/maintainerr.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/matter-server.yaml
-  - ${COMPOSE_DIR}/mosquitto.yaml
-#  - ${COMPOSE_DIR}/motioneye.yaml
+  - ${COMPOSE_DIR}/mosquitto.yamll
 #  - ${COMPOSE_DIR}/mineos.yaml
 #  - ${COMPOSE_DIR}/musicbrainz.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
 #  - ${COMPOSE_DIR}/nzbhydra2.yaml
-#  - ${COMPOSE_DIR}/netdata.yaml
-#  - ${COMPOSE_DIR}/oauth.yaml
   - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
-#  - ${COMPOSE_DIR}/php-apache-agf.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
-#  - ${COMPOSE_DIR}/php-apache-storiesbeyondstone.yaml
 #  - ${COMPOSE_DIR}/picard.yaml
   - ${COMPOSE_DIR}/pihole.yaml
 #  - ${COMPOSE_DIR}/pinchflat.yaml
@@ -194,17 +185,11 @@ include:
   - ${COMPOSE_DIR}/sonarr.yaml
   - ${COMPOSE_DIR}/soulseek.yaml
   - ${COMPOSE_DIR}/spotifytoplex.yaml
-#  - ${COMPOSE_DIR}/tailscale.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
   - ${COMPOSE_DIR}/tdarr_node.yaml
-  #- ${COMPOSE_DIR}/traefik.yaml
   - ${COMPOSE_DIR}/transmission-openvpn.yaml
-  #- ${COMPOSE_DIR}/unbound.yaml
-  #- ${COMPOSE_DIR}/uptimekuma.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
-  #- ${COMPOSE_DIR}/wordpress_agf.yaml
   #- ${COMPOSE_DIR}/wireguard.yaml
-  #- ${COMPOSE_DIR}/wizarr.yaml
 

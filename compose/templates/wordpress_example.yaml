@@ -6,32 +6,32 @@
 # ------------------------------------------------------------------------------
 services:
   wordpress:
-    container_name: wordpress_agf.${HOST_NAME}
-    hostname: wordpress_agf.${HOST_NAME}.lan
+    container_name: wordpress_example.${HOST_NAME}
+    hostname: wordpress_example.${HOST_NAME}.lan
     image: bitnami/wordpress:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
-      HOST_NAME: wordpress_agf.${HOST_NAME}.lan
+      HOST_NAME: wordpress_example.${HOST_NAME}.lan
 
       # --- WordPress setup ---
-      WORDPRESS_USERNAME: admin
-      WORDPRESS_PASSWORD: ${WORDPRESS_AGF_PASSWORD}
-      WORDPRESS_EMAIL: ${WORDPRESS_AGF_EMAIL}
-      WORDPRESS_AGF_BLOG_NAME: ${WORDPRESS_AGF_BLOG_NAME}
+      WORDPRESS_USERNAME: admin_example
+      WORDPRESS_PASSWORD: ${WORDPRESS_EXAMPLE_PASSWORD}
+      WORDPRESS_EMAIL: ${WORDPRESS_EXAMPLE_EMAIL}
+      WORDPRESS_AGF_BLOG_NAME: ${WORDPRESS_EXAMPLE_BLOG_NAME}
 
       # --- WordPress DB connection (external MariaDB) ---
-      WORDPRESS_DATABASE_NAME: ${WORDPRESS_AGF_DATABASE_NAME}
-      WORDPRESS_DATABASE_USER: ${WORDPRESS_AGF_DATABASE_USER}
-      WORDPRESS_DATABASE_PASSWORD: ${WORDPRESS_AGF_DATABASE_PASSWORD}
-      WORDPRESS_DATABASE_HOST: ${WORDPRESS_AGF_DATABASE_HOST}
+      WORDPRESS_DATABASE_NAME: ${WORDPRESS_EXAMPLE_DATABASE_NAME}
+      WORDPRESS_DATABASE_USER: ${WORDPRESS_EXAMPLE_DATABASE_USER}
+      WORDPRESS_DATABASE_PASSWORD: ${WORDPRESS_EXAMPLE_DATABASE_PASSWORD}
+      WORDPRESS_DATABASE_HOST: ${WORDPRESS_EXAMPLE_DATABASE_HOST}
 
     networks:
       - mediaserver
 
     ports:
-      - "${WORDPRESS_AGF_PORT}:8080"
+      - "${WORDPRESS_EXAMPLE_PORT}:8080"
     # - "${WORDPRESS_AGF_SSL_PORT}:8443"
 
     logging:
@@ -41,7 +41,7 @@ services:
         max-file: "7"
 
     volumes:
-      - ${DOCKERDIR}/wordpress_agf:/bitnami/wordpress
+      - ${DOCKERDIR}/wordpress_EXAMPLE:/bitnami/wordpress
 
     restart: always
     security_opt:
@@ -50,7 +50,7 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
       - "homepage.group=Infrastructure"
-      - "homepage.name=AGF WordPress"
+      - "homepage.name=EXAMPLE WordPress"
       - "homepage.icon=https://s.w.org/style/images/about/WordPress-logotype-wmark.png"
-      - "homepage.href=https://wordpress_agf.${HOST_NAME}:${WORDPRESS_AGF_PORT}"
+      - "homepage.href=https://wordpress_EXAMPLE.${HOST_NAME}:${WORDPRESS_EXAMPLE_PORT}"
       - "homepage.description=WordPress site"

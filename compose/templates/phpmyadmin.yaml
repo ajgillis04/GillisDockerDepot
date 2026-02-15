@@ -2,14 +2,11 @@
 services:
   phpmyadmin:
     container_name: phpmyadmin.${HOST_NAME}
-    hostname: phpmyadmin.${HOST_NAME}.local
+    hostname: phpmyadmin.${HOST_NAME}.lan
     image: phpmyadmin/phpmyadmin:latest
     links:
       - mariadb:db
     environment:
-      TZ: ${TZ}
-      PUID: ${PUID}
-      PGID: ${PGID}
       DOMAINNAME: ${DOMAINNAME}
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/maria_root_password
       PMA_ARBITRARY: 1
@@ -27,18 +24,12 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.phpmyadmin-rtr.entrypoints=https"
-      - "traefik.http.routers.phpmyadmin-rtr.rule=Host(`pma.${DOMAINNAME}`)"
-      - "traefik.http.routers.phpmyadmin-rtr.tls=true"
-      ## Middlewares
-      - "traefik.http.routers.phpmyadmin-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.phpmyadmin-rtr.service=phpmyadmin-svc"
-      - "traefik.http.services.phpmyadmin-svc.loadbalancer.server.port=80"
       ## Watchtower enable?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=phpMyAdmin"
+      - "homepage.icon=database"
+      - "homepage.href=https://phpmyadmin.${DOMAINNAME}/"
+      - "homepage.description=Web-based MySQL/MariaDB administration"      
 
