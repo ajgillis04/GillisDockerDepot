@@ -16,6 +16,7 @@ services:
       DATABASE_URL: data/db.sqlite3
       #DATABASE_URL_FILE: /run/secrets/vaultwarden_db_password # for use in an external database      
       DOMAIN: "https://vault.${DOMAINNAME}"
+      ORG_ADMIN_RECOVERY_ENABLED: "true"
     networks:
       - mediaserver
     ports:
