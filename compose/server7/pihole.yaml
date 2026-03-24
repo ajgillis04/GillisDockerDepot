@@ -1,0 +1,79 @@
+# Pi-hole - A network-wide ad blocker.
+#
+# Notes:
+# - This container is dual-homed:
+#     • pihole_network (macvlan) → gives Pi-hole its own LAN IP (192.168.2.x) for DNS/DHCP.
+#     • ha_bridge (user-defined bridge) → added so host-mode containers (like Home Assistant)
+#       can reach Pi-hole’s API. Without this, the host cannot talk to the macvlan IP due to isolation.
+#
+# - The web UI/API is published on the NAS host at ${PIHOLE_WEB_PORT} (e.g. 8080).
+#   LAN clients continue to use the macvlan IP for DNS/DHCP, while HA uses the host:port for API access.
+#
+# - Windows users: if running Docker Desktop, you may need to allow the backend through the firewall:
+#   new-NetFirewallRule -DisplayName "Docker Desktop Backend" -Direction Inbound `
+#     -Program "C:\Program Files\Docker\Docker\resources\com.docker.backend.exe" `
+#     -Action Allow -Profile Private,Public
+#
+# - Remember: overlapping host ports will prevent the container from starting.
+#   Always assign Pi-hole a unique host port for its web interface.
+
+services:
+  pihole:
+    container_name: pihole.${HOST_NAME}
+    hostname: pihole.${HOST_NAME}.lan
+    image: pihole/pihole:latest 
+    cap_add:
+         # Required if you are using Pi-hole as your DHCP server, else not needed    
+      - NET_ADMIN
+      - SYS_TIME
+      - SYS_NICE
+      - CAP_NET_RAW
+    environment:
+      TZ: ${TZ}      
+      HOST_NAME: pihole.${HOST_NAME}.lan
+      DOMAINNAME: ${DOMAINNAME}      
+      #WEBPASSWORD_FILE: /run/secrets/pihole_password
+      FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
+      FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
+      FTLCONF_dns_listeningMode: all
+      #FTLCONF_dns_upstreams: ${PIHOLE_SECONDARY}#5335;${PIHOLE_SECONDARY_V6}#5335
+      #FTLCONF_dns_dnssec: true
+      FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,local
+      FTLCONF_debug_api: false
+      TAIL_FTL_LOG: '1' # or '0' to disable
+      FTLCONF_dhcp_active: true
+      FTLCONF_dhcp_start: 192.168.2.50
+      FTLCONF_dhcp_end: 192.168.2.254
+      FTLCONF_dhcp_router: 192.168.2.1
+      FTLCONF_dhcp_leaseTime: 30d
+      FTLCONF_dns_domain: local
+      FTLCONF_dhcp_ipv6: false
+      TEMPERATUREUNIT: c
+    networks:
+      pihole_network:
+        ipv4_address: ${PIHOLE_IP}      
+      ha_bridge: {}
+    ports:
+      - "${PIHOLE_WEB_PORT}:80"
+    volumes:
+      - ${DOCKERDIR}/pihole/etc:/etc/pihole
+      - ${DOCKERDIR}/pihole/dnsmasq.d:/etc/dnsmasq.d
+      - ${DOCKERDIR}/logs/pihole:/var/log/pihole
+      - ${DOCKERDIR}/logs/pihole-FTL:/var/log/pihole-FTL
+    restart: always
+    secrets:
+      - pihole_password    
+    labels:
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Network"
+      - "homepage.name=Pi-hole"
+      - "homepage.icon=pi-hole.png"
+      - "homepage.href=https://pihole.${DOMAINNAME}/admin"
+      - "homepage.description=Network-wide ad blocker"
+      ## Homepage Widget
+      - "homepage.widget.type=pihole"
+      - "homepage.widget.url=http://pihole.${HOST_NAME}"
+      - "homepage.widget.version=6"
+      - "homepage.widget.key=${PIHOLE_TOKEN}"

@@ -1,0 +1,88 @@
+# Transmission-OpenVPN - A combination of Transmission and OpenVPN for secure torrenting.
+services:
+  transmission-openvpn:
+    container_name: transmission-openvpn.${HOST_NAME}
+    hostname: transmission-openvpn.${HOST_NAME}.lan
+    image: haugene/transmission-openvpn:latest
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    environment:
+      #OPENVPN_DISABLE: "true"
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}      
+      HOST_NAME: ${HOST_NAME}.lan
+      DOMAIN: ${DOMAINNAME}
+      TRANS_USER: ${TRANS_USER}
+      TRANS_PASS: ${TRANS_PASS}
+      CREATE_TUN_DEVICE: true
+      LOCAL_NETWORK: ${LOCAL_NETWORK}
+      OPENVPN_CONFIG: ca_toronto
+      OPENVPN_OPTS: '--inactive 3600 --ping 10 --ping-exit 60'
+      OPENVPN_USERNAME: "**None**"
+      OPENVPN_PASSWORD: "**None**"
+      OPENVPN_PROVIDER: PIA
+      PIA_OPENVPN_CONFIG_BUNDLE: openvpn
+      TRANSMISSION_DOWNLOAD_DIR: /downloads/Completed
+      TRANSMISSION_INCOMPLETE_DIR: /downloads/Incomplete
+      TRANSMISSION_INCOMPLETE_DIR_ENABLED: true
+      TRANSMISSION_RATIO_LIMIT: 0
+      TRANSMISSION_RATIO_LIMIT_ENABLED: true
+      TRANSMISSION_RPC_AUTHENTICATION_REQUIRED: true
+      TRANSMISSION_RPC_HOST_WHITELIST: "127.0.0.1,192.168.4.*"
+      #TRANSMISSION_RPC_PASSWORD_FILE: /run/secrets/transmission_pass
+      #TRANSMISSION_RPC_USERNAME_FILE: /run/secrets/transmission_user
+      TRANSMISSION_RPC_USERNAME: "**None**"
+      TRANSMISSION_RPC_PASSWORD: "**None**"
+      TRANSMISSION_UMASK: 2
+      TRANSMISSION_WATCH_DIR: /downloads
+      TRANSMISSION_WATCH_DIR_ENABLED: true
+      UMASK_SET: 2
+    networks:
+      - mediaserver
+    ports:
+      - "${TRANSMISSION_PORT}:9091"      
+#      - "${SLSKD_HTTP_PORT}:5030"   # Soulseek web UI putting behind openvpn for privacy
+#      - "${SLSKD_HTTPS_PORT}:5031"  # Soulseek HTTPS UI  putting behind openvpn for privacy
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/transmission-openvpn/data:/data
+      - ${DOCKERDIR}/transmission-openvpn/config:/config
+      - ${SECRETSDIR}/openvpn-credentials.txt:/config/openvpn-credentials.txt
+      - ${USERDOWNLOAD}/Torrents:/downloads
+      - ${USERDOWNLOAD}/Torrents:/data/watch
+      - ${USERDOWNLOAD}/Torrents/Completed:/data/completed
+      - ${USERDOWNLOAD}/Torrents/Incomplete:/data/incomplete
+      - ${DOCKERDIR}/logs/transmission-openvpn:/var/log
+    restart: always
+    secrets:
+      - pia_username
+      - pia_password
+      - rpc_creds
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Other"
+      - "homepage.name=Transmission-OpenVPN"
+      - "homepage.icon=transmission.png"
+      - "homepage.href=https://trans.${DOMAINNAME}/"
+      - "homepage.description=Torrent client with OpenVPN"
+      ## Homepage Widget
+      - "homepage.widget.type=transmission"
+      - "homepage.widget.url=http://transmission-openvpn.${HOST_NAME}:9091"
+      - "homepage.widget.username=${TRANS_USER}"
+      - "homepage.widget.password=${TRANS_PASS}"
+
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
