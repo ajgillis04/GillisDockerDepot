@@ -1,0 +1,41 @@
+services:
+  faster-whisper:
+    container_name: faster-whisper.${HOST_NAME}
+    hostname: faster-whisper.${HOST_NAME}.lan
+    image: lscr.io/linuxserver/faster-whisper:latest
+
+    networks:
+      - mediaserver
+
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      HOST_NAME: ${HOST_NAME}
+
+      # Optional tuning
+      DEBUG: false
+      LOCAL_ONLY: false
+      WHISPER_BEAM: 1
+      WHISPER_LANG: auto
+      WHISPER_MODEL: medium
+
+    volumes:
+      - ${DOCKERDIR}/faster-whisper/config:/config
+
+    ports:
+      - "10300:10300"
+
+    restart: unless-stopped
+
+    security_opt:
+      - no-new-privileges:true
+
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Media"
+      - "homepage.name=Faster Whisper"
+      - "homepage.icon=whisper.png"
+      - "homepage.href=https://faster-whisper.${DOMAINNAME}/"
+      - "homepage.description=Whisper subtitle backend for Bazarr"

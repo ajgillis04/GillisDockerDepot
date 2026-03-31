@@ -109,6 +109,8 @@ include:
   - ${COMPOSE_DIR}/bazarr.yaml
 #  - ${COMPOSE_DIR}/cloudflare-ddns.yaml
   - ${COMPOSE_DIR}/cloudflared.yaml
+  - ${COMPOSE_DIR}/cloudflared-ddns.yaml
+  - ${COMPOSE_DIR}/faster-whisper.yaml
   - ${COMPOSE_DIR}/guacamole.yaml
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/homepage.yaml
