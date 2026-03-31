@@ -16,6 +16,8 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}      
       DOMAIN: ${DOMAINNAME}
+      TRANS_USER: ${TRANS_USER}
+      TRANS_PASS: ${TRANS_PASS}
       CREATE_TUN_DEVICE: true
       LOCAL_NETWORK: ${LOCAL_NETWORK}
       OPENVPN_CONFIG: ca_toronto
@@ -72,6 +74,12 @@ services:
       - "homepage.icon=transmission.png"
       - "homepage.href=https://trans.${DOMAINNAME}/"
       - "homepage.description=Torrent client with OpenVPN"
+            ## Homepage Widget
+      - "homepage.widget.type=transmission"
+      - "homepage.widget.url=http://transmission-openvpn.${HOST_NAME}:9091"
+      - "homepage.widget.username=${TRANS_USER}"
+      - "homepage.widget.password=${TRANS_PASS}"
+
     logging:
       driver: json-file
       options:
