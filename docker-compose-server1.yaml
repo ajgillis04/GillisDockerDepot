@@ -185,6 +185,7 @@ include:
   - ${COMPOSE_DIR}/sonarr.yaml
   - ${COMPOSE_DIR}/soulseek.yaml
   - ${COMPOSE_DIR}/spotifytoplex.yaml
+  - ${COMPOSE_DIR}/syncthing.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
   - ${COMPOSE_DIR}/tdarr_node.yaml
