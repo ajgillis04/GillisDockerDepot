@@ -71,8 +71,8 @@ services:
       PUID: 0
       PGID: 0
       DOMAINNAME: ${DOMAINNAME}
-      UMASK: 002
-      ADVERTISE_IP: "https://plex.${HOST_NAME}.${DOMAINNAME}:443,https://${SERVER_IP}:32400"
+      UMASK: 002      
+      ADVERTISE_IP: https://${SERVER_IP}:32400/
       ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks
       HOST_NAME: plex.${HOST_NAME}.lan
       #PLEX_CLAIM_FILE: /run/secrets/plex_claim # input claim number into file after first run
@@ -86,19 +86,20 @@ services:
       ANIMATED_MOVIES_PATH: /media/Videos/KidsMovies
       VERSION: docker
       TRANS_DIR: /transcode # offload transcoding to memory
-    networks:
-      - mediaserver
-    ports:
-      - "${PLEX_PORT}:32400/tcp"
-      - "3005:3005/tcp"
-      - "8324:8324/tcp"
-      - "32469:32469/tcp"
-      - "1901:1900/udp"
-      - "32410:32410/udp"
-      - "32412:32412/udp"
-      - "32413:32413/udp"
-      - "32414:32414/udp"
-      - "33400:33400"
+    #networks:
+      #- mediaserver
+    network_mode: host # host mode is required for Plex to properly detect network interfaces and support features like DLNA and remote access without complex port mappings. It allows Plex to use the host's network stack directly, ensuring better compatibility and performance.
+#    ports:
+#      - "${PLEX_PORT}:32400/tcp"
+#      - "3005:3005/tcp"
+#      - "8324:8324/tcp"
+#      - "32469:32469/tcp"
+#      - "1901:1900/udp"
+#      - "32410:32410/udp"
+#      - "32412:32412/udp"
+#      - "32413:32413/udp"
+#      - "32414:32414/udp"
+#      - "33400:33400"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/plex/config:/config
