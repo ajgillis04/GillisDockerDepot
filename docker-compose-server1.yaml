@@ -13,6 +13,7 @@
 #          make sure PUID and PGID match the system you are in with .env
 #          After services are brought online retreive api_keys and update .env/secrets
 # Usage: docker compose -p mediaserver -f docker-compose-server1.yaml up --detach
+# or:    docker compose -p mediaserver -f docker-compose-server1.yaml up -d <service_name>
 # **********************************************************************************
 
 # *************************** NETWORKS ****************************************** 

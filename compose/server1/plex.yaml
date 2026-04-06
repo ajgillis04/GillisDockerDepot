@@ -6,10 +6,11 @@
 # - Library: enable "Scan my library automatically", "Run partial scans",
 #   and set Video played threshold to 95%.
 # - Network:
-#   LAN Networks: 127.0.0.1/32,10.0.27.0/24,172.29.0.0/16,192.168.2.0/24
+#   LAN Networks: 127.0.0.1/32,172.29.0.0/24,<Your IP Range>
+#   Disable Treat WAN IP As LAN Bandwidth
 #   Disable Relay
 #   Custom server access URLs:
-#     https://plex.YOURNAME.gillisonline.com:443, https://YOURIP:32400
+#     https://plex.<DOMAINNAME>.gillisonline.com
 #   Allowed IPs without auth: same LAN ranges above.
 # - Transcode:
 #   Temporary directory = /transcode
@@ -71,6 +72,7 @@ services:
       PUID: 0
       PGID: 0
       DOMAINNAME: ${DOMAINNAME}
+      SERVER_IP: ${SERVER_IP}
       UMASK: 002      
       ADVERTISE_IP: https://${SERVER_IP}:32400/
       ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks
@@ -78,28 +80,9 @@ services:
       #PLEX_CLAIM_FILE: /run/secrets/plex_claim # input claim number into file after first run
       #CLAIM_SERVER: yes #first run
       PLEX_SERVER_NAME: plex.${HOST_NAME}
-      TV_SHOWS_PATH: /media/Videos/TV 
-      MOVIES_PATH: /media/Videos/Movies 
-      MUSIC_PATH: /media/Music 
-      PHOTOS_PATH: /media/Photos
-      ANIMATED_TV_PATH: /media/Videos/KidsTV
-      ANIMATED_MOVIES_PATH: /media/Videos/KidsMovies
       VERSION: docker
       TRANS_DIR: /transcode # offload transcoding to memory
-    #networks:
-      #- mediaserver
     network_mode: host # host mode is required for Plex to properly detect network interfaces and support features like DLNA and remote access without complex port mappings. It allows Plex to use the host's network stack directly, ensuring better compatibility and performance.
-#    ports:
-#      - "${PLEX_PORT}:32400/tcp"
-#      - "3005:3005/tcp"
-#      - "8324:8324/tcp"
-#      - "32469:32469/tcp"
-#      - "1901:1900/udp"
-#      - "32410:32410/udp"
-#      - "32412:32412/udp"
-#      - "32413:32413/udp"
-#      - "32414:32414/udp"
-#      - "33400:33400"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/plex/config:/config
@@ -128,6 +111,6 @@ services:
       - "homepage.description=Stream your favorite media"
       ## Homepage Widget
       - "homepage.widget.type=plex"
-      - "homepage.widget.url=http://plex.${HOST_NAME}:32400"
+      - "homepage.widget.url=http://${SERVER_IP}:32400"
       - "homepage.widget.key=${PLEX_TOKEN}"
 
