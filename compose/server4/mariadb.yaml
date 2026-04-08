@@ -8,7 +8,7 @@
 services:
   mariadb:
     container_name: mariadb.${HOST_NAME}
-    hostname: mariadb.${HOST_NAME}.local
+    hostname: mariadb.${HOST_NAME}.lan
     image: linuxserver/mariadb:latest
     environment:      
       TZ: ${TZ}
@@ -21,6 +21,7 @@ services:
       # MYSQL_PASSWORD_FILE: /run/secrets/maria_user_password
     networks:
       - mediaserver
+      - sbs_network # if you need to access other containers on this network
     ports:
       - "${DB_PORT}:3306"
     volumes:

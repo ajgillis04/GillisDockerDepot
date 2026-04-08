@@ -2,8 +2,8 @@
 services:
   tdarr_node:
     container_name: tdarr_node.${HOST_NAME}
-    hostname: tdarr_node.${HOST_NAME}.local
-    image: haveagitgat/tdarr_node:latest
+    hostname: tdarr_node.${HOST_NAME}.lan
+    image: haveagitgat/tdarr_node:2.58.01
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
@@ -13,7 +13,7 @@ services:
       serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
       inContainer: true # Tell tdarr its running in docker      
-      serverURL: http://tdarr.${HOST_NAME}:8266
+      serverURL: http://${TDARR_SERVERIP}:${TDARR_SERVER_PORT}
       # NVIDIA_DRIVER_CAPABILITIES: all
       # NVIDIA_VISIBLE_DEVICES: all
     networks:

@@ -2,7 +2,7 @@
 services:
   transmission-openvpn:
     container_name: transmission-openvpn.${HOST_NAME}
-    hostname: transmission-openvpn.${HOST_NAME}.local
+    hostname: transmission-openvpn.${HOST_NAME}.lan
     image: haugene/transmission-openvpn:latest
     cap_add:
       - NET_ADMIN
@@ -16,6 +16,8 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}      
       DOMAIN: ${DOMAINNAME}
+      TRANS_USER: ${TRANS_USER}
+      TRANS_PASS: ${TRANS_PASS}
       CREATE_TUN_DEVICE: true
       LOCAL_NETWORK: ${LOCAL_NETWORK}
       OPENVPN_CONFIG: ca_toronto
@@ -42,7 +44,10 @@ services:
     networks:
       - mediaserver
     ports:
-      - "${TRANSMISSION_PORT}:9091"
+      - "${TRANSMISSION_PORT}:9091"      
+      - "${SLSKD_HTTP_PORT}:5030"   # Soulseek web UI putting behind openvpn for privacy
+      - "${SLSKD_HTTPS_PORT}:5031"  # Soulseek HTTPS UI  putting behind openvpn for privacy
+
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/transmission-openvpn/data:/data
@@ -61,25 +66,20 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.transmission-vpn-rtr.entrypoints=https"
-      - "traefik.http.routers.transmission-vpn-rtr.rule=Host(`trans.${DOMAINNAME}`)"
-      - "traefik.http.routers.transmission-vpn-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.transmission-openvpn-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.transmission-vpn-rtr.service=transmission-vpn-svc"
-      - "traefik.http.services.transmission-vpn-svc.loadbalancer.server.port=9091"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Other"
       - "homepage.name=Transmission-OpenVPN"
       - "homepage.icon=transmission.png"
-      - "homepage.href=http://trans.${DOMAINNAME}/"
+      - "homepage.href=https://trans.${DOMAINNAME}/"
       - "homepage.description=Torrent client with OpenVPN"
+            ## Homepage Widget
+      - "homepage.widget.type=transmission"
+      - "homepage.widget.url=http://transmission-openvpn.${HOST_NAME}:9091"
+      - "homepage.widget.username=${TRANS_USER}"
+      - "homepage.widget.password=${TRANS_PASS}"
+
     logging:
       driver: json-file
       options:

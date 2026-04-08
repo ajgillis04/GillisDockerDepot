@@ -2,7 +2,7 @@
 services:
   watchtower:
     container_name: watchtower.${HOST_NAME}
-    hostname: watchtower.${HOST_NAME}.local
+    hostname: watchtower.${HOST_NAME}.lan
     image: containrrr/watchtower:latest
     environment:
       TZ: ${TZ}
@@ -10,10 +10,11 @@ services:
       PUID: ${PUID}
       WATCHTOWER_INCLUDE_RESTARTING: true
       WATCHTOWER_LABEL_ENABLE: true
-#      WATCHTOWER_NOTIFICATIONS: shoutrrr
-#      WATCHTOWER_NOTIFICATION_TEMPLATE: '{{range .}}{{.Time.Format "12-01-2020 15:04:05"}} ({{.Level}}): {{.Message}}{{println}}{{end}}'
-#      WATCHTOWER_NOTIFICATION_URL: discord://${DISCORD_TOKEN}@${DISCORD_ID}
-      WATCHTOWER_POLL_INTERVAL: 36000
+      WATCHTOWER_NOTIFICATIONS: shoutrrr
+      WATCHTOWER_NOTIFICATION_TEMPLATE: '{{range .}}{{.Time.Format "12-01-2020 15:04:05"}} ({{.Level}}): {{.Message}}{{println}}{{end}}'
+      WATCHTOWER_NOTIFICATION_URL: discord://${DISCORD_TOKEN}@${DISCORD_ID}
+      #WATCHTOWER_POLL_INTERVAL: 36000 #ever 10 hours
+      WATCHTOWER_SCHEDULE: "0 6 * * 1"
       WATCHTOWER_REMOVE_VOLUMES: true
     networks:
       - mediaserver

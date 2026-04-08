@@ -2,18 +2,32 @@
 services:
   cloudflared:
     container_name: cloudflared.${HOST_NAME}
-    hostname: cloudflared.${HOST_NAME}.local
+    hostname: cloudflared.${HOST_NAME}.lan
     image: cloudflare/cloudflared:latest
-    command: tunnel run test-tunnel
+    command: tunnel --config /home/nonroot/.cloudflared/config.yml run ${HOST_NAME}
+    cap_add:
+      - NET_ADMIN
     environment:
-      TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}  # You’ll get this after `cloudflared tunnel login`
+      #TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}  # You’ll get this after `cloudflared tunnel login`
+      HOST_NAME: ${HOST_NAME}
+      TZ: ${TZ}
     networks:
       - mediaserver
+      - sbs_network # if you need to access other containers on this network
+    dns:      
+      - ${PIHOLE_SECONDARY}
+      - 1.1.1.1
     volumes:
       - ${DOCKERDIR}/cloudflared:/home/nonroot/.cloudflared
       - ${DOCKERDIR}/logs/cloudflared:/var/log
     restart: always
     security_opt:
       - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "cloudflared", "tunnel", "info", "${CLOUDFLARED_TUNNEL_UUID}"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
