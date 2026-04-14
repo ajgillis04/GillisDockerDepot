@@ -13,7 +13,7 @@
 #          make sure PUID and PGID match the system you are in with .env
 #          After services are brought online retreive api_keys and update .env/secrets
 # Usage: docker compose -p mediaserver -f docker-compose-server1.yaml up --detach
-# or:    docker compose -p mediaserver -f docker-compose-server7.yaml up -d <service_name>
+# or:    docker compose -p mediaserver -f docker-compose-server1.yaml up -d <service_name>
 # **********************************************************************************
 
 # *************************** NETWORKS ****************************************** 
@@ -161,7 +161,7 @@ include:
 #  - ${COMPOSE_DIR}/musicbrainz.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
 #  - ${COMPOSE_DIR}/nzbhydra2.yaml
-  - ${COMPOSE_DIR}/overseerr.yaml
+#  - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
@@ -183,6 +183,7 @@ include:
   - ${COMPOSE_DIR}/sbs-mysql8.yaml
   - ${COMPOSE_DIR}/sbs-shlink.yaml
   - ${COMPOSE_DIR}/sbs-shlink-ui.yaml
+  - ${COMPOSE_DIR}/seerr.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
   - ${COMPOSE_DIR}/soulseek.yaml
   - ${COMPOSE_DIR}/spotifytoplex.yaml

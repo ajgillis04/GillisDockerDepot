@@ -1,0 +1,41 @@
+# Seerr - Successor to Overseerr. Drop-in replacement with automatic migration.
+# Uses the SAME config folder as Overseerr for seamless migration.
+services:
+  seerr:
+    container_name: seerr.${HOST_NAME}
+    hostname: seerr.${HOST_NAME}.lan
+    image: ghcr.io/seerr-team/seerr:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      DOMAINNAME: ${DOMAINNAME}
+    networks:
+      - mediaserver
+    ports:
+      - "${SEERR_PORT}:5055"      
+    volumes:
+      - ${DOCKERDIR}/overseer/config:/app/config
+      - ${DOCKERDIR}/logs/seerr:/var/log
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/settings/public || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    labels:
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Seerr"
+      - "homepage.icon=seerr.png"
+      - "homepage.href=https://seerr.${DOMAINNAME}/"
+      - "homepage.description=Request and manage your media"
+      ## Homepage Widget
+      - "homepage.widget.type=overseerr"
+      - "homepage.widget.url=http://seerr.${HOST_NAME}:5055"
+      - "homepage.widget.key=${SEERR_API_KEY}"
