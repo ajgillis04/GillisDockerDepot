@@ -132,7 +132,7 @@ include:
   - ${COMPOSE_DIR}/mariadb.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
   - ${COMPOSE_DIR}/oauth.yaml
-  - ${COMPOSE_DIR}/overseerr.yaml
+#  - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/pihole.yaml
   - ${COMPOSE_DIR}/plex.yaml
@@ -141,6 +141,7 @@ include:
   - ${COMPOSE_DIR}/profilarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
  # - ${COMPOSE_DIR}/sabnzbd.yaml
+  - ${COMPOSE_DIR}/seerr.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
   - ${COMPOSE_DIR}/tautulli.yaml
 # - ${COMPOSE_DIR}/tdarr.yaml
