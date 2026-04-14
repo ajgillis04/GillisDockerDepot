@@ -15,7 +15,7 @@ services:
     ports:
       - "${SEERR_PORT}:5055"      
     volumes:
-      - ${DOCKERDIR}/overseer/config:/app/config
+      - ${DOCKERDIR}/seerr/config:/app/config
       - ${DOCKERDIR}/logs/seerr:/var/log
     restart: always
     security_opt:

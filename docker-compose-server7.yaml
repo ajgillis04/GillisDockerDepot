@@ -116,7 +116,7 @@ include:
 # - ${COMPOSE_DIR}/homeassistant.yaml
   - ${COMPOSE_DIR}/maintainerr.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
-  - ${COMPOSE_DIR}/overseerr.yaml
+#  - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/pihole.yaml
   - ${COMPOSE_DIR}/plex.yaml
   - ${COMPOSE_DIR}/portainer.yaml
