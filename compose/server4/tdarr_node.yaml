@@ -4,6 +4,7 @@ services:
     container_name: tdarr_node.${HOST_NAME}
     hostname: tdarr_node.${HOST_NAME}.lan
     image: haveagitgat/tdarr_node:2.58.01
+    runtime: nvidia
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
@@ -14,8 +15,8 @@ services:
       serverPort: ${TDARR_SERVER_PORT}
       inContainer: true # Tell tdarr its running in docker      
       serverURL: http://${TDARR_SERVERIP}:${TDARR_SERVER_PORT}
-      # NVIDIA_DRIVER_CAPABILITIES: all
-      # NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+      NVIDIA_VISIBLE_DEVICES: all
     networks:
       - mediaserver
     ports:
@@ -24,24 +25,13 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr/app/configs:/app/configs
       - ${DOCKERDIR}/tdarr/cache:/cache
-      #- /dev/shm/tdarr:/temp # offload transcoding to memory #Not viable anymore as video files are becoming too large to fit on RAM
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr_node:/app/logs
-    # Hardware transcoding
-    devices:
-      - /dev/dri:/dev/dri
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-    #      - driver: nvidia # Pick one
-#          - driver: vaapi # Pick one
-    #      - driver: qsv # Pick one
-#            count: all
-#            capabilities: [gpu] 
     restart: always
     security_opt:
       - no-new-privileges:true
     labels:
       ## Watchtower Enable
-      - "com.centurylinklabs.watchtower.enable=false"
+#      - "com.centurylinklabs.watchtower.enable=false"
+      - "wud.managed=true"
+      - "wud.trigger.update=true"
