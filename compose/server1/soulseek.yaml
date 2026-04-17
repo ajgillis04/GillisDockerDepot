@@ -22,6 +22,8 @@ services:
       SLSKD_API_KEY: ${LIDARR_API_KEY} # Reusing LIDARR_API_KEY for convenience
       SLSKD_REMOTE_CONFIGURATION: true
 
+      UMASK: "002"
+
     # Use the transmission-openvpn network for privacy    
     network_mode: "service:transmission-openvpn"
 

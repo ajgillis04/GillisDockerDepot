@@ -24,7 +24,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr/app/configs:/app/configs
       - ${DOCKERDIR}/tdarr/cache:/cache
-      - /dev/shm/tdarr:/temp # offload transcoding to memory
+      #- /dev/shm/tdarr:/temp # offload transcoding to memory #Not viable anymore as video files are becoming too large to fit on RAM
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr_node:/app/logs
     # Hardware transcoding

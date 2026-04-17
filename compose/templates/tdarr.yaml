@@ -9,25 +9,23 @@
 # QSV
 # docker run --device=/dev/dri:/dev/dri ghcr.io/haveagitgat/tdarr_node:latest /bin/bash -e -c 'ffmpeg -hwaccel qsv -f lavfi -i color=c=black:s=256x256:d=1:r=30 -c:v:0 hevc_qsv -f null /dev/null'
 
-
-
 services:
   tdarr:
     container_name: tdarr.${HOST_NAME}
-    hostname: tdarr.${HOST_NAME}.local
-    image: haveagitgat/tdarr:latest
+    hostname: tdarr.${HOST_NAME}.lan
+    image: haveagitgat/tdarr:2.58.01
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
       PUID: ${PUID}
       DOMAINNAME: ${DOMAINNAME}
-      inContainer: true # Tell tdarr its running in docker
-      serverIP: tdarr.${HOST_NAME}.local
+      UMASK_SET: 002
+      serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
       webUIPort: ${TDARR_WEBUI_PORT}
-      internalNode: true
-      nodeName: tdarr_node.${HOST_NAME} 
-      nodeID: tdarr_node.${HOST_NAME}
+      internalNode: false # true to enable the Node in the Server container.
+      inContainer: true # Tell tdarr its running in docker
+#      nodeName: tdarr_node.${HOST_NAME}     
       # NVIDIA_DRIVER_CAPABILITIES: all # Nvidia transcoding
       # NVIDIA_VISIBLE_DEVICES: all # Nvidia transcoding
     networks:
@@ -38,8 +36,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr/app/server:/app/server
-      - ${DOCKERDIR}/tdarr/app/configs:/app/configs
-      - ${DOCKERDIR}/tdarr/transcode:/transcode
+      - ${DOCKERDIR}/tdarr/cache:/cache
+      #- /dev/shm/tdarr:/temp # offload transcoding to memory #Not viable anymore as video files are becoming too large to fit on RAM
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr:/app/logs
     # Hardware transcoding
@@ -58,17 +56,11 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.tdarr-rtr.entrypoints=https"
-      - "traefik.http.routers.tdarr-rtr.rule=Host(`tdarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.tdarr-rtr.tls=true"
-      ## Middlewares
-      - "traefik.http.routers.tdarr-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.tdarr-rtr.service=tdarr-svc"
-      - "traefik.http.services.tdarr-svc.loadbalancer.server.port=8265"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=false" #Client and Server versions must match so should be carefully updating
+      ## Homepage Labels
+      - "homepage.group=Other"
+      - "homepage.name=Tdarr"
+      - "homepage.icon=tdarr.png"
+      - "homepage.href=https://tdarr.${DOMAINNAME}/#/"
+      - "homepage.description=Automate transcoding of media"
