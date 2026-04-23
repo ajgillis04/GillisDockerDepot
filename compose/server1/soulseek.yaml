@@ -5,7 +5,7 @@
 # Can integrate with Spotify-to-Plex for missing track acquisition.
 # ------------------------------------------------------------------------------
 services:
-  slskd:
+  soulseek:
     container_name: soulseek.${HOST_NAME}
  #   hostname: soulseek.${HOST_NAME}.lan
     image: slskd/slskd:latest

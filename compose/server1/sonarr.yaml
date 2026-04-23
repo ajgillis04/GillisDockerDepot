@@ -19,6 +19,8 @@ services:
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/sonarr:/var/log
+      - ${SCRIPTS_DIR}:/scripts
+      - ${SECRETSDIR}:/secrets:ro
     restart: always
     security_opt:
       - no-new-privileges:true
