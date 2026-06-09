@@ -1,3 +1,6 @@
+# Note Nvidia GPU support requires the NVIDIA Game ready or Studio driver to be installed on the host machine. 
+# https://www.nvidia.com/en-us/drivers/
+
 # Tdarr Node - A node instance for the Tdarr tool.
 services:
   tdarr_node:
@@ -12,10 +15,10 @@ services:
       nodeName: tdarr_node.${HOST_NAME}
       serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
-      inContainer: true # Tell tdarr its running in docker      
+      inContainer: true
       serverURL: http://${TDARR_SERVERIP}:${TDARR_SERVER_PORT}
-      # NVIDIA_DRIVER_CAPABILITIES: all
-      # NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
     networks:
       - mediaserver
     ports:
@@ -24,24 +27,17 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr/app/configs:/app/configs
       - ${DOCKERDIR}/tdarr/cache:/cache
-      #- /dev/shm/tdarr:/temp # offload transcoding to memory #Not viable anymore as video files are becoming too large to fit on RAM
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr_node:/app/logs
-    # Hardware transcoding
-    devices:
-      - /dev/dri:/dev/dri
-#    deploy:
-#      resources:
-#        reservations:
-#          devices:
-    #      - driver: nvidia # Pick one
-#          - driver: vaapi # Pick one
-    #      - driver: qsv # Pick one
-#            count: all
-#            capabilities: [gpu] 
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     restart: always
     security_opt:
       - no-new-privileges:true
     labels:
-      ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=false"

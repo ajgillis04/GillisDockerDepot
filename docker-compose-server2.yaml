@@ -115,9 +115,9 @@ include:
 #  - ${COMPOSE_DIR}/cloudflared.yaml
 #  - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/heimdallint.yaml
-  - ${COMPOSE_DIR}/gramps.yaml
-  - ${COMPOSE_DIR}/grampsweb_redis.yaml
-  - ${COMPOSE_DIR}/grampsweb_celery.yaml
+#  - ${COMPOSE_DIR}/gramps.yaml
+#  - ${COMPOSE_DIR}/grampsweb_redis.yaml
+#  - ${COMPOSE_DIR}/grampsweb_celery.yaml
 #  - ${COMPOSE_DIR}/jaegertracing.yaml
 #  - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
