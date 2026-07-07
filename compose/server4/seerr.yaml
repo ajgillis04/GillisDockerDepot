@@ -65,8 +65,8 @@ services:
     ports:
       - "${SEERR_PORT}:5055"      
     volumes:
-      - ${DOCKERDIR}/overseerr/config:/app/config # Use this for Migration Step 1
-      #- ${DOCKERDIR}/seerr/config:/app/config # Use this for after Migration Step 5
+      #- ${DOCKERDIR}/overseerr/config:/app/config # Use this for Migration Step 1
+      - ${DOCKERDIR}/seerr/config:/app/config # Use this for after Migration Step 5
       - ${DOCKERDIR}/logs/seerr:/var/log 
     restart: always
     security_opt:

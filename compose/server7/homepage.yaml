@@ -4,13 +4,12 @@
 services:
   homepage:
     container_name: homepage.${HOST_NAME}
-    hostname: homepage.${HOST_NAME}
+    hostname: homepage.${HOST_NAME}.lan
     image: ghcr.io/gethomepage/homepage:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: 0
-      HOST_NAME: ${HOST_NAME}.lan
       DOMAINNAME: ${DOMAINNAME}
       HOMEPAGE_ALLOWED_HOSTS: homepage.${DOMAINNAME},${SERVER_IP}:3000
     networks:

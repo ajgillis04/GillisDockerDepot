@@ -9,11 +9,13 @@ services:
   profilarr:
     container_name: profilarr.${HOST_NAME}
     hostname: profilarr.${HOST_NAME}.lan
-    image: santiagosayshey/profilarr:latest
+    image: ghcr.io/dictionarry-hub/profilarr:latest
     environment:
       TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      AUTH: off
+      ORIGIN: https://profilarr.${DOMAINNAME}
     networks:
       - mediaserver
     ports:
@@ -35,3 +37,7 @@ services:
       - "homepage.icon=profilarr.png"
       - "homepage.href=https://profilarr.${DOMAINNAME}/"
       - "homepage.description=custom format / quality profile management tool"
+      ## Homepage Widget
+      - "homepage.widget.type="
+      - "homepage.widget.url=http://profilarr.${HOST_NAME}:6868"
+      - "homepage.widget.key=${PROFILARR_API_KEY}"

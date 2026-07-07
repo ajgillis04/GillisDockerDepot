@@ -12,11 +12,9 @@ services:
       - 1.1.1.1
       - 1.0.0.1
     environment:
-      #OPENVPN_DISABLE: "true"
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}      
-      HOST_NAME: ${HOST_NAME}.lan
       DOMAIN: ${DOMAINNAME}
       TRANS_USER: ${TRANS_USER}
       TRANS_PASS: ${TRANS_PASS}
