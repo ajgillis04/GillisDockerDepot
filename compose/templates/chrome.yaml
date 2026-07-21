@@ -1,0 +1,37 @@
+# ------------------------------------------------------------------------------
+# chrome - Full Google Chrome Browser (noVNC / VNC)
+# ------------------------------------------------------------------------------
+# Provides a complete Chrome desktop environment accessible through any browser.
+# Ideal for remote browsing from work or restricted networks via Cloudflare Tunnel.
+# Runs as a non-root user (PUID/PGID) with persistent profiles and extensions.
+# Traffic exits through your home network, bypassing corporate filtering entirely.
+# ------------------------------------------------------------------------------
+services:
+  chrome:
+    container_name: chrome.${HOST_NAME}
+    hostname: chrome.${HOST_NAME}.lan
+    image: ghcr.io/linuxserver/chrome:latest
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    networks:
+      - mediaserver
+    ports:
+      - ${CHROME_PORT}:3000   # noVNC web UI
+      - ${CHROME_VNC_PORT}:5900
+    volumes:
+      - ${DOCKERDIR}/chrome:/config
+    shm_size: "2g"
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower enabled?
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=chrome"
+      - "homepage.icon=chrome.png"
+      - "homepage.href=https://chrome.${DOMAINNAME}/"
+      - "homepage.description=Full Chrome browser (noVNC/VNC)"
