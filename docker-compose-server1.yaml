@@ -139,6 +139,7 @@ include:
 #  - ${COMPOSE_DIR}/bookbounty.yaml
   - ${COMPOSE_DIR}/calibre-web.yaml
   - ${COMPOSE_DIR}/calibre.yaml
+  - ${COMPOSE_DIR}/chrome.yaml
   - ${COMPOSE_DIR}/chowdown.yaml
   - ${COMPOSE_DIR}/cloudflared.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml

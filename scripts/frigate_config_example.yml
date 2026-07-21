@@ -1,0 +1,260 @@
+version: 0.17.2
+
+logger:
+  default: info
+  logs:
+    frigate.ffmpeg: warning
+
+model:
+  path: /openvino-model/ssdlite_mobilenet_v2.xml
+  width: 300
+  height: 300
+  input_tensor: nhwc
+  input_pixel_format: bgr
+  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+
+detectors:
+  ov:
+    type: openvino
+    device: GPU
+
+mqtt:
+  host: <your-mqtt-broker-ip>
+  port: 1883
+  topic_prefix: frigate
+  client_id: frigate
+
+# GLOBAL HARDWARE ACCELERATION (Applies Intel VA-API decoding to all streams)
+ffmpeg:
+  hwaccel_args: preset-vaapi
+
+birdseye:
+  enabled: true
+  mode: objects
+  width: 1280
+  height: 720
+
+detect:
+  enabled: true
+  stationary:
+    interval: 10
+    threshold: 50
+
+record:
+  enabled: true
+
+semantic_search:
+  enabled: true
+  model_size: small
+
+face_recognition:
+  enabled: true
+  model_size: small
+
+# ------------------------------------------------------------------------------
+# CAMERAS CONFIGURATION
+# ------------------------------------------------------------------------------
+cameras:
+
+  # ---------------------------
+  # CHANNEL 1 — FRONT YARD (4K High-Res Detection)
+  # ---------------------------
+  channel_1:
+    ffmpeg:
+      inputs:
+        - path: rtsp://<user>:<password>@<nvr-ip>:554/cam/realmonitor?channel=1&subtype=0
+          roles:
+            - detect
+            - record
+          input_args: preset-rtsp-restream          
+    detect:
+      enabled: true
+      width: 3840
+      height: 2160
+      fps: 5
+    motion:
+      contour_area: 100
+      threshold: 25
+      improve_contrast: true
+      mask:
+        - 0.007,-0.002,0.988,0,0.776,0.196,0.003,0.376
+        - 0,0.867,0.355,0.565,0.365,0.241,0.001,0.381
+    snapshots:
+      enabled: true
+      timestamp: true
+      bounding_box: true
+      quality: 100
+    objects:
+      track: [person]
+      filters:
+        person:
+          min_score: 0.70
+          threshold: 0.60
+          min_area: 3000
+    zones:
+      FrontYard:
+        coordinates: 0.164,0.714,0.763,0.295,1,0.237,1,1,0,1
+        inertia: 3
+        loitering_time: 0
+        objects: person
+    review:
+      alerts:
+        required_zones: FrontYard
+
+  # ---------------------------
+  # CHANNEL 2 — DRIVEWAY (4K High-Res Detection)
+  # ---------------------------
+  channel_2:
+    ffmpeg:
+      inputs:
+        - path: rtsp://<user>:<password>@<nvr-ip>:554/cam/realmonitor?channel=2&subtype=0
+          roles:
+            - detect
+            - record
+          input_args: preset-rtsp-restream
+    detect:
+      enabled: true
+      width: 3840
+      height: 2160
+      fps: 5
+    motion:
+      contour_area: 100
+      threshold: 25
+      improve_contrast: true
+      mask: 0.089,0.066,0.09,0,0.825,0,0.811,0.122,0.485,0.013,0.273,0.012
+    snapshots:
+      enabled: true
+      timestamp: true
+      bounding_box: true
+      quality: 100
+    objects:
+      track: [person]
+      filters:
+        person:
+          min_score: 0.70
+          threshold: 0.60
+          min_area: 3000
+    zones:
+      Driveway:
+        coordinates: 0.1,0.087,0.42,0.114,0.788,0.28,1,1,0,1,0,0.287
+        inertia: 3
+        loitering_time: 0
+        objects: person
+    notifications:
+      enabled: false
+    review:
+      alerts:
+        required_zones: Driveway
+
+  # ---------------------------
+  # CHANNEL 3 — BACK DOOR (4K High-Res Detection)
+  # ---------------------------
+  channel_3:
+    ffmpeg:
+      inputs:
+        - path: rtsp://<user>:<password>@<nvr-ip>:554/cam/realmonitor?channel=3&subtype=0
+          roles:
+            - detect
+            - record
+          input_args: preset-rtsp-restream
+    detect:
+      enabled: true
+      width: 3840
+      height: 2160
+      fps: 5
+    motion:
+      contour_area: 100
+      threshold: 25
+      improve_contrast: true
+      mask:
+        - 0.786,0.005,0.783,0.348,0.895,0.46,0.932,0.003
+        - 0.364,0.638,0.384,0.549,0.46,0.473,0.511,0.427,0.616,0.372,0.679,0.354,0.743,0.376,0.829,0.418,0.855,0.461,0.814,0.489,0.815,0.575,0.807,0.583,0.753,0.631,0.741,0.74,0.675,0.819,0.585,0.843,0.49,0.83,0.396,0.751
+    snapshots:
+      enabled: true
+      timestamp: true
+      bounding_box: true
+      quality: 100
+    objects:
+      track: [person]
+      filters:
+        person:
+          min_score: 0.70
+          threshold: 0.60
+          min_area: 3000
+    zones:
+      BackDoor:
+        coordinates: 0.0,0.0,0.412,0.0,0.783,0.0,0.785,0.117,0.784,0.367,0.654,0.329,0.499,0.399,0.405,0.487,0.35,0.544,0.322,0.654,0.394,0.791,0.62,1.0,0.0,1.0
+        inertia: 3
+        loitering_time: 0
+        objects: person
+      walkway:
+        coordinates: 0.481,0.862,0.592,0.868,0.683,0.834,0.737,0.786,0.765,0.695,0.784,0.623,0.824,0.589,0.826,0.496,0.884,0.46,0.901,0.484,0.774,1.0,0.625,0.993
+        loitering_time: 0
+        objects: person
+        inertia: 3
+    notifications:
+      enabled: false
+    review:
+      alerts:
+        required_zones: BackDoor
+
+  # ---------------------------
+  # CHANNEL 4 — DOORBELL (2K High-Res Detection)
+  # ---------------------------
+  channel_4:
+    ffmpeg:
+      inputs:
+        - path: rtsp://<user>:<password>@<nvr-ip>:554/cam/realmonitor?channel=4&subtype=0
+          roles:
+            - detect
+            - record
+          input_args: preset-rtsp-restream
+    detect:
+      enabled: true
+      width: 2560      # Native high-res 2K width
+      height: 1920     # Native high-res 2K height
+      fps: 5
+    audio:
+      enabled: false
+    motion:
+      threshold: 15
+      contour_area: 100
+      improve_contrast: true
+      mask:
+        - 0.007,0.001,0.996,0.004,1,0.347,0,0.343
+        - -0.001,0.349,0.991,0.35,0.991,0.565,0.007,0.553
+    snapshots:
+      enabled: true
+      timestamp: true
+      bounding_box: true
+      quality: 100
+      retain:
+        default: 7
+    objects:
+      track: [person]
+      filters:
+        person:
+          min_score: 0.7
+          threshold: 0.6
+          min_area: 3000
+    zones:
+      Lawn:
+        coordinates: 0.015,0.609,0.985,0.64,0.977,0.991,0.005,0.991
+        loitering_time: 0
+        inertia: 3
+        objects: person
+    notifications:
+      enabled: false
+    review:
+      alerts:
+        required_zones: Lawn
+
+camera_groups:
+  Birdseye:
+    order: 1
+    icon: LuAccessibility
+    cameras:
+      - channel_1
+      - channel_2
+      - channel_3
+      - channel_4
