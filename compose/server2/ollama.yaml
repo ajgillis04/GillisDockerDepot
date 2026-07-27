@@ -1,0 +1,49 @@
+# ***********************************************************************************
+# Service: Ollama
+# Purpose: Local LLM engine Hosts models such as Llama3, Mistral, Phi‑3.
+# Notes: 
+#   - Uses CPU on no GPU required).
+#   - Models stored in ${DOCKERDIR}/ollama for persistence.
+#   - OpenWebUI connects to this service via API.
+# ***********************************************************************************
+
+services:
+  ollama:
+    container_name: ollama.${HOST_NAME}
+    hostname: ollama.${HOST_NAME}.lan
+    image: ollama/ollama:latest
+    gpus: all
+    environment:
+      TZ: ${TZ}
+      OLLAMA_FLASH_ATTENTION: "true"
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_KV_CACHE_TYPE: "q8_0"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      OLLAMA_CONTEXT_LENGTH: "8192"
+    networks:
+      - mediaserver
+    ports:
+      - "${OLLAMA_PORT}:11434"
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/ollama:/root/.ollama
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Ollama"
+      - "homepage.icon=ollama.png"
+      - "homepage.href=https://ollama.${DOMAINNAME}/"
+      - "homepage.description=Local LLM engine"

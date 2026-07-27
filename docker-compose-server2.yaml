@@ -14,11 +14,16 @@
 #          make sure PUID and PGID match the system you are in with .env
 #          After services are brought online retrieve api_keys and update .env/secrets
 # Usage: docker compose -p mediaserver -f docker-compose-server2.yaml up --detach
+# or:    docker compose -p mediaserver -f docker-compose-server2.yaml up -d <service_name>
+# or: docker compose -p mediaserver -f docker-compose-server2.yaml up -d --no-deps --force-recreate <service_name>
 # **********************************************************************************
 
 # *************************** NETWORKS ****************************************** 
 # You may customize the network subnet (172.30.0.0/24) below as you please.
 # Docker Compose version 3.5 or higher required to define networks this way. You no longer have to create manual.
+
+name: mediaserver
+
 networks:
   mediaserver:
     name: mediaserver
@@ -111,8 +116,10 @@ secrets:
 # *************************** SERVICES ****************************************** 
 include:
 #  - ${COMPOSE_DIR}/bazarr.yaml
+  - ${COMPOSE_DIR}/chromadb.yaml
 #  - ${COMPOSE_DIR}/cloudflare-ddns.yaml
 #  - ${COMPOSE_DIR}/cloudflared.yaml
+#  - ${COMPOSE_DIR}/comfyui.yaml
 #  - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/heimdallint.yaml
 #  - ${COMPOSE_DIR}/gramps.yaml
@@ -121,7 +128,9 @@ include:
 #  - ${COMPOSE_DIR}/jaegertracing.yaml
 #  - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
+  - ${COMPOSE_DIR}/ollama.yaml
 #  - ${COMPOSE_DIR}/opentelemetry.yaml
+  - ${COMPOSE_DIR}/openwebui.yaml
 #  - ${COMPOSE_DIR}/orbital-sync.yaml
 #  - ${COMPOSE_DIR}/phpmyadmin.yaml
 #  - ${COMPOSE_DIR}/pihole.yaml

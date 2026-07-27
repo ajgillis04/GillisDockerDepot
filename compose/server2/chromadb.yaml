@@ -1,0 +1,33 @@
+# ***********************************************************************************
+# Service: ChromaDB
+# Purpose: Vector database for long‑term AI memory + RAG storage.
+# Notes:
+#   - Stores embeddings for documents, notes, PDFs, web pages, etc.
+#   - OpenWebUI connects to this service for Retrieval Augmented Generation (RAG).
+#   - Data persists in ${DOCKERDIR}/chromadb.
+# ***********************************************************************************
+
+ services:
+  chromadb:
+    container_name: chromadb.${HOST_NAME}
+    hostname: chromadb.${HOST_NAME}.lan
+    image: chromadb/chroma:latest
+    environment:
+      TZ: ${TZ}
+    networks:
+      - mediaserver
+    ports:
+      - "${CHROMADB_PORT}:8000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/chromadb:/chroma
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Infrastructure"
+      - "homepage.name=ChromaDB"
+      - "homepage.icon=database.png"
+      - "homepage.href=https://chromadb.${DOMAINNAME}/"
+      - "homepage.description=Vector database for RAG"

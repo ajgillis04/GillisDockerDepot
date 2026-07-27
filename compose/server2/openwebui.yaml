@@ -1,0 +1,44 @@
+# ***********************************************************************************
+# Service: OpenWebUI
+# Purpose: Unified AI interface for LLM chat + image generation.
+# Notes:
+#   - Connects to Ollama for LLMs.
+#   - Connects to ComfyUI for image generation.
+#   - Stores user data and settings in ${DOCKERDIR}/openwebui.
+# ***********************************************************************************
+
+services:
+  openwebui:
+    container_name: openwebui.${HOST_NAME}
+    hostname: openwebui.${HOST_NAME}.lan
+    image: ghcr.io/open-webui/open-webui:latest
+    gpus: all
+    environment:
+      TZ: ${TZ}
+      ENV: prod
+      WEBUI_HOST: 0.0.0.0
+      WEBUI_PORT: 3001
+      USE_OLLAMA_DOCKER: false
+      OLLAMA_BASE_URL: http://ollama.${HOST_NAME}:11434
+      OLLAMA_API_BASE_URL: http://ollama.${HOST_NAME}:11434
+      PUBLIC_OLLAMA_API_BASE_URL: http://ollama.${HOST_NAME}:11434
+      COMFYUI_API_BASE_URL: http://comfyui.${HOST_NAME}:8188
+      CHROMA_URL: http://chromadb.${HOST_NAME}:8000
+    networks:
+      - mediaserver
+    ports:
+      - "${OPENWEBUI_PORT}:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/openwebui:/app/backend/data
+      - ${DOCKER_NAS}:/app/backend/data/knowledge/gillis_docker_depot:ro
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Infrastructure"
+      - "homepage.name=OpenWebUI"
+      - "homepage.icon=openwebui.png"
+      - "homepage.href=https://openwebui.${DOMAINNAME}/"
+      - "homepage.description=Unified AI interface"
