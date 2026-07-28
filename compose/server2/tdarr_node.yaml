@@ -6,12 +6,8 @@ services:
   tdarr_node:
     container_name: tdarr_node.${HOST_NAME}
     hostname: tdarr_node.${HOST_NAME}.lan
-<<<<<<< HEAD
     image: haveagitgat/tdarr_node:2.81.01
-=======
-    image: haveagitgat/tdarr_node:2.58.01
     gpus: all
->>>>>>> b7f81b6960e1e6ca656e59fa26c57d8f1a4471c8
     environment:
       TZ: ${TZ}
       PGID: ${PGID}
