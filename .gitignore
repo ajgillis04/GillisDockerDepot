@@ -48,3 +48,7 @@ appdata/
 
 # Visual Studio Code settings
 .vscode/
+
+# Aider
+.aider*
+.aider.tags.cache.v4/
