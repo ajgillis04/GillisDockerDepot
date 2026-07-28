@@ -1,0 +1,36 @@
+# ***********************************************************************************
+# Service: ComfyUI
+# Purpose: Local image generation using Stable Diffusion (GPU accelerated).
+# Notes:
+#   - Uses your GPU via NVIDIA Docker runtime.
+#   - SD 1.5 runs well; SDXL requires low‑VRAM mode.
+#   - Models stored in ${MEDIASHARE}/ai_models for persistence.
+# ***********************************************************************************
+
+services:
+  comfyui:
+    container_name: comfyui.${HOST_NAME}
+    hostname: comfyui.${HOST_NAME}.lan
+    image: ghcr.io/ai-dock/comfyui:latest-cuda
+    gpus: all
+    environment:
+      TZ: ${TZ}
+      NVIDIA_REQUIRE_CUDA: "cuda>=12.1"
+    networks:
+      - mediaserver
+    ports:
+      - "${COMFYUI_PORT}:8188"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/comfyui:/workspace
+      - ${DOCKERDIR}/comfyui/models:/models
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Infrastructure"
+      - "homepage.name=ComfyUI"
+      - "homepage.icon=comfyui.png"
+      - "homepage.href=https://comfyui.${DOMAINNAME}/"
+      - "homepage.description=Local image generation"

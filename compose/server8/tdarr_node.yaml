@@ -1,0 +1,66 @@
+# --- NVIDIA GPU Setup for Ubuntu + Docker (GTX 1650 / Tdarr) ---
+# 1. Install NVIDIA driver (kernel module + userspace libs)
+#    Ensures Ubuntu can see and use the GPU.
+#    sudo ubuntu-drivers install
+#    nvidia-smi   # verify GPU is detected
+
+# 2. Add NVIDIA Container Toolkit repository
+#    Required so Docker containers can access the GPU.
+#    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | \
+#    sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+#    curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+#    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+#    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+# 3. Install NVIDIA Container Toolkit
+#    Provides the nvidia runtime + CUDA libraries inside containers.
+#    sudo apt update
+#    sudo apt install -y nvidia-container-toolkit
+
+# 4. Register NVIDIA runtime with Docker
+#    Adds "nvidia" to Docker's available runtimes.
+#    sudo nvidia-ctk runtime configure --runtime=docker
+#    sudo systemctl restart docker
+
+# 5. Test GPU inside Docker
+#    Confirms containers can access the GPU.
+#    docker run --rm --gpus all nvidia/cuda:12.3.0-base-ubuntu22.04 nvidia-smi
+
+# 6. Compose usage (Linux)
+#    Use runtime: nvidia (NOT Swarm deploy: devices)
+#    Tdarr Node will now have full GPU access.
+# ---------------------------------------------------------------
+
+
+# Tdarr Node - A node instance for the Tdarr tool.
+services:
+  tdarr_node:
+    container_name: tdarr_node.${HOST_NAME}
+    hostname: tdarr_node.${HOST_NAME}.lan
+    image: haveagitgat/tdarr_node:2.58.01
+    runtime: nvidia
+    environment:
+      TZ: ${TZ}
+      PGID: ${PGID}
+      PUID: ${PUID}
+      UMASK_SET: 002
+      nodeName: tdarr_node.${HOST_NAME}
+      serverIP: ${TDARR_SERVERIP}
+      serverPort: ${TDARR_SERVER_PORT}
+      inContainer: true
+      serverURL: http://${TDARR_SERVERIP}:${TDARR_SERVER_PORT}
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+    networks:
+      - mediaserver
+    ports:
+      - "${TDARR_NODE_PORT}:8267"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/tdarr/app/configs:/app/configs
+      - ${DOCKERDIR}/tdarr/cache:/cache
+      - ${MEDIASHARE}:/media
+      - ${DOCKERDIR}/logs/tdarr_node:/app/logs
+    restart: always
+    security_opt:
+      - no-new-privileges:true
