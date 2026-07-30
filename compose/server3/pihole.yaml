@@ -11,20 +11,20 @@ services:
     hostname: pihole.${HOST_NAME}.lan
     image: pihole/pihole:latest 
     cap_add:
-         # Required if you are using Pi-hole as your DHCP server, else not needed    
+      # Required if you are using Pi-hole as your DHCP server, else not needed
       - NET_ADMIN
       - SYS_TIME
       - SYS_NICE
       - CAP_NET_RAW
     environment:
-      TZ: ${TZ}      
+      TZ: ${TZ}
       HOST_NAME: pihole.${HOST_NAME}.lan
       #WEBPASSWORD_FILE: /run/secrets/pihole_password
       #FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
       #FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
       FTLCONF_dns_upstreams: 127.0.0.1#5335;::1#5335
       FTLCONF_dns_dnssec: true
-      FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,local
+      FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,lan
       FTLCONF_debug_api: true
       TAIL_FTL_LOG: '1' # or '0' to disable
       FTLCONF_dhcp_active: false
@@ -32,12 +32,12 @@ services:
       FTLCONF_dhcp_end: 192.168.2.254
       FTLCONF_dhcp_router: 192.168.2.1
       FTLCONF_dhcp_leaseTime: 30d
-      FTLCONF_dns_domain: local
+      FTLCONF_dns_domain: lan
       FTLCONF_dhcp_ipv6: true
       TEMPERATUREUNIT: c
  #   networks:
  #     pihole_network:
- #       ipv4_address: ${PIHOLE_IP}  
+ #       ipv4_address: ${PIHOLE_IP}
     network_mode: host
     volumes:
       - ${DOCKERDIR}/pihole/etc:/etc/pihole
@@ -46,6 +46,6 @@ services:
       - ${DOCKERDIR}/logs/pihole-FTL:/var/log/pihole-FTL
     restart: always
     secrets:
-      - pihole_password    
+      - pihole_password
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
