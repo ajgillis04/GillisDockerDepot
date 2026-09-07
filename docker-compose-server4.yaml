@@ -121,9 +121,9 @@ secrets:
 # *************************** SERVICES ******************************************
 include:
   - ${COMPOSE_DIR}/bazarr.yaml
-  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
+#  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml  
-  - ${COMPOSE_DIR}/dozzle.yaml
+#  - ${COMPOSE_DIR}/dozzle.yaml
   - ${COMPOSE_DIR}/guacamole.yaml
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/homepage.yaml
@@ -131,10 +131,10 @@ include:
 #  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
   - ${COMPOSE_DIR}/nextcloud.yaml
-  - ${COMPOSE_DIR}/oauth.yaml
+#  - ${COMPOSE_DIR}/oauth.yaml
 #  - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
-  - ${COMPOSE_DIR}/pihole.yaml
+#  - ${COMPOSE_DIR}/pihole.yaml
   - ${COMPOSE_DIR}/plex.yaml
   - ${COMPOSE_DIR}/portainer.yaml
   - ${COMPOSE_DIR}/prowlarr.yaml
@@ -146,8 +146,8 @@ include:
   - ${COMPOSE_DIR}/tautulli.yaml
 # - ${COMPOSE_DIR}/tdarr.yaml
 # - ${COMPOSE_DIR}/tdarr_node.yaml
-  - ${COMPOSE_DIR}/traefik.yaml
+#  - ${COMPOSE_DIR}/traefik.yaml
   - ${COMPOSE_DIR}/transmission-openvpn.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
-  - ${COMPOSE_DIR}/wireguard.yaml
+#  - ${COMPOSE_DIR}/wireguard.yaml
