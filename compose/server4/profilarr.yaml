@@ -24,7 +24,7 @@ services:
       # Uncomment if you want Profilarr to interact with Docker directly
       # - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERDIR}/profilarr/config:/config
-      - ${DOCKERDIR}/logs/profilarr:/var/log
+      - ${DOCKERDIR}/logs/profilarr:/config/logs
     restart: always
     security_opt:
       - no-new-privileges:true

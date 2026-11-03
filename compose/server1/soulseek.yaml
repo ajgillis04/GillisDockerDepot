@@ -34,6 +34,7 @@ services:
 
     volumes:
       - ${DOCKERDIR}/soulseek/app:/app      
+      - ${DOCKERDIR}/logs/soulseek:/app/logs
       - ${USERDOWNLOAD}/Torrents:/downloads
 
     restart: on-failure:4
