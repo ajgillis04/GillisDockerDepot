@@ -18,7 +18,7 @@ services:
       - ${DOCKERDIR}/sonarr/config:/config
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${MEDIASHARE}:/media
-      - ${DOCKERDIR}/logs/sonarr:/var/log
+      - ${DOCKERDIR}/logs/sonarr:/config/logs
       - ${SCRIPTS_DIR}:/scripts
       - ${SECRETSDIR}:/secrets:ro
     restart: always

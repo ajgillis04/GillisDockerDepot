@@ -18,7 +18,7 @@ services:
       - ${DOCKERDIR}/radarr/config:/config
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${MEDIASHARE}:/media
-      - ${DOCKERDIR}/logs/radarr:/var/log
+      - ${DOCKERDIR}/logs/radarr:/config/logs
       - ${SCRIPTS_DIR}:/scripts
       - ${SECRETSDIR}:/secrets:ro
     restart: always

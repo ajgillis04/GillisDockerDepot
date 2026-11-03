@@ -17,7 +17,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/prowlarr/config:/config
       - ${USERDOWNLOAD}/Torrents:/downloads
-      - ${DOCKERDIR}/logs/prowlarr:/var/log
+      - ${DOCKERDIR}/logs/prowlarr:/config/logs
     restart: always
     security_opt:
       - no-new-privileges:true

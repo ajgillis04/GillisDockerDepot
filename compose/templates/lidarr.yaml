@@ -18,7 +18,7 @@ services:
       - ${DOCKERDIR}/lidarr/config:/config
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${MEDIASHARE}/Music:/music
-      - ${DOCKERDIR}/logs/lidarr:/var/log
+      - ${DOCKERDIR}/logs/lidarr:/config/logs
     restart: always
     security_opt:
       - no-new-privileges:true    

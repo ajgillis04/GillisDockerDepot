@@ -18,7 +18,7 @@ services:
       - ${DOCKERDIR}/sonarr/config:/config
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${MEDIASHARE}:/media
-      - ${DOCKERDIR}/logs/sonarr:/var/log
+      - ${DOCKERDIR}/logs/sonarr:/config/logs
     restart: always
     security_opt:
       - no-new-privileges:true

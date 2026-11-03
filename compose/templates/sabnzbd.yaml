@@ -16,7 +16,7 @@ services:
     volumes:
       - ${DOCKERDIR}/sabnzbd/config:/config
       - ${USERDOWNLOAD}/Torrents:/downloads
-      - ${DOCKERDIR}/logs/sabnzbd:/var/log
+      - ${DOCKERDIR}/logs/sabnzbd:/config/logs
     restart: always
     security_opt:
       - no-new-privileges:true

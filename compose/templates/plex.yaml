@@ -54,7 +54,7 @@ services:
       - ${DOCKERDIR}/plex/config:/config
       - ${MEDIASHARE}:/media
       - /dev/shm:/transcode # offload transcoding to memory
-      - ${DOCKERDIR}/logs/plex:/var/log
+      - "${DOCKERDIR}/logs/plex:/config/Plex Media Server/Logs"
     restart: always
     secrets:
       - plex_claim

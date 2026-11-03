@@ -16,7 +16,7 @@ services:
     volumes:
       - ${DOCKERDIR}/bazarr/config:/config
       - ${MEDIASHARE}:/media
-      - ${DOCKERDIR}/logs/bazarr:/var/log
+      - ${DOCKERDIR}/logs/bazarr:/config/log
     restart: always
     security_opt:
       - no-new-privileges:true   
