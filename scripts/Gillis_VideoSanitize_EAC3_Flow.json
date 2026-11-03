@@ -1,7 +1,7 @@
 {
-  "_id": "Cb2EH-RI3_R",
-  "name": "Gillis_VideoSanitize_EAC3_Flow",
-  "description": "Gillis_VideoSanitize_EAC3_Flow",
+  "_id": "GvsEac3V2a",
+  "name": "Gillis_VideoSanitize_EAC3_Flow_v2",
+  "description": "Duration check and a 20% size floor before replacing the original. Chapters are kept.",
   "tags": "",
   "flowPlugins": [
     {
@@ -9,36 +9,36 @@
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "HWD9I7jFY",
       "position": {
         "x": 382.3474784856101,
         "y": 26.908541906880505
-      },
-      "fpEnabled": true
+      }
     },
     {
       "name": "Fail Flow Image",
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "5jSRm0JJ3",
       "position": {
-        "x": 96.43759715801946,
-        "y": 59.98080097334467
-      },
-      "fpEnabled": true
+        "x": 93.12658407465713,
+        "y": 162.622206557578
+      }
     },
     {
       "name": "Image",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "nOpdAfdUN",
       "position": {
         "x": -8.69497381599976,
         "y": -338.4335966451156
-      },
-      "fpEnabled": true
+      }
     },
     {
       "name": "Input File",
@@ -49,125 +49,111 @@
         "fileAccessChecks": "true",
         "pauseNodeIfAccessChecksFail": "true"
       },
+      "fpEnabled": true,
       "id": "4nyE-sIn0I",
       "position": {
-        "x": -389.45273575125583,
-        "y": -410.68209916935393
-      },
-      "fpEnabled": true
+        "x": -408,
+        "y": -408
+      }
     },
     {
       "name": "Audio",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "eSIuagYsY",
       "position": {
-        "x": -390.2225111063082,
-        "y": -339.81646681345757
-      },
-      "fpEnabled": true
+        "x": -202.26711209242472,
+        "y": -337.05593846996675
+      }
     },
     {
       "name": "Fail Flow Audio",
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "zwcUdWRvZ",
       "position": {
-        "x": -279.34279245231806,
-        "y": 63.3373365434846
-      },
-      "fpEnabled": true
+        "x": -98.00947004959342,
+        "y": 161.15849727498164
+      }
     },
     {
       "name": "Text",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "nJUHbufln",
       "position": {
-        "x": -199.66379957402893,
-        "y": -339.4125000814347
-      },
-      "fpEnabled": true
+        "x": -408,
+        "y": -336
+      }
     },
     {
       "name": "Fail Flow Subtitle",
       "sourceRepo": "Community",
       "pluginName": "failFlow",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "HJV1clEqy",
       "position": {
-        "x": -93.37243443401525,
-        "y": 61.335851786243325
-      },
-      "fpEnabled": true
+        "x": -299.8856360922184,
+        "y": 161.03063645912695
+      }
     },
     {
       "name": "Review",
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "MDLrfvRh5",
       "position": {
         "x": 182.11655640515482,
         "y": -337.635309155616
-      },
-      "fpEnabled": true
+      }
     },
     {
       "name": "Compare File Size Ratio",
       "sourceRepo": "Community",
       "pluginName": "compareFileSizeRatio",
       "version": "2.0.0",
+      "inputsDB": {
+        "greaterThan": "20",
+        "lessThan": "120"
+      },
+      "fpEnabled": true,
       "id": "t4ezIpmo4",
       "position": {
         "x": 182.55873216720443,
-        "y": -271.3207431146052
-      },
-      "fpEnabled": true
+        "y": -190
+      }
     },
     {
       "name": "Require Review",
       "sourceRepo": "Community",
       "pluginName": "requireReview",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "SrgVUdEsr",
       "position": {
         "x": 280.50376694257864,
-        "y": -179.6481884885259
-      },
-      "fpEnabled": true
+        "y": -100
+      }
     },
     {
       "name": "Replace Original File",
       "sourceRepo": "Community",
       "pluginName": "replaceOriginalFile",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "vK-cmo0Bn",
       "position": {
         "x": 190.67969718316755,
-        "y": -64.82837047677742
-      },
-      "fpEnabled": true
-    },
-    {
-      "name": "Clean Audio and Tag Undetermined Tracks (Migz3CleanAudio)",
-      "sourceRepo": "Community",
-      "pluginName": "runClassicTranscodePlugin",
-      "version": "2.0.0",
-      "id": "qCCgS1WvZ",
-      "position": {
-        "x": -390.2153432671404,
-        "y": -183.27135491896655
-      },
-      "fpEnabled": true,
-      "inputsDB": {
-        "pluginSourceId": "Local:Tdarr_Plugin_MC93_Migz3CleanAudio",
-        "commentary": "true",
-        "tag_language": "eng",
-        "tag_title": "true"
+        "y": 10
       }
     },
     {
@@ -175,16 +161,14 @@
       "sourceRepo": "Community",
       "pluginName": "runClassicTranscodePlugin",
       "version": "2.0.0",
-      "id": "vRkvH-KvI",
-      "position": {
-        "x": -199.2631209640997,
-        "y": -269.4945094524013
+      "inputsDB": {
+        "pluginSourceId": "Local:Tdarr_Plugin_MC93_Migz4CleanSubs"
       },
       "fpEnabled": true,
-      "inputsDB": {
-        "pluginSourceId": "Community:Tdarr_Plugin_MC93_Migz4CleanSubs",
-        "commentary": "true",
-        "tag_language": "eng"
+      "id": "vRkvH-KvI",
+      "position": {
+        "x": -408,
+        "y": 24
       }
     },
     {
@@ -192,14 +176,14 @@
       "sourceRepo": "Community",
       "pluginName": "runClassicTranscodePlugin",
       "version": "2.0.0",
-      "id": "RCI2rqZ9I",
-      "position": {
-        "x": -6.117729603976528,
-        "y": -181.4130799404369
-      },
-      "fpEnabled": true,
       "inputsDB": {
         "pluginSourceId": "Community:Tdarr_Plugin_MC93_Migz6OrderStreams"
+      },
+      "fpEnabled": true,
+      "id": "RCI2rqZ9I",
+      "position": {
+        "x": -12,
+        "y": -156
       }
     },
     {
@@ -207,14 +191,14 @@
       "sourceRepo": "Community",
       "pluginName": "runClassicTranscodePlugin",
       "version": "2.0.0",
+      "inputsDB": {
+        "pluginSourceId": "Community:Tdarr_Plugin_MC93_MigzImageRemoval"
+      },
+      "fpEnabled": true,
       "id": "ruFFCm8vT",
       "position": {
         "x": -8.874738009125963,
         "y": -270.4657230159178
-      },
-      "fpEnabled": true,
-      "inputsDB": {
-        "pluginSourceId": "Community:Tdarr_Plugin_MC93_MigzImageRemoval"
       }
     },
     {
@@ -222,26 +206,43 @@
       "sourceRepo": "Community",
       "pluginName": "comment",
       "version": "1.0.0",
+      "fpEnabled": true,
       "id": "NDurACYz7",
       "position": {
-        "x": 191.10582603197815,
-        "y": 116.06480633567695
-      },
-      "fpEnabled": true
+        "x": 239.94326901157308,
+        "y": 240.2277969617657
+      }
     },
     {
       "name": "Clean Metadata (Migz2CleanTitle)",
       "sourceRepo": "Community",
       "pluginName": "runClassicTranscodePlugin",
       "version": "2.0.0",
-      "id": "V3VLQejtY",
-      "position": {
-        "x": -196.25158939186707,
-        "y": -180.69702876483873
-      },
-      "fpEnabled": true,
       "inputsDB": {
         "pluginSourceId": "Community:Tdarr_Plugin_MC93_Migz2CleanTitle"
+      },
+      "fpEnabled": true,
+      "id": "V3VLQejtY",
+      "position": {
+        "x": -408,
+        "y": -60
+      }
+    },
+    {
+      "name": "Fix Unsupported Streams (Migz1Remux)",
+      "sourceRepo": "Community",
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "1.0.0",
+      "inputsDB": {
+        "pluginSourceId": "Local:Tdarr_Plugin_MC93_Migz1Remux",
+        "force_conform": "false",
+        "container": "mkv"
+      },
+      "fpEnabled": true,
+      "id": "a3vcksOGe",
+      "position": {
+        "x": -408,
+        "y": -264
       }
     },
     {
@@ -249,16 +250,16 @@
       "sourceRepo": "Community",
       "pluginName": "runClassicTranscodePlugin",
       "version": "2.0.0",
-      "id": "Fy9waBI62",
-      "position": {
-        "x": -390.39761280066784,
-        "y": -114.88274060137014
-      },
-      "fpEnabled": true,
       "inputsDB": {
         "pluginSourceId": "Community:Tdarr_Plugin_a9hd_FFMPEG_Transcode_Specific_Audio_Stream_Codecs",
-        "codec": "eac3",
-        "codecs_to_transcode": "ac3,aac,mp3"
+        "codecs_to_transcode": "ac3,aac,mp3",
+        "codec": "eac3"
+      },
+      "fpEnabled": false,
+      "id": "YNnZWEEKC",
+      "position": {
+        "x": -204,
+        "y": -264
       }
     },
     {
@@ -266,51 +267,52 @@
       "sourceRepo": "Community",
       "pluginName": "runClassicTranscodePlugin",
       "version": "2.0.0",
-      "id": "Mwwaimuze",
-      "position": {
-        "x": -390.41677458111167,
-        "y": -269.6184438094782
-      },
-      "fpEnabled": true,
       "inputsDB": {
         "pluginSourceId": "Local:Tdarr_Plugin_MC99_DropNonAVStreams"
+      },
+      "fpEnabled": true,
+      "id": "b19xqk1jS",
+      "position": {
+        "x": -408,
+        "y": -156
       }
     },
     {
-      "name": "Normalize Audio",
+      "name": "Clean Audio and Tag Undetermined Tracks (Migz3CleanAudio)",
       "sourceRepo": "Community",
-      "pluginName": "normalizeAudio",
-      "version": "1.0.0",
-      "id": "cumqUmsFr",
-      "position": {
-        "x": -387.91761890484156,
-        "y": -11.953575750317675
+      "pluginName": "runClassicTranscodePlugin",
+      "version": "2.0.0",
+      "inputsDB": {
+        "pluginSourceId": "Local:Tdarr_Plugin_MC93_Migz3CleanAudio",
+        "commentary": "true",
+        "tag_language": "eng",
+        "tag_title": "true"
       },
-      "fpEnabled": true
+      "fpEnabled": true,
+      "id": "ongKU2XQY",
+      "position": {
+        "x": -204,
+        "y": -60
+      }
+    },
+    {
+      "name": "Compare File Duration Ratio",
+      "sourceRepo": "Community",
+      "pluginName": "compareFileDurationRatio",
+      "version": "1.0.0",
+      "inputsDB": {
+        "greaterThan": "99.5",
+        "lessThan": "100.5"
+      },
+      "fpEnabled": true,
+      "id": "dUrChK01a",
+      "position": {
+        "x": 182.56,
+        "y": -271.32
+      }
     }
   ],
   "flowEdges": [
-    {
-      "source": "4nyE-sIn0I",
-      "sourceHandle": "1",
-      "target": "eSIuagYsY",
-      "targetHandle": null,
-      "id": "O5_tdBN9B"
-    },
-    {
-      "source": "MDLrfvRh5",
-      "sourceHandle": "1",
-      "target": "t4ezIpmo4",
-      "targetHandle": null,
-      "id": "YVWAkoDrn"
-    },
-    {
-      "source": "nJUHbufln",
-      "sourceHandle": "1",
-      "target": "vRkvH-KvI",
-      "targetHandle": null,
-      "id": "kbcvO3EAU"
-    },
     {
       "source": "nOpdAfdUN",
       "sourceHandle": "1",
@@ -359,13 +361,6 @@
       "target": "SrgVUdEsr",
       "targetHandle": null,
       "id": "664JKcjwt"
-    },
-    {
-      "source": "qCCgS1WvZ",
-      "sourceHandle": "err1",
-      "target": "zwcUdWRvZ",
-      "targetHandle": null,
-      "id": "xB6kBNxKH"
     },
     {
       "source": "vRkvH-KvI",
@@ -424,123 +419,179 @@
       "id": "yICTCfJJW"
     },
     {
-      "source": "vRkvH-KvI",
-      "sourceHandle": "1",
-      "target": "V3VLQejtY",
+      "source": "t4ezIpmo4",
+      "sourceHandle": "3",
+      "target": "SrgVUdEsr",
       "targetHandle": null,
-      "id": "MYVWgrmUq"
+      "id": "ZbFH-1Vxk"
     },
     {
-      "source": "vRkvH-KvI",
-      "sourceHandle": "2",
-      "target": "V3VLQejtY",
+      "source": "4nyE-sIn0I",
+      "sourceHandle": "1",
+      "target": "nJUHbufln",
       "targetHandle": null,
-      "id": "MeSJTzWLR"
+      "id": "UwRtfRRZi"
+    },
+    {
+      "source": "V3VLQejtY",
+      "sourceHandle": "1",
+      "target": "vRkvH-KvI",
+      "targetHandle": null,
+      "id": "bYQifRgBb"
+    },
+    {
+      "source": "V3VLQejtY",
+      "sourceHandle": "2",
+      "target": "vRkvH-KvI",
+      "targetHandle": null,
+      "id": "ThxE4tuXj"
     },
     {
       "source": "V3VLQejtY",
       "sourceHandle": "err1",
       "target": "HJV1clEqy",
       "targetHandle": null,
-      "id": "TcI5Ivbqn"
+      "id": "KC7lFT0Ep"
     },
     {
-      "source": "V3VLQejtY",
+      "source": "vRkvH-KvI",
       "sourceHandle": "1",
-      "target": "nOpdAfdUN",
+      "target": "eSIuagYsY",
       "targetHandle": null,
-      "id": "y_vPx7hQ8"
+      "id": "xB-s3quTK"
     },
     {
-      "source": "V3VLQejtY",
+      "source": "vRkvH-KvI",
       "sourceHandle": "2",
-      "target": "nOpdAfdUN",
+      "target": "eSIuagYsY",
       "targetHandle": null,
-      "id": "Veiu_dPj_"
+      "id": "Av1Bwcb8B"
     },
     {
-      "source": "qCCgS1WvZ",
+      "source": "nJUHbufln",
       "sourceHandle": "1",
-      "target": "Fy9waBI62",
+      "target": "a3vcksOGe",
       "targetHandle": null,
-      "id": "YeatX7uha"
+      "id": "1YuwUi4oD"
     },
     {
-      "source": "qCCgS1WvZ",
-      "sourceHandle": "2",
-      "target": "Fy9waBI62",
+      "source": "a3vcksOGe",
+      "sourceHandle": "err1",
+      "target": "HJV1clEqy",
       "targetHandle": null,
-      "id": "JgEDlGUrO"
+      "id": "u8kKILvUn"
     },
     {
-      "source": "Fy9waBI62",
+      "source": "YNnZWEEKC",
       "sourceHandle": "err1",
       "target": "zwcUdWRvZ",
       "targetHandle": null,
-      "id": "O8XVtThkm"
+      "id": "dkN1eu9M7"
+    },
+    {
+      "source": "a3vcksOGe",
+      "sourceHandle": "1",
+      "target": "b19xqk1jS",
+      "targetHandle": null,
+      "id": "h1LfvUlBC"
+    },
+    {
+      "source": "b19xqk1jS",
+      "sourceHandle": "err1",
+      "target": "HJV1clEqy",
+      "targetHandle": null,
+      "id": "hCNgJIr2b"
+    },
+    {
+      "source": "b19xqk1jS",
+      "sourceHandle": "1",
+      "target": "V3VLQejtY",
+      "targetHandle": null,
+      "id": "jH1QTGgSg"
+    },
+    {
+      "source": "b19xqk1jS",
+      "sourceHandle": "2",
+      "target": "V3VLQejtY",
+      "targetHandle": null,
+      "id": "U4Lfl_-gL"
+    },
+    {
+      "source": "ongKU2XQY",
+      "sourceHandle": "err1",
+      "target": "zwcUdWRvZ",
+      "targetHandle": null,
+      "id": "9gKy1PJPf"
+    },
+    {
+      "source": "YNnZWEEKC",
+      "sourceHandle": "1",
+      "target": "ongKU2XQY",
+      "targetHandle": null,
+      "id": "i6gqT3WFm"
+    },
+    {
+      "source": "YNnZWEEKC",
+      "sourceHandle": "2",
+      "target": "ongKU2XQY",
+      "targetHandle": null,
+      "id": "-MXUq7W4Z"
     },
     {
       "source": "eSIuagYsY",
       "sourceHandle": "1",
-      "target": "Mwwaimuze",
+      "target": "YNnZWEEKC",
       "targetHandle": null,
-      "id": "07k35hQtQ"
+      "id": "RhK7u_OjC"
     },
     {
-      "source": "Mwwaimuze",
+      "source": "ongKU2XQY",
       "sourceHandle": "1",
-      "target": "qCCgS1WvZ",
+      "target": "nOpdAfdUN",
       "targetHandle": null,
-      "id": "305B2Td4Y"
+      "id": "Q7NSYz4Ex"
     },
     {
-      "source": "Mwwaimuze",
+      "source": "ongKU2XQY",
       "sourceHandle": "2",
-      "target": "qCCgS1WvZ",
+      "target": "nOpdAfdUN",
       "targetHandle": null,
-      "id": "_o6imAJsN"
+      "id": "bZt2GlWUr"
     },
     {
-      "source": "Mwwaimuze",
-      "sourceHandle": "err1",
-      "target": "zwcUdWRvZ",
-      "targetHandle": null,
-      "id": "oQI5q_rHI"
-    },
-    {
-      "source": "Fy9waBI62",
+      "source": "MDLrfvRh5",
       "sourceHandle": "1",
-      "target": "cumqUmsFr",
+      "target": "dUrChK01a",
       "targetHandle": null,
-      "id": "s7KC3rrIS"
+      "id": "dUrEdge00"
     },
     {
-      "source": "Fy9waBI62",
+      "source": "dUrChK01a",
+      "sourceHandle": "1",
+      "target": "t4ezIpmo4",
+      "targetHandle": null,
+      "id": "dUrEdge01"
+    },
+    {
+      "source": "dUrChK01a",
       "sourceHandle": "2",
-      "target": "cumqUmsFr",
+      "target": "SrgVUdEsr",
       "targetHandle": null,
-      "id": "pbpkv0icn"
+      "id": "dUrEdge02"
     },
     {
-      "source": "cumqUmsFr",
-      "sourceHandle": "err1",
-      "target": "zwcUdWRvZ",
-      "targetHandle": null,
-      "id": "fyTX0emCN"
-    },
-    {
-      "source": "cumqUmsFr",
-      "sourceHandle": "1",
-      "target": "nJUHbufln",
-      "targetHandle": null,
-      "id": "aUh3RfCN3"
-    },
-    {
-      "source": "t4ezIpmo4",
+      "source": "dUrChK01a",
       "sourceHandle": "3",
       "target": "SrgVUdEsr",
       "targetHandle": null,
-      "id": "ZbFH-1Vxk"
+      "id": "dUrEdge03"
+    },
+    {
+      "source": "dUrChK01a",
+      "sourceHandle": "err1",
+      "target": "HWD9I7jFY",
+      "targetHandle": null,
+      "id": "dUrEdge04"
     }
   ]
 }
