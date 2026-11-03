@@ -20,8 +20,6 @@ services:
       OPENVPN_OPTS: '--inactive 3600 --ping 10 --ping-exit 60'
       OPENVPN_USERNAME_FILE: /run/secrets/pia_username
       OPENVPN_PASSWORD_FILE: /run/secrets/pia_password
-      #OPENVPN_PASSWORD: gj55JV2ggV
-      #OPENVPN_USERNAME: p2468491
       OPENVPN_PROVIDER: PIA
       PIA_OPENVPN_CONFIG_BUNDLE: openvpn
       TRANSMISSION_DOWNLOAD_DIR: /downloads/Completed

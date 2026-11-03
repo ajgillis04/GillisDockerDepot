@@ -715,7 +715,7 @@ services:
       - "traefik.enable=true"
       # HTTP Routers
       - "traefik.http.routers.plex-rtr.entrypoints=https"
-#"Request has been aborted [172.69.130.220:26920 - /:/eventsource/notifications?X-Plex-Token=V5s3JHBy41d16n1EU84z]: net/http: abort Handler" middlewareName=traefik-internal-recovery middlewareType=Recovery
+#"Request has been aborted [172.69.130.220:26920 - /:/eventsource/notifications?X-Plex-Token=REDACTED]: net/http: abort Handler" middlewareName=traefik-internal-recovery middlewareType=Recovery
 #      - "traefik.http.routers.plex-rtr.rule=Host(`plex.${DOMAINNAME}`, `${DOMAINNAME}`)"
       - "traefik.http.routers.plex-rtr.rule=Host(`plex.${DOMAINNAME}`)"
       # Middlewares
