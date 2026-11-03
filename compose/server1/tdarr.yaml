@@ -25,6 +25,7 @@ services:
       webUIPort: ${TDARR_WEBUI_PORT}
       internalNode: false # true to enable the Node in the Server container.
       inContainer: true # Tell tdarr its running in docker
+      auth: false # v3 defaults to true without a saved config
 #      nodeName: tdarr_node.${HOST_NAME}     
       # NVIDIA_DRIVER_CAPABILITIES: all # Nvidia transcoding
       # NVIDIA_VISIBLE_DEVICES: all # Nvidia transcoding
