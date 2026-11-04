@@ -1,0 +1,31 @@
+# ***********************************************************************************
+# Service: Jupyter sandbox
+# Purpose: Runs Python written by the local LLM, for maths, data work and charts.
+# Notes:
+#   - The LLM's code runs here, and web pages can try to steer what it writes, so it's locked down.
+#   - llm_sandbox is an internal network: no internet, no LAN, and OpenWebUI is the only other member.
+#   - No host folders mounted, not root, no capabilities, and CPU, memory and process limits.
+#   - Files disappear when the container restarts.
+#   - JUPYTER_SANDBOX_TOKEN is set in .env.
+# ***********************************************************************************
+
+services:
+  jupyter-sandbox:
+    container_name: jupyter-sandbox.${HOST_NAME}
+    hostname: jupyter-sandbox
+    image: quay.io/jupyter/scipy-notebook@sha256:a8dd44932e91a6fa942c1b9976d0322302bfaf1d8c2f41b0bacc5f775cc94ce6
+    command: ["start-notebook.py", "--IdentityProvider.token=${JUPYTER_SANDBOX_TOKEN}", "--ServerApp.allow_origin=*", "--ServerApp.disable_check_xsrf=True"]
+    environment:
+      TZ: ${TZ}
+    networks:
+      - llm_sandbox
+    restart: always
+    mem_limit: 4g
+    cpus: 4
+    pids_limit: 512
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"

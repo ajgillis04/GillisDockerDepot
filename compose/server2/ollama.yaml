@@ -2,8 +2,8 @@
 # Service: Ollama
 # Purpose: Local LLM engine Hosts models such as Llama3, Mistral, Phi‑3.
 # Notes: 
-#   - Uses CPU on no GPU required).
-#   - Models stored in ${DOCKERDIR}/ollama for persistence.
+#   - Runs on the GPU (RTX 3060 12GB), shared with ComfyUI and the Tdarr node.
+#   - Models are stored in the ollama_models Docker volume, on the NVMe.
 #   - OpenWebUI connects to this service via API.
 # ***********************************************************************************
 
@@ -11,7 +11,7 @@ services:
   ollama:
     container_name: ollama.${HOST_NAME}
     hostname: ollama.${HOST_NAME}.lan
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.40.14
     gpus: all
     environment:
       TZ: ${TZ}
@@ -19,8 +19,9 @@ services:
       OLLAMA_NUM_PARALLEL: "1"
       OLLAMA_KV_CACHE_TYPE: "q8_0"
       OLLAMA_MAX_LOADED_MODELS: "1"
-      #OLLAMA_CONTEXT_LENGTH: "8192"
-      OLLAMA_NUM_CTX: "8192"
+      # OLLAMA_CONTEXT_LENGTH is the real setting. OLLAMA_NUM_CTX is ignored and leaves the 4096 default.
+      OLLAMA_CONTEXT_LENGTH: "16384"
+      OLLAMA_KEEP_ALIVE: "30m"
     networks:
       - mediaserver
     ports:
@@ -30,7 +31,8 @@ services:
       - 8.8.8.8
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ${DOCKERDIR}/ollama:/root/.ollama
+      # Docker volume on the NVMe. D: is a hard drive reached over 9p at about 30 MB/s, too slow to load models.
+      - ollama_models:/root/.ollama
     restart: always
     security_opt:
       - no-new-privileges:true
@@ -48,3 +50,7 @@ services:
       - "homepage.icon=ollama.png"
       - "homepage.href=https://ollama.${DOMAINNAME}/"
       - "homepage.description=Local LLM engine"
+
+volumes:
+  ollama_models:
+    name: ollama_models

@@ -1,0 +1,30 @@
+# ***********************************************************************************
+# Service: LLM backup
+# Purpose: Nightly copy of OpenWebUI's chats, settings and uploads from the NVMe to D:.
+# Notes:
+#   - Writes to ${DOCKERDIR}/_backups/openwebui and keeps 14 nightly copies of the database.
+#   - Skips the vector store and models. They can be rebuilt or downloaded again.
+#   - Knowledge bases would need re-indexing after a restore.
+# ***********************************************************************************
+
+services:
+  llm-backup:
+    container_name: llm-backup.${HOST_NAME}
+    hostname: llm-backup
+    image: python:3.13.9-alpine
+    command: ["python3", "-u", "/backup.py"]
+    environment:
+      TZ: ${TZ}
+      BACKUP_HOUR: "4"
+      KEEP_COPIES: "14"
+    network_mode: none
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - openwebui_data:/data:ro
+      - ${DOCKERDIR}/_backups/openwebui:/backup
+      - ${COMPOSE_DIR}/openwebui/backup.py:/backup.py:ro
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"

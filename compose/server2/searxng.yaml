@@ -1,0 +1,35 @@
+# ***********************************************************************************
+# Service: SearXNG
+# Purpose: Private metasearch engine that gives OpenWebUI its web search.
+# Notes:
+#   - No API keys. Queries go out to the engines from this machine's IP address.
+#   - Only OpenWebUI uses it, over the mediaserver network. The port is localhost only.
+#   - Settings are in ${COMPOSE_DIR}/searxng/settings.yml. The json format is required.
+#   - SEARXNG_SECRET is set in .env.
+# ***********************************************************************************
+
+services:
+  searxng:
+    container_name: searxng.${HOST_NAME}
+    hostname: searxng.${HOST_NAME}.lan
+    image: searxng/searxng:2026.11.2-cccbc9e15
+    environment:
+      TZ: ${TZ}
+      SEARXNG_SECRET: ${SEARXNG_SECRET}
+      SEARXNG_BASE_URL: http://searxng.${HOST_NAME}:8080/
+    networks:
+      - mediaserver
+    ports:
+      - "127.0.0.1:${SEARXNG_PORT}:8080"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${COMPOSE_DIR}/searxng/settings.yml:/etc/searxng/settings.yml:ro
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "homepage.group=Infrastructure"
+      - "homepage.name=SearXNG"
+      - "homepage.icon=searxng.png"
+      - "homepage.description=Private web search for the local LLM"
