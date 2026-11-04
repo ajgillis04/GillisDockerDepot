@@ -84,9 +84,17 @@ CAPABILITIES = {
 
 # gemma4:e4b scored best overall and fits 64K context on the GPU at about 75 tok/s.
 # bonsai-2:27b was the best at code, at about 31 tok/s and 32K context.
+CODER_SCOPE = (
+    "Your job: you're for programming and technical help, such as code, debugging, scripts, Docker, "
+    "servers, databases and software tools, including looking up technical facts. If a question has "
+    "nothing to do with those, like car repair, cooking or general life questions, don't answer it and "
+    "don't use any tools. Reply in one or two friendly sentences that Gillis-Assistant is the right one "
+    "for that and can be picked from the model menu. If it could be technical, help."
+)
+
 MODELS = {
     "gillis-assistant": {"base": "gemma4:e4b", "num_ctx": 65536, "compact": 48000},
-    "gillis-coder": {"base": "bonsai-2:27b", "num_ctx": 32768, "compact": 24000},
+    "gillis-coder": {"base": "bonsai-2:27b", "num_ctx": 32768, "compact": 24000, "scope": CODER_SCOPE},
     "gillis-professor": {"base": "bonsai-2:27b", "num_ctx": 32768, "compact": 24000},
 }
 
@@ -112,7 +120,7 @@ for model_id, spec in MODELS.items():
     name, owner, version_id = row[2], row[3], row[4]
     persona = (params.get("system") or "").split(POLICY_MARK)[0].rstrip()
     params.update(
-        system=f"{persona}\n\n{policy}".strip(),
+        system="\n\n".join(part for part in (persona, policy, spec.get("scope")) if part),
         function_calling="native",
         num_ctx=spec["num_ctx"],
         compact_token_threshold=spec["compact"],
@@ -153,6 +161,22 @@ for model_id in HIDDEN_MODELS:
         meta = {**json.loads(row[0] or "{}"), "hidden": True}
         db.execute("UPDATE model SET meta = ?, updated_at = ? WHERE id = ?", (json.dumps(meta), now, model_id))
     print(f"hidden {model_id}")
+
+# Runs after every answer on every model. See link_results.py for why.
+db.execute(
+    "INSERT INTO function (id, user_id, name, type, content, meta, valves, is_active, is_global, updated_at, created_at) "
+    "VALUES ('link_results', ?, 'Link Search Results', 'filter', ?, ?, '{}', 1, 1, ?, ?) "
+    "ON CONFLICT(id) DO UPDATE SET content = excluded.content, meta = excluded.meta, is_active = 1, is_global = 1, "
+    "updated_at = excluded.updated_at",
+    (
+        owner,
+        open(f"{CFG}/openwebui/link_results.py").read(),
+        json.dumps({"description": "Turns pages and videos the model names into real links.", "manifest": {}}),
+        now,
+        now,
+    ),
+)
+print("link filter installed")
 
 db.commit()
 print("integrity:", db.execute("PRAGMA integrity_check").fetchone()[0])
