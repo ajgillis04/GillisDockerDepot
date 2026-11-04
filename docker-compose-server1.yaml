@@ -153,6 +153,7 @@ include:
   #- ${COMPOSE_DIR}/jellyfin.yaml
   #- ${COMPOSE_DIR}/libation.yaml
   - ${COMPOSE_DIR}/lidarr.yaml
+  - ${COMPOSE_DIR}/lineup.yaml
 #  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/maintainerr.yaml
   - ${COMPOSE_DIR}/mariadb.yaml

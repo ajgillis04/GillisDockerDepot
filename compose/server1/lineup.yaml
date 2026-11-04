@@ -1,0 +1,36 @@
+# Lineup - Weekly game organizer: rosters, rotations and balanced teams.
+# Reached only through the Cloudflare tunnel, so it publishes no port. Its image is built locally.
+services:
+  lineup:
+    container_name: lineup.${HOST_NAME}
+    hostname: lineup.${HOST_NAME}.lan
+    image: lineup:local
+    environment:
+      LINEUP_TIMEZONE: ${TZ}
+      LINEUP_SECRET_KEY: ${LINEUP_SECRET_KEY}
+      LINEUP_COOKIE_SECURE: "true"
+      LINEUP_BEHIND_CLOUDFLARE: "true"
+      # These stay false until real sending is approved. Changing them here is deliberate and visible.
+      LINEUP_ALLOW_GROUP_SEND: "false"
+      LINEUP_ALLOW_PERSON_SEND: "false"
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/lineup:/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      ## Watchtower enabled? The image is local, so there's nothing to pull.
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Homepage Labels
+      - "homepage.group=Other"
+      - "homepage.name=Lineup"
+      - "homepage.icon=mdi-hockey-sticks"
+      - "homepage.href=https://lineup.${DOMAINNAME}/"
+      - "homepage.description=Weekly game organizer"
