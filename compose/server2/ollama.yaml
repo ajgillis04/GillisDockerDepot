@@ -21,7 +21,8 @@ services:
       OLLAMA_MAX_LOADED_MODELS: "1"
       # OLLAMA_CONTEXT_LENGTH is the real setting. OLLAMA_NUM_CTX is ignored and leaves the 4096 default.
       OLLAMA_CONTEXT_LENGTH: "16384"
-      OLLAMA_KEEP_ALIVE: "30m"
+      # Kept short because the Tdarr node needs VRAM too. A reload from the NVMe takes 7 to 15 seconds.
+      OLLAMA_KEEP_ALIVE: "10m"
     networks:
       - mediaserver
     ports:
