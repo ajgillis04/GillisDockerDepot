@@ -23,6 +23,7 @@ TOKEN = os.environ["JUPYTER_SANDBOX_TOKEN"].split("#")[0].strip()
 POLICY_MARK = "\n\nToday is {{CURRENT_WEEKDAY}}"
 
 workflow = json.load(open(f"{CFG}/comfyui/z_image_turbo_api.json"))
+edit_workflow = json.load(open(f"{CFG}/comfyui/flux2_klein_edit_api.json"))
 policy = open(f"{CFG}/openwebui/tool-policy.md").read().strip()
 
 SETTINGS = {
@@ -49,6 +50,18 @@ SETTINGS = {
         {"type": "n", "key": "batch_size", "node_ids": ["5"]},
         {"type": "steps", "key": "steps", "node_ids": ["9"]},
         {"type": "seed", "key": "seed", "node_ids": ["9"]},
+    ],
+    # Editing and combining photos. generate_image only takes text, so it can't use a photo.
+    "images.edit.enable": True,
+    "images.edit.engine": "comfyui",
+    "images.edit.model": "flux-2-klein-4b-fp8.safetensors",
+    "images.edit.comfyui.base_url": f"http://comfyui.{HOST}:8188",
+    "images.edit.comfyui.workflow": json.dumps(edit_workflow),
+    "images.edit.comfyui.nodes": [
+        {"type": "prompt", "key": "text", "node_ids": ["6"]},
+        {"type": "model", "key": "unet_name", "node_ids": ["1"]},
+        {"type": "image", "key": "image", "node_ids": ["20", "21", "22"]},
+        {"type": "seed", "key": "noise_seed", "node_ids": ["27"]},
     ],
     # Code runs server side in the locked-down sandbox, not in the browser.
     "code_execution.enable": True,

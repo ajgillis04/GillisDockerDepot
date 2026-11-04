@@ -11,6 +11,7 @@ import json
 import re
 
 MAX_VIDEOS = 4
+MAX_IMAGES = 5
 
 
 def normalize(text):
@@ -120,16 +121,73 @@ def add_links(text, results, question=""):
     return text
 
 
+def drop_image_links(text):
+    """The image tools already show their picture. A copy from the model is redundant,
+    and its address is sometimes made up, which shows as "Image unavailable"."""
+    text = re.sub(r"</?image>", "", text)
+    text = re.sub(r"!\[[^\]]*\]\([^)\s]*\)", "", text)
+    text = re.sub(r"\[[^\]]*\]\([^)\s]*/api/v1/files/[^)\s]*\)", "", text)
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
+
+
+async def earlier_images(chat_id):
+    from open_webui.models.chats import Chats
+
+    messages = await Chats.get_messages_map_by_chat_id(chat_id) or {}
+    found = []
+    for message in sorted(messages.values(), key=lambda m: m.get("timestamp") or 0, reverse=True):
+        if message.get("role") != "assistant":
+            continue
+        for file in message.get("files") or []:
+            url = file.get("url") or ""
+            if file.get("type") == "image" and url.startswith("/api/v1/files/") and url not in found:
+                found.append(url)
+    return found[:MAX_IMAGES]
+
+
 class Filter:
+    async def inlet(self, body: dict, __metadata__: dict = None) -> dict:
+        # The model mistypes long image IDs from memory, so give it the exact addresses each time.
+        try:
+            chat_id = (__metadata__ or {}).get("chat_id")
+            messages = body.get("messages") or []
+            if not chat_id or not messages or messages[-1].get("role") != "user":
+                return body
+            urls = await earlier_images(chat_id)
+            if not urls:
+                return body
+            note = (
+                "\n\n(Images already made in this chat, newest first. To change one, copy its address "
+                "exactly into edit_image: " + ", ".join(urls) + ")"
+            )
+            content = messages[-1].get("content")
+            if isinstance(content, str):
+                messages[-1]["content"] = content + note
+            elif isinstance(content, list):
+                content.append({"type": "text", "text": note})
+        except Exception as error:
+            print(f"link_results inlet: {error}")
+        return body
+
     def outlet(self, body: dict) -> dict:
         messages = body.get("messages") or []
         target = next((m for m in reversed(messages) if m.get("id") == body.get("id")), None)
         if not target or target.get("role") != "assistant":
             return body
         results = search_results(messages)
-        if not results:
-            return body
         question = next((m.get("content") or "" for m in reversed(messages) if m.get("role") == "user"), "")
+        # Only image tools. A chart from execute_code needs its link kept.
+        made_image = any(
+            item.get("type") == "function_call" and item.get("name") in ("generate_image", "edit_image")
+            for item in target.get("output") or []
+        )
+        if not results and not made_image:
+            return body
+
+        def fix(text):
+            if made_image:
+                text = drop_image_links(text)
+            return add_links(text, results, question) if results else text
 
         # The page draws from output when a message has it, so both have to change.
         for item in target.get("output") or []:
@@ -137,7 +195,7 @@ class Filter:
                 continue
             for part in item.get("content") or []:
                 if part.get("type") == "output_text" and part.get("text"):
-                    part["text"] = add_links(part["text"], results, question)
+                    part["text"] = fix(part["text"])
         if isinstance(target.get("content"), str) and target["content"]:
-            target["content"] = add_links(target["content"], results, question)
+            target["content"] = fix(target["content"])
         return body

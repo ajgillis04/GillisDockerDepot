@@ -1,0 +1,19 @@
+{
+  "1": { "class_type": "UNETLoader", "inputs": { "unet_name": "flux-2-klein-4b-fp8.safetensors", "weight_dtype": "default" } },
+  "2": { "class_type": "CLIPLoader", "inputs": { "clip_name": "qwen_3_4b_fp8_mixed.safetensors", "type": "flux2", "device": "default" } },
+  "3": { "class_type": "VAELoader", "inputs": { "vae_name": "flux2-vae.safetensors" } },
+  "6": { "class_type": "GillisVramSwap", "inputs": { "text": "Put the person from image 2 in the room from image 1." } },
+  "7": { "class_type": "CLIPTextEncode", "inputs": { "clip": ["2", 0], "text": ["6", 0] } },
+  "20": { "class_type": "GillisOptionalImage", "inputs": { "image": "" } },
+  "21": { "class_type": "GillisOptionalImage", "inputs": { "image": "" } },
+  "22": { "class_type": "GillisOptionalImage", "inputs": { "image": "" } },
+  "23": { "class_type": "GillisReferenceImages", "inputs": { "positive": ["7", 0], "vae": ["3", 0], "megapixels": 1.0, "image_1": ["20", 0], "image_2": ["21", 0], "image_3": ["22", 0] } },
+  "24": { "class_type": "EmptyFlux2LatentImage", "inputs": { "width": ["23", 2], "height": ["23", 3], "batch_size": 1 } },
+  "25": { "class_type": "Flux2Scheduler", "inputs": { "steps": 4, "width": ["23", 2], "height": ["23", 3] } },
+  "26": { "class_type": "KSamplerSelect", "inputs": { "sampler_name": "euler" } },
+  "27": { "class_type": "RandomNoise", "inputs": { "noise_seed": 0 } },
+  "28": { "class_type": "CFGGuider", "inputs": { "model": ["1", 0], "positive": ["23", 0], "negative": ["23", 1], "cfg": 1 } },
+  "29": { "class_type": "SamplerCustomAdvanced", "inputs": { "noise": ["27", 0], "guider": ["28", 0], "sampler": ["26", 0], "sigmas": ["25", 0], "latent_image": ["24", 0] } },
+  "30": { "class_type": "VAEDecode", "inputs": { "samples": ["29", 0], "vae": ["3", 0] } },
+  "31": { "class_type": "SaveImage", "inputs": { "images": ["30", 0], "filename_prefix": "openwebui_edit" } }
+}
