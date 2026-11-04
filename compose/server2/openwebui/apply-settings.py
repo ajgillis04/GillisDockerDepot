@@ -6,7 +6,7 @@ after first start, so they're written here. Run it with OpenWebUI stopped:
 
   docker stop openwebui.$HOST_NAME
   docker run --rm --env-file .env -v openwebui_data:/data -v "$PWD/compose/server2:/cfg:ro" \
-    --entrypoint python3 ghcr.io/open-webui/open-webui:v0.12.5 /cfg/openwebui/apply-settings.py
+    --entrypoint python3 ghcr.io/open-webui/open-webui:v0.13.0 /cfg/openwebui/apply-settings.py
   docker start openwebui.$HOST_NAME
 """
 import json
@@ -116,6 +116,8 @@ for model_id, spec in MODELS.items():
         params.pop(stale, None)
     meta["capabilities"] = {**(meta.get("capabilities") or {}), **CAPABILITIES}
     meta["defaultFeatureIds"] = ["web_search", "image_generation", "code_interpreter"]
+    # Stop models creating Python tools from chat: those run in OpenWebUI, outside the sandbox.
+    meta["builtinTools"] = {**(meta.get("builtinTools") or {}), "tools": False}
     # Record a version too, so the model editor's history stays right and can roll back.
     snapshot = {"name": name, "base_model_id": spec["base"], "params": params,
                 "meta": {k: v for k, v in meta.items() if k != "hidden"}}

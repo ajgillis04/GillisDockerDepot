@@ -14,7 +14,7 @@ services:
   openwebui:
     container_name: openwebui.${HOST_NAME}
     hostname: openwebui.${HOST_NAME}.lan
-    image: ghcr.io/open-webui/open-webui:v0.12.5
+    image: ghcr.io/open-webui/open-webui:v0.13.0
     environment:
       TZ: ${TZ}
       ENV: prod
