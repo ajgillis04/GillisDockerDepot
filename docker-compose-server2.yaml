@@ -119,7 +119,7 @@ include:
   - ${COMPOSE_DIR}/chromadb.yaml
 #  - ${COMPOSE_DIR}/cloudflare-ddns.yaml
 #  - ${COMPOSE_DIR}/cloudflared.yaml
-#  - ${COMPOSE_DIR}/comfyui.yaml
+  - ${COMPOSE_DIR}/comfyui.yaml
 #  - ${COMPOSE_DIR}/dozzle.yaml
 #  - ${COMPOSE_DIR}/heimdallint.yaml
 #  - ${COMPOSE_DIR}/gramps.yaml
