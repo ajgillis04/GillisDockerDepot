@@ -67,9 +67,14 @@ SETTINGS = {
     "rag.reranking_model": "BAAI/bge-reranker-v2-m3",
     "rag.top_k": 12,
     "rag.top_k_reranker": 5,
-    # New chats open on the fast model.
+    # New chats open on the fast model. The picker lists only the presets, in this order.
     "ui.default_models": "gillis-assistant",
+    "ui.model_order_list": ["gillis-assistant", "gillis-coder", "gillis-professor"],
+    "evaluation.arena.enable": False,
 }
+
+# The presets still run on these. Hiding them only removes them from the picker.
+HIDDEN_MODELS = ["gemma4:e4b", "bonsai-2:27b"]
 
 CAPABILITIES = {
     "vision": True, "file_upload": True, "file_context": True, "web_search": True,
@@ -134,6 +139,20 @@ for model_id, spec in MODELS.items():
         (spec["base"], json.dumps(params), json.dumps(meta), version_id, now, model_id),
     )
     print(f"updated {model_id} -> {spec['base']} (version {version_id[:8]})")
+
+owner = db.execute("SELECT user_id FROM model WHERE id = 'gillis-assistant'").fetchone()[0]
+for model_id in HIDDEN_MODELS:
+    row = db.execute("SELECT meta FROM model WHERE id = ?", (model_id,)).fetchone()
+    if row is None:
+        db.execute(
+            "INSERT INTO model (id, user_id, base_model_id, name, params, meta, updated_at, created_at, is_active) "
+            "VALUES (?, ?, NULL, ?, '{}', ?, ?, ?, 1)",
+            (model_id, owner, model_id, json.dumps({"hidden": True}), now, now),
+        )
+    else:
+        meta = {**json.loads(row[0] or "{}"), "hidden": True}
+        db.execute("UPDATE model SET meta = ?, updated_at = ? WHERE id = ?", (json.dumps(meta), now, model_id))
+    print(f"hidden {model_id}")
 
 db.commit()
 print("integrity:", db.execute("PRAGMA integrity_check").fetchone()[0])
