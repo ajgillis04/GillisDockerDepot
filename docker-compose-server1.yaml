@@ -182,8 +182,6 @@ include:
   - ${COMPOSE_DIR}/sbs-app.yaml
   - ${COMPOSE_DIR}/sbs-app-dev.yaml
   - ${COMPOSE_DIR}/sbs-mysql8.yaml
-  - ${COMPOSE_DIR}/sbs-shlink.yaml
-  - ${COMPOSE_DIR}/sbs-shlink-ui.yaml
   - ${COMPOSE_DIR}/seerr.yaml
   - ${COMPOSE_DIR}/sonarr.yaml
   - ${COMPOSE_DIR}/soulseek.yaml
