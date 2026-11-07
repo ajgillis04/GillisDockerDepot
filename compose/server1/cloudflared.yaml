@@ -14,6 +14,7 @@ services:
     networks:
       - mediaserver
       - sbs_network # if you need to access other containers on this network
+      - ha_bridge   # reaches the Pi-hole by name (its LAN IP is unreachable from containers on this host)
     dns:      
       - ${PIHOLE_SECONDARY}
       - 1.1.1.1
