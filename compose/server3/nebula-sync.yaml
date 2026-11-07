@@ -30,7 +30,8 @@ services:
       REPLICAS_FILE: /run/secrets/nebula_sync_replicas
       FULL_SYNC: "false"
       RUN_GRAVITY: "true"
-      CRON: "15 * * * *"
+      # Daily: each run also rebuilds gravity, which downloads every blocklist again.
+      CRON: "15 4 * * *"
       SYNC_GRAVITY_GROUP: "true"
       SYNC_GRAVITY_AD_LIST: "true"
       SYNC_GRAVITY_AD_LIST_BY_GROUP: "true"
