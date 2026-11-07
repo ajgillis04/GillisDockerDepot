@@ -16,6 +16,7 @@ services:
       HOMEPAGE_VAR_PIHOLE2_KEY: ${PIHOLE2_TOKEN}
     networks:
       - mediaserver
+      - ha_bridge  # reaches the Pi-hole by name (its LAN IP is unreachable from containers on this host)
     ports:
       - "${HOMEPAGE_PORT}:3000"  # Add HOMEPAGE_PORT to your .env file.
     volumes:
