@@ -21,11 +21,13 @@ services:
       HOST_NAME: pihole.${HOST_NAME}.lan
       #WEBPASSWORD_FILE: /run/secrets/pihole_password
       #FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
-      #FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
-      FTLCONF_dns_upstreams: 127.0.0.1#5335;::1#5335
-      FTLCONF_dns_dnssec: true
+      # Upstream is Cloudflare, the same as the other Pi-hole. Unbound is off (see the include list).
+      FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
+      #FTLCONF_dns_upstreams: 127.0.0.1#5335;::1#5335
+      # Off to match the other Pi-hole; Cloudflare already validates DNSSEC.
+      FTLCONF_dns_dnssec: false
       FTLCONF_dns_revServers: true,192.168.2.0/24,192.168.2.1#53,lan
-      FTLCONF_debug_api: true
+      FTLCONF_debug_api: false
       TAIL_FTL_LOG: '1' # or '0' to disable
       FTLCONF_dhcp_active: false
       FTLCONF_dhcp_start: 192.168.2.50
@@ -33,7 +35,7 @@ services:
       FTLCONF_dhcp_router: 192.168.2.1
       FTLCONF_dhcp_leaseTime: 30d
       FTLCONF_dns_domain: lan
-      FTLCONF_dhcp_ipv6: true
+      FTLCONF_dhcp_ipv6: false
       TEMPERATUREUNIT: c
  #   networks:
  #     pihole_network:

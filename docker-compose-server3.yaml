@@ -88,6 +88,10 @@ secrets:
     file: ${SECRETSDIR}/pia_password
   pia_username:
     file: ${SECRETSDIR}/pia_username
+  nebula_sync_primary:
+    file: ${SECRETSDIR}/nebula_sync_primary
+  nebula_sync_replicas:
+    file: ${SECRETSDIR}/nebula_sync_replicas
   pihole_password:
     file: ${SECRETSDIR}/pihole_password
   photoprism_admin_password:
@@ -134,6 +138,7 @@ include:
 #   - ${COMPOSE_DIR}/mariadb.yaml
 #   - ${COMPOSE_DIR}/mineos.yaml
 #   - ${COMPOSE_DIR}/musicbrainz.yaml
+  - ${COMPOSE_DIR}/nebula-sync.yaml
 #   - ${COMPOSE_DIR}/nextcloud.yaml
 #   - ${COMPOSE_DIR}/oauth.yaml
 #   - ${COMPOSE_DIR}/overseerr.yaml
@@ -157,7 +162,7 @@ include:
 #  - ${COMPOSE_DIR}/tdarr_node.yaml # Do not run node with tdarr on same server. tdarr already has node inside.
 #  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
-  - ${COMPOSE_DIR}/unbound.yaml
+#  - ${COMPOSE_DIR}/unbound.yaml
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
 #  - ${COMPOSE_DIR}/wireguard.yaml
