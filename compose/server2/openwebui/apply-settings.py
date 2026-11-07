@@ -20,6 +20,7 @@ DB = "/data/webui.db"
 CFG = "/cfg"
 HOST = os.environ["HOST_NAME"].split("#")[0].strip()
 TOKEN = os.environ["JUPYTER_SANDBOX_TOKEN"].split("#")[0].strip()
+NODE2 = os.environ.get("LLM_NODE2", "").split("#")[0].strip()
 POLICY_MARK = "\n\nToday is {{CURRENT_WEEKDAY}}"
 
 workflow = json.load(open(f"{CFG}/comfyui/z_image_turbo_api.json"))
@@ -88,6 +89,35 @@ SETTINGS = {
 
 # The presets still run on these. Hiding them only removes them from the picker.
 HIDDEN_MODELS = ["gemma4:e4b", "bonsai-2:27b"]
+
+# Second node (Brainiac, GTX 1650): a small model for titles, tags, follow-ups and search
+# queries, so they don't take the 3060 from chat, plus voice. Its model names must not match
+# Forge's: Open WebUI load-balances models that share a name across connections. If the node
+# is off, its model drops out of the list and tasks fall back to the chat model.
+TASK_MODEL = "qwen2.5:3b"
+if NODE2:
+    SETTINGS.update({
+        "ollama.base_urls": [f"http://ollama.{HOST}:11434", f"http://{NODE2}:11434"],
+        "ollama.api_configs": {
+            str(i): {"enable": True, "tags": [], "prefix_id": "", "model_ids": [],
+                     "connection_type": "local", "auth_type": "bearer", "key": ""}
+            for i in range(2)
+        },
+        "task.model.default": TASK_MODEL,
+        "task.model.external": TASK_MODEL,
+        # speaches: OpenAI-style speech on the node's CPU. It needs no key, but the field can't be empty.
+        "audio.stt.engine": "openai",
+        "audio.stt.openai.api_base_url": f"http://{NODE2}:8000/v1",
+        "audio.stt.openai.api_key": "none",
+        "audio.stt.model": "Systran/faster-distil-whisper-small.en",
+        "audio.tts.engine": "openai",
+        "audio.tts.openai.api_base_url": f"http://{NODE2}:8000/v1",
+        "audio.tts.openai.api_key": "none",
+        "audio.tts.model": "speaches-ai/Kokoro-82M-v1.0-ONNX",
+        "audio.tts.voice": "af_heart",
+        "audio.tts.split_on": "punctuation",
+    })
+    HIDDEN_MODELS.append(TASK_MODEL)
 
 CAPABILITIES = {
     "vision": True, "file_upload": True, "file_context": True, "web_search": True,
