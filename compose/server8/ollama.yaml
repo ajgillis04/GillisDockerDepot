@@ -1,0 +1,39 @@
+# Ollama as a second, small LLM node (4 GB GPU). Runs only helper models for an Open WebUI
+# on another server (chat titles, tags, web-search queries); the big chat models stay there.
+# Keep model names different from the main node's: Open WebUI load-balances same-named models
+# across its Ollama connections, which would send chats to this slower card.
+# The GPU is shared with tdarr_node (NVENC) and speaches, so one model, small context.
+services:
+  ollama:
+    container_name: ollama.${HOST_NAME}
+    hostname: ollama.${HOST_NAME}.lan
+    image: ollama/ollama:0.40.14
+    runtime: nvidia
+    environment:
+      TZ: ${TZ}
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+      OLLAMA_FLASH_ATTENTION: "true"
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_KV_CACHE_TYPE: "q8_0"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      OLLAMA_CONTEXT_LENGTH: "8192"
+      OLLAMA_KEEP_ALIVE: "24h"
+    networks:
+      - mediaserver
+    ports:
+      - "${OLLAMA_PORT}:11434"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ollama_models:/root/.ollama
+    # Ollama 0.40.14 crashes at startup (SIGBUS in mlx_dynamic_load) on a GTX 1650 /
+    # Ivy Bridge CPU when its MLX CUDA library is visible. MLX is an optional engine; models
+    # run on llama.cpp CUDA. Hiding the folder fixes it.
+    tmpfs:
+      - /usr/lib/ollama/mlx_cuda_v13:ro
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  ollama_models:
+    name: ollama_models

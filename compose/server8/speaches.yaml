@@ -1,0 +1,32 @@
+# speaches: speech-to-text (faster-whisper) and text-to-speech (Kokoro)
+# with OpenAI-style endpoints, used by Open WebUI for voice.
+#   STT: POST http://<this-server>:${SPEACHES_PORT}/v1/audio/transcriptions
+#   TTS: POST http://<this-server>:${SPEACHES_PORT}/v1/audio/speech
+# Models download into the volume on first use (or via POST /v1/models/<id>).
+services:
+  speaches:
+    container_name: speaches.${HOST_NAME}
+    hostname: speaches.${HOST_NAME}.lan
+    image: ghcr.io/speaches-ai/speaches:0.8.3-cpu
+    # Runs on the CPU. On the GTX 1650 (driver 595, 0.8.3-cuda-12.6.3) GPU transcription
+    # crashed the container on the first request with every compute type,
+    # and Kokoro's ONNX CUDA provider doesn't load. CPU int8: ~5 s for a 6 s clip.
+    environment:
+      TZ: ${TZ}
+      WHISPER__INFERENCE_DEVICE: cpu
+      WHISPER__COMPUTE_TYPE: int8
+      STT_MODEL_TTL: "-1"
+      TTS_MODEL_TTL: "-1"
+    networks:
+      - mediaserver
+    ports:
+      - "${SPEACHES_PORT}:8000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - speaches_cache:/home/ubuntu/.cache/huggingface/hub
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  speaches_cache:
+    name: speaches_cache
