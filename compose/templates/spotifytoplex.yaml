@@ -58,6 +58,6 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       - "homepage.group=Media"
       - "homepage.name=Spotify-to-Plex"
-      - "homepage.icon=https://raw.githubusercontent.com/jjdenhertog/spotify-to-plex/main/icon.png"
+      - "homepage.icon=spotify.png"
       - "homepage.href=http://spotifytoplex.${HOST_NAME}:${SPOTIPLEX_PORT}"
       - "homepage.description=Sync Spotify playlists into Plex"

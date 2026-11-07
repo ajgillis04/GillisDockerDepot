@@ -41,6 +41,6 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       - "homepage.group=Infrastructure"
       - "homepage.name=Frigate"
-      - "homepage.icon=camera.png"
+      - "homepage.icon=frigate.png"
       - "homepage.href=https://frigate.${DOMAINNAME}/"
       - "homepage.description=AI-powered NVR and object detection"

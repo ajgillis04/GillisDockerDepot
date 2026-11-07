@@ -45,6 +45,6 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       - "homepage.group=Media"
       - "homepage.name=Soulseek"
-      - "homepage.icon=https://raw.githubusercontent.com/slskd/slskd/master/docs/icon.png"
+      - "homepage.icon=slskd.png"
       - "homepage.href=http://soulseek.${HOST_NAME}:${SLSKD_HTTP_PORT}"
       - "homepage.description=Soulseek daemon with web GUI"

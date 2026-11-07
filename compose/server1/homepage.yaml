@@ -12,6 +12,8 @@ services:
       PGID: 0
       DOMAINNAME: ${DOMAINNAME}
       HOMEPAGE_ALLOWED_HOSTS: homepage.${DOMAINNAME},${SERVER_IP}:3000
+      # App password for the Raspberry Pi Pi-hole widget (services.yaml); set PIHOLE2_TOKEN in .env
+      HOMEPAGE_VAR_PIHOLE2_KEY: ${PIHOLE2_TOKEN}
     networks:
       - mediaserver
     ports:
