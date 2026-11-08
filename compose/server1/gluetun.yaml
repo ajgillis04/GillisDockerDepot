@@ -1,0 +1,82 @@
+# ------------------------------------------------------------------------------
+# Gluetun - VPN container that Transmission and Soulseek share
+# ------------------------------------------------------------------------------
+# Holds the PIA VPN connection. Transmission and Soulseek run inside its network
+# (network_mode: service:gluetun), so all their traffic goes through the VPN, and
+# if the VPN drops, its firewall blocks them instead of leaking your home IP.
+#
+# Why it replaced transmission-openvpn (2026-11-08):
+#   - transmission-openvpn exits whenever OpenVPN loses contact, so Docker restarted
+#     it (135+ times), and every restart cut Soulseek's network until Soulseek was
+#     recreated by hand. Its healthcheck still said Healthy while it was offline.
+#   - Gluetun reconnects the VPN inside the container without exiting, so the
+#     shared network stays up for Transmission and Soulseek.
+#   - One VPN connection for both apps, so it uses one PIA device slot.
+#
+# Ports for both apps are published here, not on the apps themselves.
+# The network aliases keep the old names working, so Sonarr, Radarr, Homepage
+# and the Cloudflare tunnel need no changes.
+#
+# Secrets (one line each, in ${SECRETSDIR}): pia_username, pia_password
+#
+# Notes:
+#   - Watchtower is OFF for this container on purpose. Recreating Gluetun leaves
+#     Transmission and Soulseek attached to a network that no longer exists.
+#     Update all three together by hand:
+#       docker compose -p mediaserver -f docker-compose-server1.yaml pull gluetun
+#       docker compose -p mediaserver -f docker-compose-server1.yaml up -d gluetun transmission soulseek
+#   - If Gluetun itself ever restarts, recreate the two apps:
+#       docker compose -p mediaserver -f docker-compose-server1.yaml up -d --force-recreate --no-deps transmission soulseek
+#   - Check the VPN: docker logs gluetun.${HOST_NAME}   (look for "Public IP address is")
+#   - Don't run a test VPN container in the same PIA region at the same time;
+#     on 2026-11-03 that knocked the live connection off.
+#   - Port forwarding is off for now. PIA can forward a port, but Transmission would
+#     need to be told the new port on every reconnect. The old setup's forwarding
+#     never worked either ("Port is open: No").
+# ------------------------------------------------------------------------------
+services:
+  gluetun:
+    container_name: gluetun.${HOST_NAME}
+    hostname: gluetun.${HOST_NAME}.lan
+    image: qmcgaw/gluetun:v3
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      TZ: ${TZ}
+      VPN_SERVICE_PROVIDER: private internet access
+      VPN_TYPE: openvpn
+      OPENVPN_USER_SECRETFILE: /run/secrets/pia_username
+      OPENVPN_PASSWORD_SECRETFILE: /run/secrets/pia_password
+      # Ontario was much faster than Toronto in testing (64-87 MB/s against 2.7 MB/s).
+      SERVER_REGIONS: CA Ontario
+      VPN_PORT_FORWARDING: "off"
+    networks:
+      mediaserver:
+        aliases:
+          - transmission.${HOST_NAME}
+          - transmission-openvpn.${HOST_NAME}   # old name, still used by the tunnel and the -arr apps
+          - soulseek.${HOST_NAME}
+    ports:
+      - "${TRANSMISSION_PORT}:9091"   # Transmission web UI and RPC
+      - "${SLSKD_HTTP_PORT}:5030"     # Soulseek web UI
+      - "${SLSKD_HTTPS_PORT}:5031"    # Soulseek HTTPS web UI
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    secrets:
+      - pia_username
+      - pia_password
+    restart: always
+    labels:
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=false" # update by hand, see Notes above
+      ## Homepage Labels
+      - "homepage.group=Network"
+      - "homepage.name=Gluetun"
+      - "homepage.icon=gluetun.png"
+      - "homepage.description=VPN for Transmission and Soulseek"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
