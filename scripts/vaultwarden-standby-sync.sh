@@ -32,7 +32,7 @@ NAS_CONTAINER=vaultwarden.GillisNAS
 
 REPO=/mnt/data/projects/GillisDockerDepot
 STANDBY_DATA="$REPO/appdata/vaultwarden-standby/data"
-ARCHIVE_DIR=/mnt/data/backups/vaultwarden
+ARCHIVE_DIR="$REPO/appdata/_backups/vaultwarden"   # git-ignored; /mnt/data itself is root-only
 KEEP_DAYS=14
 STAGE="$ARCHIVE_DIR/staging"
 LOG="$ARCHIVE_DIR/sync.log"

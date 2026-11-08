@@ -9,7 +9,7 @@
 # How it's kept up to date: scripts/vaultwarden-standby-sync.sh runs nightly from
 # cron on this machine. It takes a safe snapshot of the live database (Vaultwarden's
 # own "backup" command), copies it here with the attachments and keys, keeps 14
-# dated archives in /mnt/data/backups/vaultwarden, reloads this container, and
+# dated archives in ${DOCKERDIR}/_backups/vaultwarden, reloads this container, and
 # raises an alert if the copy doesn't start. So each night is also a restore test.
 #
 # Use it for READING ONLY. Anything saved here is overwritten the next night.
