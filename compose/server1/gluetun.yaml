@@ -53,6 +53,9 @@ services:
       OPENVPN_PASSWORD_SECRETFILE: /run/secrets/pia_password
       # Ontario was much faster than Toronto in testing (64-87 MB/s against 2.7 MB/s).
       SERVER_REGIONS: CA Ontario
+      # PIA port 1198 (UDP). Gluetun's default, 8080, got no answer from the Ontario
+      # servers on 2026-11-08; 1198 is what transmission-openvpn used.
+      OPENVPN_ENDPOINT_PORT: "1198"
       VPN_PORT_FORWARDING: "off"
       # Refresh the VPN server list daily. The built-in list was stale for CA Ontario
       # on 2026-11-08 (no server answered), so the list is kept in ${DOCKERDIR}/gluetun.
