@@ -51,10 +51,13 @@ services:
       VPN_TYPE: openvpn
       OPENVPN_USER_SECRETFILE: /run/secrets/pia_username
       OPENVPN_PASSWORD_SECRETFILE: /run/secrets/pia_password
-      # CA Montreal since 2026-11-08: Gluetun couldn't complete a handshake with any CA Ontario
-      # server (ports 8080 and 1198), while Montreal connected first time. Montreal ran
-      # 22-30 MB/s in the 2026-11-03 tests. Any PIA region works here.
-      SERVER_REGIONS: CA Montreal
+      # US Maine: fastest in tests from GillisNAS on 2026-11-08 (4 streams, 15 s each,
+      # no VPN = ~395 MB/s): Maine 64/69/63, Washington DC 62/62/65, New York 50/58/59,
+      # US East 49, Toronto 44/36/54, Chicago 36, Massachusetts 31, Montreal 13,
+      # Ontario 13 MB/s. The fast ones use ~90% of one CPU core, so OpenVPN on this
+      # NAS tops out around 65-70 MB/s. OPENVPN_ENCRYPTION_PRESET=normal made no difference.
+      # Any PIA region works; pick another here if speeds drop.
+      SERVER_REGIONS: US Maine
       VPN_PORT_FORWARDING: "off"
       # Refresh the VPN server list daily. The built-in list was stale for CA Ontario
       # on 2026-11-08 (no server answered), so the list is kept in ${DOCKERDIR}/gluetun.
