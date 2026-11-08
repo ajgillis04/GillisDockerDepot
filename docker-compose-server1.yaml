@@ -144,6 +144,7 @@ include:
   - ${COMPOSE_DIR}/cloudflared.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
 #  - ${COMPOSE_DIR}/ersatztv.yaml
+#  - ${COMPOSE_DIR}/esphome.yaml
   - ${COMPOSE_DIR}/govee2mqtt.yaml
   - ${COMPOSE_DIR}/frigate.yaml
   - ${COMPOSE_DIR}/guacamole.yaml

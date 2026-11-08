@@ -1,0 +1,40 @@
+# ------------------------------------------------------------------------------ 
+# ESPHome - Firmware Deployment and Management
+# ------------------------------------------------------------------------------ 
+# Provides a dashboard to compile, manage, and deploy OTA (Over-The-Air) firmware
+# to ESP32/ESP8266 devices. Enables remote management of the pool controller.
+# Status: not in use; its include in docker-compose-server1.yaml is commented out.
+# ------------------------------------------------------------------------------ 
+
+services:
+  esphome:
+    container_name: esphome.${HOST_NAME}
+    hostname: esphome.${HOST_NAME}.lan
+    image: esphome/esphome:stable
+    privileged: true
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      DOMAINNAME: ${DOMAINNAME}
+      HOST_NAME: esphome.${HOST_NAME}.lan
+    networks:
+      - mediaserver
+    ports:
+      - "${ESPHOME_WEB_PORT}:6052"
+    volumes:
+      - ${DOCKERDIR}/esphome:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Infrastructure"
+      - "homepage.name=ESPHome"
+      - "homepage.icon=esphome.png"
+      - "homepage.href=https://esphome.${DOMAINNAME}/"
+      - "homepage.description=Manage and deploy firmware to ESP32 devices"
