@@ -1,0 +1,66 @@
+# ------------------------------------------------------------------------------
+# Transmission - BitTorrent client, behind the Gluetun VPN
+# ------------------------------------------------------------------------------
+# Runs inside Gluetun's network (see gluetun.yaml), so it has no network of its
+# own: its traffic only leaves through the VPN, and its web UI port is published
+# by Gluetun. Reach it at http://transmission-openvpn.${HOST_NAME}:9091 or
+# http://transmission.${HOST_NAME}:9091 (Gluetun aliases).
+#
+# Replaced transmission-openvpn on 2026-11-08. Its settings and torrent list were
+# copied from ${DOCKERDIR}/transmission-openvpn/config/transmission-home, and the
+# old folder was left as it was, for rollback.
+#
+# Settings live in ${DOCKERDIR}/transmission/config/settings.json. This image
+# doesn't take TRANSMISSION_* variables like the old one, so these values from
+# the old compose file are kept there instead:
+#   download-dir /downloads/Completed, incomplete-dir /downloads/Incomplete,
+#   watch-dir /downloads, encryption 1 (preferred), peer-limit-global 240,
+#   peer-limit-per-torrent 60, DHT and PEX on, cache-size-mb 128,
+#   ratio-limit 0 (enabled), umask 2.
+# Stop the container before editing settings.json, or Transmission overwrites it.
+#
+# Notes:
+#   - USER and PASS set the web UI login (TRANS_USER and TRANS_PASS in .env).
+#   - Keep the /downloads mount the same: the torrent list and Sonarr/Radarr use
+#     /downloads/Completed and /downloads/Incomplete.
+#   - If Gluetun restarts, recreate this container (see gluetun.yaml).
+# ------------------------------------------------------------------------------
+services:
+  transmission:
+    container_name: transmission.${HOST_NAME}
+    image: lscr.io/linuxserver/transmission:latest
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      USER: ${TRANS_USER}
+      PASS: ${TRANS_PASS}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/transmission/config:/config
+      - ${USERDOWNLOAD}/Torrents:/downloads
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Other"
+      - "homepage.name=Transmission"
+      - "homepage.icon=transmission.png"
+      - "homepage.href=https://trans.${DOMAINNAME}/"
+      - "homepage.description=Torrent client behind the Gluetun VPN"
+      ## Homepage Widget
+      - "homepage.widget.type=transmission"
+      - "homepage.widget.url=http://transmission.${HOST_NAME}:9091"
+      - "homepage.widget.username=${TRANS_USER}"
+      - "homepage.widget.password=${TRANS_PASS}"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m

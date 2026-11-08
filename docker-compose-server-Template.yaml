@@ -157,7 +157,9 @@ include:
   #  - ${COMPOSE_DIR}/tautulli.yaml
   #  - ${COMPOSE_DIR}/tdarr.yaml
   #  - ${COMPOSE_DIR}/traefik.yaml
-  #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
+  #  - ${COMPOSE_DIR}/transmission-openvpn.yaml  # older all-in-one; gluetun + transmission replace it
+  #  - ${COMPOSE_DIR}/gluetun.yaml       # VPN shared by transmission and soulseek
+  #  - ${COMPOSE_DIR}/transmission.yaml  # needs gluetun.yaml
   #  - ${COMPOSE_DIR}/vaultwarden.yaml
   #  - ${COMPOSE_DIR}/watchtower.yaml
   #  - ${COMPOSE_DIR}/wireguard.yaml

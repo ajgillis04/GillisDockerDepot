@@ -3,6 +3,17 @@
 # ------------------------------------------------------------------------------
 # Provides a headless Soulseek client with API and web interface.
 # Can integrate with Spotify-to-Plex for missing track acquisition.
+#
+# Runs inside the Gluetun VPN's network (see gluetun.yaml), so its traffic only
+# leaves through the VPN. Its web UI ports are published by Gluetun, and
+# soulseek.${HOST_NAME} is a Gluetun alias (the Cloudflare tunnel uses it).
+# Until 2026-11-08 it shared transmission-openvpn's network instead, and lost its
+# network every time that container restarted.
+#
+# Notes:
+#   - If Gluetun restarts, recreate this container (see gluetun.yaml).
+#   - The P2P listen port (50300) isn't reachable from outside through the VPN,
+#     so other users can't connect in. Searching and downloading still work.
 # ------------------------------------------------------------------------------
 services:
   soulseek:
@@ -24,20 +35,18 @@ services:
 
       UMASK: "002"
 
-    # Use the transmission-openvpn network for privacy    
-    network_mode: "service:transmission-openvpn"
-
-#    ports:
-#      - "${SLSKD_HTTP_PORT}:5030"   # HTTP web UI
-#      - "${SLSKD_HTTPS_PORT}:5031"  # HTTPS web UI
-#      - "${SLSKD_P2P_PORT}:50300"   # Soulseek P2P listen port
+    # Use the Gluetun VPN network for privacy; ports are published by Gluetun
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
 
     volumes:
       - ${DOCKERDIR}/soulseek/app:/app      
       - ${DOCKERDIR}/logs/soulseek:/app/logs
       - ${USERDOWNLOAD}/Torrents:/downloads
 
-    restart: on-failure:4
+    restart: always
     security_opt:
       - no-new-privileges:true
 
