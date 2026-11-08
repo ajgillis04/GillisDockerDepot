@@ -34,7 +34,7 @@ To get started, **Git** and **Docker** must be installed on your system:
    ```  
 
 ### 🐧 **Linux**  
-1. Install Git && Docker using package manager:  
+1. Install Git and Docker using the package manager:  
    ```bash
    sudo apt-get update  
    sudo apt-get install git
@@ -126,7 +126,7 @@ Check “Remember my credentials” for seamless access.
 
 ### 🔄 **Clone the Repository**  
 🚨 **For QNAP Users**: Before cloning, **create a "Docker" shared folder** via **Control Panel → Shared Folders → Privileges**.  
-🚨 **For all other OS**:  mkdir ~/Docker/
+🚨 **For all other operating systems**: run `mkdir ~/Docker/`
 
 1. **Clone the repo:**  
    ```bash

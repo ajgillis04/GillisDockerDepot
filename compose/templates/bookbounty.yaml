@@ -11,7 +11,7 @@ services:
       DOMAINNAME: ${DOMAINNAME}
       library_scan_on_completion: true
       READARR_ADDRESS: http://${SERVER_IP}:8787
-      #FILE__READARR_API_KEY_FILE: /run/secrets/readarr_api_key # doesn't appear secrets are implemented yet
+      #FILE__READARR_API_KEY_FILE: /run/secrets/readarr_api_key # secrets don't appear to be implemented yet
       READARR_API_KEY: ${READARR_API_KEY}
       selected_path_type: folder
     networks:

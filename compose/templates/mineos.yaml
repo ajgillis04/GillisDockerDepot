@@ -27,7 +27,7 @@ services:
     security_opt:
       - no-new-privileges:true
     labels:
-       ## Watchtower enabled?cd      
+       ## Watchtower enabled?      
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Infrastructure"

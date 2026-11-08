@@ -1,6 +1,6 @@
 # ***********************************************************************************
 # Service: Ollama
-# Purpose: Local LLM engine Hosts models such as Llama3, Mistral, Phi‑3.
+# Purpose: Local LLM engine. Hosts models such as Llama3, Mistral, Phi‑3.
 # Notes: 
 #   - Runs on the GPU (RTX 3060 12GB), shared with ComfyUI and the Tdarr node.
 #   - Models are stored in the ollama_models Docker volume, on the NVMe.

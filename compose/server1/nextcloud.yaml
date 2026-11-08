@@ -1,5 +1,5 @@
 # Nextcloud - An open-source cloud storage solution.
-# Nextcloud is a finicky beast if you get into trouble if you get in trouble with it start over
+# Nextcloud is a finicky beast. If you get into trouble with it, start over.
 # docker stop $(docker ps -a -q --filter name=nextcloud)
 # docker rm $(docker ps -a -q --filter name=nextcloud)
 # docker volume rm $(docker volume ls -q --filter name=nextcloud)
@@ -11,7 +11,7 @@
 # sudo docker run -it --rm --volume /share/Docker/GillisDockerDepot/appdata/nextcloud/var/www/html:/var/www/html:rw alpine sh -c "apk add --no-cache nano && nano /var/www/html/config/config.php"
 # docker cp /share/Docker/GillisDockerDepot/scripts/create_users_nextcloud.sh nextcloud.GillisNAS:/tmp/create_users_nextcloud.sh
 # docker exec -it -u www-data nextcloud.GillisNAS sh /tmp/create_users_nextcloud.sh
-# Create shares manually script not working
+# Create the shares manually; the script isn't working
 # chmod +x scripts/create_photosdir_nextcloud.sh
 # dos2unix scripts/create_photosdir_nextcloud.sh
 # create_photosdir_nextcloud.sh
@@ -19,7 +19,7 @@
 # This volume is required to make nextcloud_aio_mastercontainer work
 # Nextcloud - A private cloud storage solution
 
-# Perms if you are mounting hosts home directories to nextcloud. Note this removes admins rights to read user files.
+# Permissions if you mount the host's home directories into Nextcloud. Note: this removes the admin's right to read user files.
 # mkdir -p /share/nextcloud/<username>
 # sudo chown -R <userid>:33 /share/nextcloud/<username>
 # sudo chmod -R 770 /share/nextcloud/<username>
@@ -58,7 +58,7 @@ services:
       - no-new-privileges:true
     labels:
       ## Watchtower Enable
-      - "com.centurylinklabs.watchtower.enable=false" # Disable watchtower for this container, should upgrade manually
+      - "com.centurylinklabs.watchtower.enable=false" # Disable Watchtower for this container; upgrade it manually
       ## Homepage Labels
       - "homepage.group=Infrastructure"
       - "homepage.name=Nextcloud"

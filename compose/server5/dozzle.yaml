@@ -38,4 +38,4 @@ services:
       - "homepage.name=Dozzle"
       - "homepage.icon=dozzle.png"
       - "homepage.href=http://dozzle.${DOMAINNAME}/"
-      - "homepage.description=Stream container logs in real-time"
+      - "homepage.description=Stream container logs in real time"

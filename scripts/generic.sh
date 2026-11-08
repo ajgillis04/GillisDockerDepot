@@ -22,7 +22,7 @@ if [ -d /opt ]; then
 else
     mkdir /opt
 fi
-# no need to create many folders. entware-opt package creates most
+# No need to create many folders; the entware-opt package creates most of them.
 for folder in bin etc lib/opkg tmp var/lock
 do
   if [ -d "/opt/$folder" ]; then

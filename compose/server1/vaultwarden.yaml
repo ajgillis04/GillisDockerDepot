@@ -1,5 +1,5 @@
 # Vaultwarden - A Bitwarden-compatible server.
-# Once container is up, generate a Admin Token
+# Once the container is up, generate an admin token
 #   echo -n "Your Personal Password" | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4 > secrets/vaultwarden_admin_token
 
 services:
@@ -12,7 +12,7 @@ services:
       PGID: ${PGID}
       PUID: ${PUID}
       #DOMAIN: ${DOMAINNAME}
-      ADMIN_TOKEN_FILE: /run/secrets/vaultwarden_admin_token #cant' get working look at later
+      ADMIN_TOKEN_FILE: /run/secrets/vaultwarden_admin_token #can't get it working; look at it later
       DATABASE_URL: data/db.sqlite3
       #DATABASE_URL_FILE: /run/secrets/vaultwarden_db_password # for use in an external database      
       DOMAIN: "https://vault.${DOMAINNAME}"

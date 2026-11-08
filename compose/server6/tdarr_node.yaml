@@ -12,7 +12,7 @@ services:
       nodeName: tdarr_node.${HOST_NAME}
       serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
-      inContainer: true # Tell tdarr its running in docker      
+      inContainer: true # Tell Tdarr it's running in Docker      
       serverURL: http://${TDARR_SERVERIP}:${TDARR_SERVER_PORT}
       # NVIDIA_DRIVER_CAPABILITIES: all
       # NVIDIA_VISIBLE_DEVICES: all

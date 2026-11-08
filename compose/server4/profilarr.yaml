@@ -33,7 +33,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
-      - "homepage.name=profilarr"
+      - "homepage.name=Profilarr"
       - "homepage.icon=profilarr.png"
       - "homepage.href=https://profilarr.${DOMAINNAME}/"
-      - "homepage.description=custom format / quality profile management tool"
+      - "homepage.description=Custom format / quality profile management tool"

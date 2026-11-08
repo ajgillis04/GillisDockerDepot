@@ -1,13 +1,13 @@
 #***********************************************************************************
 # Created: Andy Gillis
 # Date:    Apr 20, 2020
-# Purpose: A Docker Compose to create containers
+# Purpose: A Docker Compose file to create containers
 # Clone:   git clone https://github.com/ajgillis04/GillisDockerDepot.git
 # Usage:   docker compose -p mediaserver -f docker-compose.yml up --detach
 # Prereqs: Ensure Docker and Docker Compose are installed
 # Prereqs 2: You need to create a .env in your root folder with all $variables below
-# Prereqs 3: required a /secerts folder with all you sensative data
-# Help:    I relied heavily on https://www.smarthomebeginner.com/ at the begining
+# Prereqs 3: requires a /secrets folder with all your sensitive data
+# Help:    I relied heavily on https://www.smarthomebeginner.com/ at the beginning
 # **********************************************************************************
 
 
@@ -22,7 +22,7 @@ x-environment: &default-tz-puid-pgid
 x-environment-tz: &default-tz  
   TZ: $TZ
 
-# Keys common to some of the core services that we always to automatically restart on failure
+# Keys common to some of the core services that we always want to restart automatically on failure
 x-common-keys-core: &common-keys-core
   networks:
     - mediaserver
@@ -48,7 +48,7 @@ x-common-keys-media: &common-keys-media
 
 ########################### NETWORKS
 # You may customize the network subnet (172.30.0.0/24) below as you please.
-# Docker Compose version 3.5 or higher required to define networks this way. You no longer have to create manual.
+# Docker Compose version 3.5 or higher required to define networks this way. You no longer have to create them manually.
 networks:
   mediaserver:
     name: mediaserver
@@ -100,7 +100,7 @@ secrets:
     file: $DOCKERDIR/secrets/pihole_password
 
 ########################### Volumes
-# these volumne is required to make nextcloud_aio_mastercontainer work
+# This volume is required to make nextcloud_aio_mastercontainer work
 volumes:
   nextcloud_aio_mastercontainer:
     name: nextcloud_aio_mastercontainer # This line is not allowed to be changed
@@ -140,7 +140,7 @@ services:
 #        published: 8090
 #        protocol: tcp
 #        mode: host
-#      - target: 8080 # insecure api wont work
+#      - target: 8080 # insecure API won't work
 #        published: 8085
 #        protocol: tcp
 #        mode: host
@@ -169,7 +169,7 @@ services:
       # - --providers.docker.endpoint=tcp://socket-proxy:2375 # Use this instead of the previous line if you have socket proxy.
       - --providers.docker.exposedByDefault=false
       - --entrypoints.https.http.tls.options=tls-opts@file
-      # Add dns-cloudflare as default certresolver for all services. Also enables TLS and no need to specify on individual services
+      # Add dns-cloudflare as default certresolver for all services. Also enables TLS, so there's no need to specify it on individual services
       - --entrypoints.https.http.tls.certresolver=dns-cloudflare
       - --entrypoints.https.http.tls.domains[0].main=$DOMAINNAME
       - --entrypoints.https.http.tls.domains[0].sans=*.$DOMAINNAME
@@ -199,7 +199,7 @@ services:
        #CF_API_KEY_FILE: /run/secrets/cf_api_key
        #CF_API_TOKEN_FILE: /run/secrets/cf_token
        CF_DNS_API_TOKEN_FILE: /run/secrets/cf_dns_api_token
-       HTPASSWD_FILE: /run/secrets/htpasswd # HTPASSWD_FILE can be whatever as it is not used/called anywhere.
+       HTPASSWD_FILE: /run/secrets/htpasswd # HTPASSWD_FILE can be anything, as it isn't used anywhere.
        DOMAINNAME: $DOMAINNAME # Passing the domain name to the traefik container to be able to use the variable in rules. 
        LOG_LEVEL: WARN
     secrets:
@@ -231,7 +231,7 @@ services:
 #      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file,middlewares-rate-limit@file,middlewares-secure-headers@file,middlewares-compress@file"
       - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file,middlewares-rate-limit@file,middlewares-secure-headers@file"
 
-# Updates cloudflare DNS
+# Updates Cloudflare DNS
   cloudflare-ddns:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: oznu/cloudflare-ddns:latest
@@ -285,7 +285,7 @@ services:
       INSECURE_COOKIE: false
       AUTH_HOST: oauth.$DOMAINNAME
       URL_PATH: "/_oauth"
-      LOG_LEVEL: "warn" # set to trace while testing bypass rules trace, debug, info, warn, error, fatal
+      LOG_LEVEL: "warn" # set to trace while testing bypass rules: trace, debug, info, warn, error, fatal
       LOG_FORMAT: text
       LIFETIME: 2678400 # 1 month
       DEFAULT_ACTION: "auth"
@@ -349,7 +349,7 @@ services:
     cap_add:
       - NET_ADMIN
     devices:
-      - /dev/net/tun #on QNAP you need QVPN installed for this to work
+      - /dev/net/tun # on QNAP you need QVPN installed for this to work
     dns:
 #      - 8.8.8.8
 #      - 8.8.4.4
@@ -504,7 +504,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
 # Radarr - Movie management
-# Set url_base in radarr settings if using PathPrefix
+# Set url_base in Radarr settings if using PathPrefix
   radarr:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: linuxserver/radarr:latest
@@ -601,7 +601,7 @@ services:
       - "traefik.http.services.bookbounty-svc.loadbalancer.server.port=5000"
       - "com.centurylinklabs.watchtower.enable=true"
 
-# The one stop solution for all your e-book needs. Comprehensive e-book software.
+# The one-stop solution for all your e-book needs. Comprehensive e-book software.
   calibre:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     container_name: calibre
@@ -633,7 +633,7 @@ services:
       - "traefik.http.services.calibre-svc.loadbalancer.server.port=8080"
       - "com.centurylinklabs.watchtower.enable=true"
 
-# Is a web app providing a clean interface for browsing, reading and downloading eBooks using an existing Calibre database
+# A web app providing a clean interface for browsing, reading and downloading eBooks using an existing Calibre database
   calibre-web:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     container_name: calibre-web
@@ -685,11 +685,11 @@ services:
       - $MEDIASHARE:/data
       - /dev/shm:/transcode # Offload transcoding to RAM if you have enough RAM        
     devices:
-      - /dev/dri:/dev/dri # for harware transcoding must have plex pass before chmod -R 777 /dev/dri
+      - /dev/dri:/dev/dri # for hardware transcoding you must have Plex Pass; before that, chmod -R 777 /dev/dri
     environment:
       <<: *default-tz
-      PUID: 0 #need to set root so plex can access /dev/dri for hw transcoding
-      PGID: 0 #need to set root so plex can access /dev/dri for hw transcoding
+      PUID: 0 # need to run as root so Plex can access /dev/dri for hardware transcoding
+      PGID: 0 # need to run as root so Plex can access /dev/dri for hardware transcoding
       UMASK: "000"
       HOSTNAME: "Gillis-Plex"
       PLEX_CLAIM: $PLEX_CLAIM
@@ -738,7 +738,7 @@ services:
       - $DOCKERDIR/ersatztv:/root/.local/share/ersatztv
       - $MEDIASHARE/Videos:/media:ro #optional
     devices:
-      - /dev/dri:/dev/dri # for harware transcoding must have plex pass before chmod -R 777 /dev/dri
+      - /dev/dri:/dev/dri # for hardware transcoding you must have Plex Pass; before that, chmod -R 777 /dev/dri
     environment:
       <<: *default-tz-puid-pgid
     labels:
@@ -760,7 +760,7 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: ghcr.io/kieraneglin/pinchflat:latest
     container_name: pinchflat
-# adding network_mode & depends on to use vpn
+# Add network_mode and depends_on to use the VPN
 #    network_mode: "service:transmission-openvpn"
 #   depends_on:
 #      - transmission-openvpn
@@ -775,7 +775,7 @@ services:
     - "com.centurylinklabs.watchtower.enable=true"
 
 ############################# UTILITIES
-# Dozzle is a simple, lightweight application that provides you with a web based interface to monitor your Docker container logs live      
+# Dozzle is a simple, lightweight application that provides you with a web-based interface to monitor your Docker container logs live      
   dozzle:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: amir20/dozzle:latest
@@ -832,7 +832,7 @@ services:
 #      - "com.centurylinklabs.watchtower.enable=true"
 
 
-# Heimdall a webpage landing page with all your apps
+# Heimdall - A landing page with all your apps
   heimdall:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: linuxserver/heimdall:latest
@@ -860,7 +860,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
 
       
-# Heimdall using this for internal with ip instead of domain names
+# Heimdall instance for internal use, with IPs instead of domain names
   heimdallint:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: linuxserver/heimdall:latest
@@ -945,7 +945,7 @@ services:
       - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
       - "com.centurylinklabs.watchtower.enable=true"
 
-#Wizarr is a automatic user invitation system for Plex and Jellyfin
+#Wizarr is an automatic user invitation system for Plex and Jellyfin
   wizarr:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: ghcr.io/wizarrrr/wizarr:latest    
@@ -978,7 +978,7 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
-# Guacamole - Remote desktop, SSH, on Telnet on any HTML5 Browser 
+# Guacamole - Remote desktop, SSH, or Telnet in any HTML5 browser 
   guacamole:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: guacamole/guacamole:latest
@@ -1112,15 +1112,15 @@ services:
     ports:
       - 87:80 # Can be removed when running behind a web server or reverse proxy (like Apache, Nginx and else). See https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md
       - 8086:8080 #AIO Interface
-      - 16002:8443 # want to be able to reach internal if required If your firewall/router has port 80 and 8443 open/forwarded and you point a domain to your server, you can get a valid certificate automatically by opening the Nextcloud AIO Interface via: https://your-domain-that-points-to-this-server.tld:8443
+      - 16002:8443 # want to be able to reach it internally if required. If your firewall/router has port 80 and 8443 open/forwarded and you point a domain to your server, you can get a valid certificate automatically by opening the Nextcloud AIO Interface via: https://your-domain-that-points-to-this-server.tld:8443
     environment:
       - APACHE_PORT=11000 # Is needed when running behind a web server or reverse proxy (like Apache, Nginx and else). See https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md
       - APACHE_IP_BINDING=192.168.2.41 # Should be set when running behind a web server or reverse proxy (like Apache, Nginx and else) that is running on the same host. See https://github.com/nextcloud/all-in-one/blob/main/reverse-proxy.md
 #      - host.docker.internal:$APACHE_PORT
 #      - SKIP_DOMAIN_VALIDATION=true
-      - NEXTCLOUD_DATADIR=$USERDIR/nextcloud #all user folders and data will be kept here
-      - NEXTCLOUD_MOUNT=/share/ # Mount fro external storage
-      - NEXTCLOUD_TRUSTED_CACERTS_DIR=/docker/nextcloud/Certs/CA # CA certificates in this directory will be trusted by the OS of the nexcloud container (Useful e.g. for LDAPS) See See https://github.com/nextcloud/all-in-one#how-to-trust-user-defined-certification-authorities-ca
+      - NEXTCLOUD_DATADIR=$USERDIR/nextcloud # all user folders and data will be kept here
+      - NEXTCLOUD_MOUNT=/share/ # Mount for external storage
+      - NEXTCLOUD_TRUSTED_CACERTS_DIR=/docker/nextcloud/Certs/CA # CA certificates in this directory will be trusted by the OS of the Nextcloud container (useful e.g. for LDAPS). See https://github.com/nextcloud/all-in-one#how-to-trust-user-defined-certification-authorities-ca
       - SKIP_DOMAIN_VALIDATION=true
       
   photoprism:
@@ -1256,7 +1256,7 @@ services:
       - "traefik.http.services.picard-svc.loadbalancer.server.port=5800"          
       - "com.centurylinklabs.watchtower.enable=true"
 
-#Tdarr is a self hosted web-app for automating media library transcode/remux management
+#Tdarr is a self-hosted web app for automating media library transcode/remux management
   tdarr:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: haveagitgat/tdarr:latest
@@ -1290,7 +1290,7 @@ services:
       ## HTTP Services
       - "traefik.http.routers.tdarr-rtr.service=tdarr-svc"
       - "traefik.http.services.tdarr-svc.loadbalancer.server.port=8265"          
-      - "com.centurylinklabs.watchtower.enable=false" # Client and server version must match. Turning off autoupdate on server so clients do not get versions behind.
+      - "com.centurylinklabs.watchtower.enable=false" # Client and server version must match. Turning off auto-update on the server so clients don't fall versions behind.
     
   tdarr_node:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
@@ -1312,7 +1312,7 @@ services:
       - $DOCKERDIR/tdarr/transcode:/temp
       - /etc/localtime:/etc/localtime:ro
     labels:
-      - "com.centurylinklabs.watchtower.enable=false" # Client and server version must match. Turning off autoupdate on server so clients do not get versions behind.
+      - "com.centurylinklabs.watchtower.enable=false" # Client and server version must match. Turning off auto-update on the server so clients don't fall versions behind.
 
   bazarr:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
@@ -1411,7 +1411,7 @@ services:
 #      - pihole_password
  #   labels:
 #       - "traefik.enable=true"
-#       - "traefik.docker.network=pihole_network" #try if container is on multiple networks or built on different network first time
+#       - "traefik.docker.network=pihole_network" # try this if the container is on multiple networks or was first built on a different network
       ## HTTP Routers
 #       - "traefik.http.routers.pihole-rtr.entrypoints=https"
 #       - "traefik.http.routers.pihole-rtr.rule=Host(`pihole.$DOMAINNAME`)"
@@ -1422,7 +1422,7 @@ services:
       ## HTTP Services
 #       - "traefik.http.routers.pihole-rtr.service=pihole-svc"
 #       - "traefik.http.services.pihole-svc.loadbalancer.server.port=8443"   
-#       - "traefik.http.services.pihole-svc.loadbalancer.server.scheme=https" #add if cannot reach subdomain.domain.com needed for nextcloud and mienos
+#       - "traefik.http.services.pihole-svc.loadbalancer.server.scheme=https" # add if you can't reach subdomain.domain.com; needed for Nextcloud and MineOS
 #      - "com.centurylinklabs.watchtower.enable=true"
 
 #Minecraft server builder
@@ -1455,7 +1455,7 @@ services:
       ## HTTP Services
     - "traefik.http.routers.mineos-rtr.service=mineos-svc"
     - "traefik.http.services.mineos-svc.loadbalancer.server.port=8443"   
-    - "traefik.http.services.mineos-svc.loadbalancer.server.scheme=https" #add if cannot reach subdomain.domain.com needed for nextcloud and mienos
+    - "traefik.http.services.mineos-svc.loadbalancer.server.scheme=https" # add if you can't reach subdomain.domain.com; needed for Nextcloud and MineOS
     - "com.centurylinklabs.watchtower.enable=true"
 
 # PHP Website for GillisOnline
@@ -1524,7 +1524,7 @@ services:
       <<: *default-tz-puid-pgid
       SERVERURL: "auto"
       SERVERPORT: 51820
-      PEERS: 10 #change to match how many devies you want to use Wireguard on
+      PEERS: 10 #change to match how many devices you want to use WireGuard on
       PEERDNS: auto
       INTERNAL_SUBNET: 10.0.28.0 #optional
       ALLOWEDIPS: 0.0.0.0/0 #optional

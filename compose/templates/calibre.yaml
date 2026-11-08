@@ -1,5 +1,5 @@
 # Calibre - An e-book management software.
-# Windows: Getting error on x11 look later
+# Windows: getting an X11 error; look at it later
 
 services:
   calibre:

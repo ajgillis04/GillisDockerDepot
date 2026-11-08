@@ -1,8 +1,8 @@
 # Pi-hole - A network-wide ad blocker.
 
 # Notes:
-# This may need to change if you are running on windows or linux. Hence the commented variables etc
-# Windows: Suggested, new-NetFirewallRule -DisplayName "Docker Desktop Backend" -Direction Inbound -Program "C:\program files\docker\docker\resources\com.docker.backend.exe" -Action Allow -Profile Private,Public
+# This may need to change depending on whether you run Windows or Linux, hence the commented-out variables
+# Windows (suggested): New-NetFirewallRule -DisplayName "Docker Desktop Backend" -Direction Inbound -Program "C:\program files\docker\docker\resources\com.docker.backend.exe" -Action Allow -Profile Private,Public
 #
 
 services:

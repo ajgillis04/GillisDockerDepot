@@ -8,7 +8,7 @@ services:
       TZ: ${TZ}
       PGID: ${PGID}
       PUID: ${PUID}
-      inContainer: true # Tell tdarr its running in docker      
+      inContainer: true # Tell Tdarr it's running in Docker      
       nodeID: tdarr_node.${HOST_NAME}
       nodeIP: tdarr.${HOST_NAME}.lan
       nodePort: ${TDARR_NODE_PORT}

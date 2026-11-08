@@ -69,7 +69,7 @@ services:
       TRAEFIK_PROVIDERS_DOCKER: true
       TRAEFIK_PROVIDERS_DOCKER_ENDPOINT: unix:///var/run/docker.sock
       TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT: false
-      #TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver #if you want route other networks leave this
+      #TRAEFIK_PROVIDERS_DOCKER_NETWORK: mediaserver # if you want to route other networks, leave this
       TRAEFIK_PROVIDERS_FILE_DIRECTORY: /rules
       TRAEFIK_PROVIDERS_FILE_WATCH: true
       
@@ -82,7 +82,7 @@ services:
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROVIDER: cloudflare
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_RESOLVERS: 1.1.1.1:53,1.0.0.1:53
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_DNSCHALLENGE_PROPAGATION_DELAYBEFORECHECKS: 90
-      # Testing Let's Encrypt Staging Server ENABLE after testing
+      # Let's Encrypt staging server, for testing. Comment it out again after testing.
       #TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
       TRAEFIK_CERTIFICATESRESOLVERS_DNSCLOUDFLARE_ACME_CASERVER: "https://acme-v02.api.letsencrypt.org/directory"
 

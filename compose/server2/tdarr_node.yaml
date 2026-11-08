@@ -1,4 +1,4 @@
-# Note Nvidia GPU support requires the NVIDIA Game ready or Studio driver to be installed on the host machine. 
+# Note: NVIDIA GPU support requires the NVIDIA Game Ready or Studio driver to be installed on the host machine. 
 # https://www.nvidia.com/en-us/drivers/
 
 # Tdarr Node - A node instance for the Tdarr tool.

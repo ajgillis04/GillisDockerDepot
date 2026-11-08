@@ -36,6 +36,6 @@
       security_opt:
         - no-new-privileges:true
       labels:
-        #- "traefik.http.routers.wg.rule=Host(`vpn.${DOMAINNAMEs}`)"
+        #- "traefik.http.routers.wg.rule=Host(`vpn.${DOMAINNAME}`)"
         ## Watchtower Enable
         - "com.centurylinklabs.watchtower.enable=true"

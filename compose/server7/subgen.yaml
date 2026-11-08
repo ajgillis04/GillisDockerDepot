@@ -18,7 +18,7 @@ services:
       WEBHOOKPORT: 9000
       PROCADDEDMEDIA: "True"
       PROCMEDIAONPLAY: "True"
-      #TRANSCRIBE_FOLDERS: "/tv|/movies" # Batch Proceesing for backlog old shows tunrn off after its done
+      #TRANSCRIBE_FOLDERS: "/tv|/movies" # Batch processing for the backlog of old shows; turn off after it's done
       ONLY_SKIP_IF_SUBGEN_SUBTITLE: "True"
       SKIP_IF_TO_TRANSCRIBE_SUB_ALREADY_EXIST: "False"
       MONITOR: "True"

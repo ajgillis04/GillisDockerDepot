@@ -33,7 +33,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Other"
-      - "homepage.name=retroassembly"
+      - "homepage.name=RetroAssembly"
       - "homepage.icon=gamevault.png"
       - "homepage.href=https://retro.${DOMAINNAME}/"
-      - "homepage.description=web-based retro game library + launcher"
+      - "homepage.description=Web-based retro game library + launcher"

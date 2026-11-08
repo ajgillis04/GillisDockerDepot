@@ -28,7 +28,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Media"
-      - "homepage.name=libation"
+      - "homepage.name=Libation"
       - "homepage.icon=libation.png"
       - "homepage.href=https://libation.${DOMAINNAME}/"
       - "homepage.description=Audible audiobook manager"

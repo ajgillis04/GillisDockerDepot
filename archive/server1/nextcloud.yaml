@@ -1,5 +1,5 @@
 # Nextcloud - An open-source cloud storage solution.
-# Nextcloud is a finicky beast if you get into trouble if you get in trouble with it start over
+# Nextcloud is a finicky beast. If you get into trouble with it, start over.
 # docker stop $(docker ps -a -q --filter name=nextcloud)
 # docker rm $(docker ps -a -q --filter name=nextcloud)
 # docker volume rm $(docker volume ls -q --filter name=nextcloud)
@@ -23,7 +23,7 @@ services:
       APACHE_IP_BINDING: ${SERVER_IP}
       NEXTCLOUD_DATADIR: ${NEXTCLOUD_HOMES} # all user folders and data will be kept here
       NEXTCLOUD_MOUNT: ${NEXTCLOUD_EXSTORAGE} # Allows the Nextcloud container to access the chosen directory on the host
-      NEXTCLOUD_TRUSTED_CACERTS_DIR: ${SHAREDDIR} # CA certificates in this directory will be trusted by the OS of the nexcloud container (Useful e.g. for LDAPS) See See
+      NEXTCLOUD_TRUSTED_CACERTS_DIR: ${SHAREDDIR} # CA certificates in this directory will be trusted by the OS of the Nextcloud container (useful e.g. for LDAPS). See
       SKIP_DOMAIN_VALIDATION: true
     networks:
       - nextcloud-aio

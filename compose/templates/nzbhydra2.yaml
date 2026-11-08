@@ -31,8 +31,8 @@ services:
       - "homepage.name=NZBHydra2"
       - "homepage.icon=nzbhydra2.png"
       - "homepage.href=https://nzbhydra2.${DOMAINNAME}/"
-      - "homepage.description=NZBHydra 2 is a meta search for NZB indexers"
-      ## Homepage Widget currently not working until post supported
+      - "homepage.description=Meta search for NZB indexers"
+      ## Homepage widget not working until POST requests are supported
    #   - "homepage.widget.type=customapi"
    #   - "homepage.widget.url=http://nzbhydra2.${HOST_NAME}:5076/internalapi/stats?apikey=${NZBHYDRA2_API_KEY}"
    #   - "homepage.widget.key=${NZBHYDRA2_API_KEY}"

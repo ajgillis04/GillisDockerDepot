@@ -12,7 +12,7 @@ services:
       nodeName: tdarr_node.${HOST_NAME}
       serverIP: ${TDARR_SERVERIP}
       serverPort: ${TDARR_SERVER_PORT}
-      inContainer: true # Tell tdarr its running in docker      
+      inContainer: true # Tell Tdarr it's running in Docker      
       serverURL: http://${TDARR_SERVERIP}:${TDARR_SERVER_PORT}
       # NVIDIA_DRIVER_CAPABILITIES: all
       # NVIDIA_VISIBLE_DEVICES: all
@@ -24,7 +24,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr/app/configs:/app/configs
       - ${DOCKERDIR}/tdarr/cache:/cache
-      #- /dev/shm/tdarr:/temp # offload transcoding to memory #Not viable anymore as video files are becoming too large to fit on RAM
+      #- /dev/shm/tdarr:/temp # offload transcoding to memory # Not viable anymore as video files are becoming too large to fit in RAM
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr_node:/app/logs
     # Hardware transcoding

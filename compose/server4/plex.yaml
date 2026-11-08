@@ -1,13 +1,13 @@
 # Plex - A media server to organize and stream your media.
 # Note: Some stuff has to be set manually
-#       Settings, Remote Access, Intenet upload speeds: set to your speed
-#       Settings, Library, Select: Scan my library Auto, Run a Partial, Scan my library perd, 
+#       Settings, Remote Access, Internet upload speeds: set to your speed
+#       Settings, Library, Select: Scan my library Auto, Run a Partial, Scan my library periodically, 
 #         Video played threshold 95%
 #       Settings, Network, LAN Networks: 127.0.0.1/32,10.0.27.0/24,172.29.0.0/16,192.168.2.0/24, uncheck enable Relay, 
 #         Custom server access URLs: https://plex.YOURNAME.gillisonline.com:443,https://YOURIP:32400
 #         List of IP addresses and networks that are allowed without auth: 127.0.0.1/32,10.0.27.0/24,172.29.0.0/16,192.168.2.0/24
 #       Settings, Transcode, Transcoder temporary directory: /transcode
-#         If you paid for plex pass ensure these are selected Use hardware-accelerated video encoding, Use hardware acceleration when available
+#         If you paid for Plex Pass, make sure these are selected: Use hardware-accelerated video encoding, Use hardware acceleration when available
 #       Settings, Extras, Include Cinema Trailers from new and upcoming movies in theaters
 #       to restore playlists from old plex server https://soundiiz.com/webapp/playlists/spotify
 # 
@@ -28,7 +28,7 @@ services:
       DOMAINNAME: ${DOMAINNAME}
       UMASK: 002
       ADVERTISE_IP: "https://plex.${HOST_NAME}.${DOMAINNAME}:443,https://${SERVER_IP}:32400"
-      ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks
+      ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manually: Settings, Network, LAN Networks
       HOSTNAME: plex.${HOST_NAME}
       PLEX_CLAIM_FILE: /run/secrets/plex_claim # input claim number into file after first run
       PLEX_SERVER_NAME: plex.${HOST_NAME}

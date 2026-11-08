@@ -1,0 +1,35 @@
+# ***********************************************************************************
+# Service: Cabot-Scraper
+# Purpose: Monitors tee time availability using Playwright.
+# Status:  One-off; kept for reference. Its include line in docker-compose-server6.yaml stays commented out.
+# Notes: 
+#   - Runs a headless browser to scrape dynamic RGuest content.
+#   - Scripts stored in ${DOCKERDIR}/cabot-scraper.
+#   - Writes availability data to csv for trend analysis.
+# prerequisite: docker exec -it cabot-scraper.Andy-LaptopT146 pip install playwright
+#               docker exec -it cabot-scraper.Andy-LaptopT146 playwright install chromium
+#               docker exec -it cabot-scraper.Andy-LaptopT146 pip install playwright-stealth
+# ***********************************************************************************
+services:
+  cabot-scraper:
+    container_name: cabot-scraper.${HOST_NAME}
+    hostname: cabot-scraper.${HOST_NAME}.lan
+    #image: mcr.microsoft.com/playwright/python:v1.40.0-jammy
+    #entrypoint: python3 /app/monitor.py
+    build: ../../appdata/cabot-scraper
+    environment:
+      TZ: ${TZ}
+      PLAYWRIGHT_BROWSERS_PATH: /app/ms-playwright
+      DISCORD_ID: ${DISCORD_ID}
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+    networks:
+      - mediaserver
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/cabot-scraper:/app
+      - ${DOCKERDIR}/cabot-scraper/logs:/app/logs
+    restart: unless-stopped
+    labels:
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Cabot Scraper"
+      - "homepage.description=Tee time availability monitor"

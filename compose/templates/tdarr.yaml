@@ -24,7 +24,7 @@ services:
       serverPort: ${TDARR_SERVER_PORT}
       webUIPort: ${TDARR_WEBUI_PORT}
       internalNode: false # true to enable the Node in the Server container.
-      inContainer: true # Tell tdarr its running in docker
+      inContainer: true # Tell Tdarr it's running in Docker
       auth: false # v3 defaults to true without a saved config
 #      nodeName: tdarr_node.${HOST_NAME}     
       # NVIDIA_DRIVER_CAPABILITIES: all # Nvidia transcoding
@@ -38,7 +38,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKERDIR}/tdarr/app/server:/app/server
       - ${DOCKERDIR}/tdarr/cache:/cache
-      #- /dev/shm/tdarr:/temp # offload transcoding to memory #Not viable anymore as video files are becoming too large to fit on RAM
+      #- /dev/shm/tdarr:/temp # offload transcoding to memory # Not viable anymore as video files are becoming too large to fit in RAM
       - ${MEDIASHARE}:/media
       - ${DOCKERDIR}/logs/tdarr:/app/logs
     # Hardware transcoding
@@ -58,7 +58,7 @@ services:
       - no-new-privileges:true
     labels:
       ## Watchtower Enable
-      - "com.centurylinklabs.watchtower.enable=false" #Client and Server versions must match so should be carefully updating
+      - "com.centurylinklabs.watchtower.enable=false" # Client and server versions must match, so update carefully
       ## Homepage Labels
       - "homepage.group=Other"
       - "homepage.name=Tdarr"

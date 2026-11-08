@@ -75,7 +75,7 @@ services:
       SERVER_IP: ${SERVER_IP}
       UMASK: 002      
       ADVERTISE_IP: https://${SERVER_IP}:32400/
-      ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manual, Settings, Network, LAN Networks
+      ALLOWED_NETWORKS: ${LOCAL_NETWORK} # Add manually: Settings, Network, LAN Networks
       HOST_NAME: plex.${HOST_NAME}.lan
       #PLEX_CLAIM_FILE: /run/secrets/plex_claim # input claim number into file after first run
       #CLAIM_SERVER: yes #first run

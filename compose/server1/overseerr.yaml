@@ -1,5 +1,5 @@
 # Overseerr - A request management and media discovery tool for Plex.
-# Login to web interface and setup admin user
+# Log in to the web interface and set up the admin user
 services:
   overseerr:
     container_name: overseerr.${HOST_NAME}

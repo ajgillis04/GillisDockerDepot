@@ -31,7 +31,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
       ## Homepage Labels
       - "homepage.group=Infrastructure"
-      - "homepage.name=chrome"
+      - "homepage.name=Chrome"
       - "homepage.icon=chrome.png"
       - "homepage.href=https://chrome.${DOMAINNAME}/"
       - "homepage.description=Full Chrome browser (noVNC/VNC)"
