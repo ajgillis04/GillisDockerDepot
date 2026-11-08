@@ -21,6 +21,20 @@
 # database is db.sqlite3 and config.json holds the live server's settings.
 #
 # Needs: SSH key access to GillisNAS as GilAdmin (NAS_KEY), rsync on both ends.
+#
+# Setting it up from scratch on the standby machine (done on Brainiac 2026-11-08):
+#   1. SSH key: put a key that logs in to GillisNAS as GilAdmin at NAS_KEY and
+#      check it with: ssh -i <key> GilAdmin@<NAS> 'echo ok'
+#   2. .env: add VAULTWARDEN_STANDBY_PORT=9445 and
+#      VAULTWARDEN_STANDBY_DOMAIN=https://<this machine's IP>:9445
+#   3. Certificate: run the openssl lines in compose/server8/vaultwarden-standby.yaml.
+#   4. First run by hand (it also starts the standby the first time):
+#        scripts/vaultwarden-standby-sync.sh; tail appdata/_backups/vaultwarden/sync.log
+#      The last line should end "standby healthy".
+#   5. Add the cron line above with: crontab -e
+#   6. Optional emailed alert if a night is missed: put a Healthchecks.io ping URL
+#      on one line in appdata/_backups/vaultwarden/healthcheck-url (not in git).
+#      The script pings it after each good run; Healthchecks emails if a ping is late.
 # ------------------------------------------------------------------------------
 set -uo pipefail
 
@@ -48,6 +62,8 @@ log() { echo "$(date '+%F %T') $*" >> "$LOG"; }
 fail() {
   log "FAILED: $*"
   [ -x /usr/local/sbin/brainiac-alert ] && /usr/local/sbin/brainiac-alert critical "Vaultwarden standby" "$*"
+  # Healthchecks.io (if set up) emails right away on a /fail ping
+  [ -s "$ARCHIVE_DIR/healthcheck-url" ] && curl -fsS -m 15 -o /dev/null --data-raw "$*" "$(head -1 "$ARCHIVE_DIR/healthcheck-url")/fail"
   exit 1
 }
 
@@ -93,3 +109,9 @@ done
   || log "warning: pruning old snapshots on GillisNAS failed"
 
 log "ok: $snap ($size bytes) -> $(basename "$archive"), standby healthy"
+
+# 6. Tell Healthchecks.io (if set up) that tonight worked; it emails when a ping is missed
+if [ -s "$ARCHIVE_DIR/healthcheck-url" ]; then
+  curl -fsS -m 15 --retry 3 -o /dev/null "$(head -1 "$ARCHIVE_DIR/healthcheck-url")" \
+    || log "warning: Healthchecks ping failed"
+fi
