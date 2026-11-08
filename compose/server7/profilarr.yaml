@@ -37,7 +37,3 @@ services:
       - "homepage.icon=profilarr.png"
       - "homepage.href=https://profilarr.${DOMAINNAME}/"
       - "homepage.description=custom format / quality profile management tool"
-      ## Homepage Widget
-      - "homepage.widget.type="
-      - "homepage.widget.url=http://profilarr.${HOST_NAME}:6868"
-      - "homepage.widget.key=${PROFILARR_API_KEY}"
