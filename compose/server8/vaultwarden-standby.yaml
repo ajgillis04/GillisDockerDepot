@@ -1,0 +1,64 @@
+# ------------------------------------------------------------------------------
+# Vaultwarden Standby - Nightly copy of the live password vault (GillisNAS)
+# ------------------------------------------------------------------------------
+# A second Vaultwarden that holds last night's copy of the live vault, so the
+# passwords are still reachable if GillisNAS fails. Everyone logs in with their
+# normal email and master password; the vaults stay encrypted exactly as on the
+# live server.
+#
+# How it's kept up to date: scripts/vaultwarden-standby-sync.sh runs nightly from
+# cron on this machine. It takes a safe snapshot of the live database (Vaultwarden's
+# own "backup" command), copies it here with the attachments and keys, keeps 14
+# dated archives in /mnt/data/backups/vaultwarden, reloads this container, and
+# raises an alert if the copy doesn't start. So each night is also a restore test.
+#
+# Use it for READING ONLY. Anything saved here is overwritten the next night.
+#   Web vault: https://<this machine>:${VAULTWARDEN_STANDBY_PORT}
+#   The certificate is self-signed: accept the browser warning once. Bitwarden
+#   phone apps won't accept it, so use a browser (or the desktop app after
+#   trusting the certificate).
+#
+# Notes:
+#   - Not reachable from the internet, no signups, no invitations, no admin page,
+#     and no email. Its settings come from here, not from the live config.json.
+#   - Certificate (one time, 10 years):
+#       mkdir -p ${DOCKERDIR}/vaultwarden-standby/ssl && cd ${DOCKERDIR}/vaultwarden-standby/ssl
+#       openssl req -x509 -newkey rsa:2048 -nodes -days 3650 -subj "/CN=vaultwarden-standby" \
+#         -addext "subjectAltName=DNS:${HOST_NAME},DNS:${HOST_NAME}.lan,IP:<this machine's IP>" \
+#         -keyout key.pem -out cert.pem
+#   - If GillisNAS is gone for good, this copy can become the live vault: give it
+#     SMTP and an admin token, point vault.${DOMAINNAME} at it, and stop the cron job.
+# ------------------------------------------------------------------------------
+services:
+  vaultwarden-standby:
+    container_name: vaultwarden-standby.${HOST_NAME}
+    hostname: vaultwarden-standby.${HOST_NAME}.lan
+    image: vaultwarden/server:latest
+    user: "${PUID}:${PGID}"   # so the nightly sync (run as this user) can replace the data
+    environment:
+      TZ: ${TZ}
+      DOMAIN: ${VAULTWARDEN_STANDBY_DOMAIN}   # e.g. https://<this machine's IP>:9445
+      ROCKET_PORT: "8443"
+      ROCKET_TLS: '{certs="/ssl/cert.pem",key="/ssl/key.pem"}'
+      SIGNUPS_ALLOWED: "false"
+      INVITATIONS_ALLOWED: "false"
+      EMERGENCY_ACCESS_ALLOWED: "false"
+      SENDS_ALLOWED: "false"
+    networks:
+      - mediaserver
+    ports:
+      - "${VAULTWARDEN_STANDBY_PORT}:8443"
+    volumes:
+      - ${DOCKERDIR}/vaultwarden-standby/data:/data
+      - ${DOCKERDIR}/vaultwarden-standby/ssl:/ssl:ro
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      ## Watchtower Enable
+      - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Vaultwarden Standby"
+      - "homepage.icon=vaultwarden.png"
+      - "homepage.description=Last night's copy of the password vault (read only)"

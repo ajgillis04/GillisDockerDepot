@@ -135,6 +135,7 @@ include:
   - ${COMPOSE_DIR}/ollama.yaml # small helper models (task model) for an Open WebUI on another server
   - ${COMPOSE_DIR}/speaches.yaml # voice: Whisper speech-to-text and Kokoro text-to-speech
   - ${COMPOSE_DIR}/tdarr_node.yaml # Don't run a node on the same server as Tdarr; Tdarr already has a node inside.
+  - ${COMPOSE_DIR}/vaultwarden-standby.yaml # nightly copy of the live vault from GillisNAS; see scripts/vaultwarden-standby-sync.sh
 #  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/traefik-cloudflare-companion.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
