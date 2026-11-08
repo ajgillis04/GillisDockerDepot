@@ -1,8 +1,6 @@
 {
-  "_id": "GvsEac3V2a",
-  "name": "Gillis_VideoSanitize_EAC3_Flow_v2",
-  "description": "Duration check and a 20% size floor before replacing the original. Chapters are kept.",
-  "tags": "",
+  "_id": "GvsEac3V3a",
+  "name": "Gillis_VideoSanitize_EAC3_Flow_v3",
   "flowPlugins": [
     {
       "name": "Fail Flow Final",
@@ -24,7 +22,7 @@
       "fpEnabled": true,
       "id": "5jSRm0JJ3",
       "position": {
-        "x": 93.12658407465713,
+        "x": 93.12658407465712,
         "y": 162.622206557578
       }
     },
@@ -112,7 +110,7 @@
       "fpEnabled": true,
       "id": "MDLrfvRh5",
       "position": {
-        "x": 182.11655640515482,
+        "x": 182.1165564051548,
         "y": -337.635309155616
       }
     },
@@ -128,7 +126,7 @@
       "fpEnabled": true,
       "id": "t4ezIpmo4",
       "position": {
-        "x": 182.55873216720443,
+        "x": 182.55873216720445,
         "y": -190
       }
     },
@@ -310,6 +308,21 @@
         "x": 182.56,
         "y": -271.32
       }
+    },
+    {
+      "name": "Convert WebVTT Subtitles to SRT",
+      "sourceRepo": "Local",
+      "pluginName": "convertWebVttToSrt",
+      "version": "1.0.0",
+      "inputsDB": {
+        "keepLanguages": "eng"
+      },
+      "fpEnabled": true,
+      "id": "WebVtt2Srt",
+      "position": {
+        "x": -148,
+        "y": -264
+      }
     }
   ],
   "flowEdges": [
@@ -470,7 +483,7 @@
     {
       "source": "nJUHbufln",
       "sourceHandle": "1",
-      "target": "a3vcksOGe",
+      "target": "WebVtt2Srt",
       "targetHandle": null,
       "id": "1YuwUi4oD"
     },
@@ -592,6 +605,20 @@
       "target": "HWD9I7jFY",
       "targetHandle": null,
       "id": "dUrEdge04"
+    },
+    {
+      "source": "WebVtt2Srt",
+      "sourceHandle": "1",
+      "target": "a3vcksOGe",
+      "targetHandle": null,
+      "id": "WebVttEdge1"
+    },
+    {
+      "source": "WebVtt2Srt",
+      "sourceHandle": "err1",
+      "target": "HJV1clEqy",
+      "targetHandle": null,
+      "id": "WebVttEdge2"
     }
   ]
 }
