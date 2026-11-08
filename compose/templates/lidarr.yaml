@@ -2,7 +2,7 @@
 services:
   lidarr:
     container_name: lidarr.${HOST_NAME}
-    hostname: lidarr.${HOST_NAME}.local
+    hostname: lidarr.${HOST_NAME}.lan
     image: linuxserver/lidarr:latest
     environment:
       TZ: ${TZ}
@@ -23,22 +23,15 @@ services:
     security_opt:
       - no-new-privileges:true    
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers - Bypass
-      - "traefik.http.routers.lidarr-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.lidarr-rtr-bypass.rule=Host(`lidarr.${DOMAINNAME}`) && Header(`traefik-auth-bypass-key`, `${TRAEFIK_AUTH_BYPASS_KEY}`)"
-      - "traefik.http.routers.lidarr-rtr-bypass.priority=100"
-      ## HTTP Routers
-      - "traefik.http.routers.lidarr-rtr.entrypoints=https"
-      - "traefik.http.routers.lidarr-rtr.rule=Host(`lidarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.lidarr-rtr.priority=99"
-      - "traefik.http.routers.lidarr-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.lidarr-rtr.service=lidarr-svc"
-      - "traefik.http.routers.lidarr-rtr-bypass.service=lidarr-svc"
-      - "traefik.http.services.lidarr-svc.loadbalancer.server.port=8686"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
-
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Lidarr"
+      - "homepage.icon=lidarr.png"
+      - "homepage.href=https://lidarr.${DOMAINNAME}/"
+      - "homepage.description=Music download manager"
+      ## Homepage Widget
+      - "homepage.widget.type=lidarr"
+      - "homepage.widget.url=http://lidarr.${HOST_NAME}:8686"
+      - "homepage.widget.key=${LIDARR_API_KEY}"

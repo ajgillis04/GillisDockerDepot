@@ -1,61 +1,45 @@
-# Guacamole - A remote desktop gateway.
-
-# # Notes:
-# 1. Ensure a user 'photoprism' is created in MariaDB.
-# 2. Create a database for 'photoprism' with appropriate permissions.
-# 3. Use the following SQL commands:
-#    docker exec -it mariadb.${HOST_NAME} /usr/bin/mariadb -u root -p
-#    CREATE DATABASE guacamole;
-#    CREATE USER 'guac_user'@'%' IDENTIFIED BY 'your_password';
-#    GRANT ALL PRIVILEGES ON guacamole.* TO 'guac_user'@'%';
-#    FLUSH PRIVILEGES;
-#    quit;
-#    docker cp /path/to/scripts/guac_initdb.sql mariadb.${HOST_NAME}:/guac_initdb.sql
-#    docker exec -i mariadb.${HOST_NAME} bash -c "/usr/bin/mariadb -u guac_user -p'YOURPASSWORD' guacamole < /guac_initdb.sql"
-
 services:
   guacamole:
     container_name: guacamole.${HOST_NAME}
-    hostname: guacamole.${HOST_NAME}.local
+    hostname: guacamole.${HOST_NAME}.lan
     image: guacamole/guacamole:latest
     environment:
-      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
-      GUACAMOLE_HOME: /config
-      GUACD_HOSTNAME: guacamole.${HOST_NAME}
+      GUACD_HOSTNAME: guacd.${HOST_NAME}.lan
       MYSQL_DATABASE: guacamole
-      MYSQL_HOSTNAME:  mariadb.${HOST_NAME}
+      MYSQL_HOSTNAME: mariadb.${HOST_NAME}.lan
       MYSQL_PORT: 3306
-      MYSQL_USER_FILE: /run/secrets/guac_mysql_user
-      MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password
+      #MYSQL_USER_FILE: /run/secrets/guac_mysql_user #stopped working
+      #MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password #stopped working
+      MYSQL_USER: ${MYSQL_GUAC_USER}
+      MYSQL_PASSWORD: ${MYSQL_GUAC_PASS}
+    depends_on:
+      - guacd
+      - mariadb
     networks:
       - mediaserver
     ports:
       - "${GUACAMOLE_PORT}:8080"
     volumes:
-      - ${DOCKERDIR}/guacamole/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/guacamole/home:/home/guacamole
+      - ${DOCKERDIR}/guacamole/etc:/etc/guacamole
       - ${DOCKERDIR}/logs/guacamole:/var/log
-    restart: always
+    restart: unless-stopped
     secrets:
       - guac_mysql_user
       - guac_mysql_password
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.guacamole-rtr.entrypoints=https"
-      - "traefik.http.routers.guacamole-rtr.rule=Host(`guac.${DOMAINNAME}`)"
-      - "traefik.http.routers.guacamole-rtr.tls=true"
-      ## Middlewares
-      - "traefik.http.routers.guacamole-rtr.middlewares=chain-oauth@file,add-guacamole"
-      - "traefik.http.middlewares.add-guacamole.addPrefix.prefix=/guacamole"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.guacamole-rtr.service=guacamole-svc"
-      - "traefik.http.services.guacamole-svc.loadbalancer.server.port=8080"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Infrastructure"
+      - "homepage.name=Guacamole"
+      - "homepage.icon=guacamole.png"
+      - "homepage.href=https://guac.${DOMAINNAME}/guacamole/"
+      - "homepage.description=Remote desktop gateway"

@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # syncthing - Continuous File Synchronization
 # ------------------------------------------------------------------------------
-# Secure, peer-to-peer syncing between KennedyNAS and GillisNAS.
+# Secure, peer-to-peer syncing between two servers.
 # Runs as a lightweight service with full UI access.
 # ------------------------------------------------------------------------------
 services:
@@ -27,7 +27,7 @@ services:
       # Source folders to sync
       - /share/homes:/data/homes
       - ${MEDIASHARE}/Photos:/data/Photos
-      - /share/Backups/GillisNAS/Docker/GillisDockerDepot:/data/Docker
+      - /share/Backups/${HOST_NAME}/Docker/GillisDockerDepot:/data/Docker
       # Receiver
       - /share/Backups:/data/Backups
     restart: always

@@ -20,15 +20,16 @@
 services:
   homeassistant:
     container_name: homeassistant.${HOST_NAME}
-    hostname: homeassistant.${HOST_NAME}.local
+    hostname: homeassistant.${HOST_NAME}.lan
     image: ghcr.io/home-assistant/home-assistant:stable
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}      
-      HOST_NAME: ${HOST_NAME}
+      HOST_NAME: ${HOST_NAME}.lan
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ${DOCKERDIR}/homeassistant/config:/config
       - ${DOCKERDIR}/logs/homeassistant:/var/log
     restart: always
@@ -53,8 +54,5 @@ services:
       - "homepage.group=Infrastructure"
       - "homepage.name=Home Assistant"
       - "homepage.icon=home-assistant.png"
-      - "homepage.href=http://homeassistant.${DOMAINNAME}:8123"
+      - "homepage.href=http://ha.${DOMAINNAME}/"
       - "homepage.description=Smart home control center"
-      ## Homepage Widget
-      - "homepage.widget.type=generic"
-      - "homepage.widget.url=http://homeassistant.${HOST_NAME}:8123"

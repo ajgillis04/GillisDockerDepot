@@ -31,17 +31,21 @@ networks:
     driver: bridge
  #   ipam:
  #     config:
- #       - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
- #         gateway: 192.168.2.1        
+ #       - subnet: 192.168.1.0/24  # Ensure this subnet does not overlap with your existing network
+ #         gateway: 192.168.1.1        
     # external: true # use if not managing network with docker-compose.yaml
   pihole_network:
+    # Gives Pi-hole its own address on your LAN. Use your LAN's subnet and gateway, and the host's network interface.
+    # macvlan does not work on Docker Desktop for Windows; there, use driver: bridge with a subnet that doesn't overlap your LAN.
     name: pihole_network
-    #driver: macvlan #does not work on windows
-    driver: bridge
+    driver: macvlan
+    driver_opts:
+      parent: eth0  # Replace with your actual network interface
     ipam:
       config:
-        - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
-          gateway: 192.168.2.1    
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
+          ip_range: 192.168.1.0/26  # A range your router's DHCP doesn't hand out
     # external: true # use if not managing network with docker-compose.yaml
   nextcloud-aio:
     name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
@@ -106,6 +110,14 @@ secrets:
   vaultwarden_admin_token:
     file: ${SECRETSDIR}/vaultwarden_admin_token
 
+  # Used by transmission-openvpn, oauth and traefik
+  basic_auth_credentials:
+    file: ${SECRETSDIR}/basic_auth_credentials
+  oauth_secrets:
+    file: ${SECRETSDIR}/oauth_secrets
+  rpc_creds:
+    file: ${SECRETSDIR}/rpc_creds
+
 # *************************** SERVICES ****************************************** 
 include:
   #  - ${COMPOSE_DIR}/bazarr.yaml
@@ -150,3 +162,32 @@ include:
   #  - ${COMPOSE_DIR}/watchtower.yaml
   #  - ${COMPOSE_DIR}/wireguard.yaml
   #  - ${COMPOSE_DIR}/wizarr.yaml
+  #  - ${COMPOSE_DIR}/chrome.yaml
+  #  - ${COMPOSE_DIR}/cloudflared.yaml
+  #  - ${COMPOSE_DIR}/frigate.yaml
+  #  - ${COMPOSE_DIR}/govee2mqtt.yaml
+  #  - ${COMPOSE_DIR}/homeassistant.yaml
+  #  - ${COMPOSE_DIR}/homepage.yaml
+  #  - ${COMPOSE_DIR}/kometa.yaml
+  #  - ${COMPOSE_DIR}/libation.yaml
+  #  - ${COMPOSE_DIR}/maintainerr.yaml
+  #  - ${COMPOSE_DIR}/matter-server.yaml
+  #  - ${COMPOSE_DIR}/mosquitto.yaml
+  #  - ${COMPOSE_DIR}/motioneye.yaml
+  #  - ${COMPOSE_DIR}/musicbrainz.yaml
+  #  - ${COMPOSE_DIR}/netdata.yaml
+  #  - ${COMPOSE_DIR}/nextcloudaio.yaml
+  #  - ${COMPOSE_DIR}/nzbhydra2.yaml
+  #  - ${COMPOSE_DIR}/orbital-sync.yaml
+  #  - ${COMPOSE_DIR}/profilarr.yaml
+  #  - ${COMPOSE_DIR}/retroassembly.yaml
+  #  - ${COMPOSE_DIR}/seerr.yaml
+  #  - ${COMPOSE_DIR}/soulseek.yaml
+  #  - ${COMPOSE_DIR}/spotifytoplex.yaml
+  #  - ${COMPOSE_DIR}/syncthing.yaml
+  #  - ${COMPOSE_DIR}/tailscale.yaml
+  #  - ${COMPOSE_DIR}/tdarr_node.yaml
+  #  - ${COMPOSE_DIR}/traefik-cloudflare-companion.yaml
+  #  - ${COMPOSE_DIR}/unbound.yaml
+  #  - ${COMPOSE_DIR}/uptimekuma.yaml
+  #  - ${COMPOSE_DIR}/wordpress_example.yaml

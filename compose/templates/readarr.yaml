@@ -2,7 +2,7 @@
 services:
   readarr:
     container_name: readarr.${HOST_NAME}
-    hostname: readarr.${HOST_NAME}.local
+    hostname: readarr.${HOST_NAME}.lan
     image: linuxserver/readarr:develop # In development so no latest
     environment:
       TZ: ${TZ}
@@ -20,19 +20,21 @@ services:
       - ${MEDIASHARE}/Books:/books
       - ${USERDOWNLOAD}/Torrents:/downloads
       - ${DOCKERDIR}/logs/readarr:/config/logs
+      - ${MEDIASHARE}:/media
     restart: always
     security_opt:
       - no-new-privileges:true
     labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.readarr-rtr.entrypoints=https"
-      - "traefik.http.routers.readarr-rtr.rule=Host(`readarr.${DOMAINNAME}`)"
-      - "traefik.http.routers.readarr-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.readarr-rtr.service=readarr-svc"
-      - "traefik.http.services.readarr-svc.loadbalancer.server.port=8787"
       ## Watchtower Enable
       - "com.centurylinklabs.watchtower.enable=true"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Readarr"
+      - "homepage.icon=readarr.png"
+      - "homepage.href=https://readarr.${DOMAINNAME}/"
+      - "homepage.description=Book download manager"
+      ## Homepage Widget
+      - "homepage.widget.type=readarr"
+      - "homepage.widget.url=http://readarr.${HOST_NAME}:8787"
+      - "homepage.widget.key=${READARR_API_KEY}"
+

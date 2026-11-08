@@ -2,12 +2,12 @@
 services:
   bookbounty:
     container_name: bookbounty.${HOST_NAME}
-    hostname: bookbounty.${HOST_NAME}.local
+    hostname: bookbounty.${HOST_NAME}.lan
     image: thewicklowwolf/bookbounty:latest
     environment:
-      TZ: ${TZ}
       PUID: ${PUID}
       PGID: ${PGID}
+      TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
       library_scan_on_completion: true
       READARR_ADDRESS: http://${SERVER_IP}:8787
@@ -28,17 +28,5 @@ services:
 #      - readarr_api_key
     security_opt:
       - no-new-privileges:true
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.bookbounty-rtr.entrypoints=https"
-      - "traefik.http.routers.bookbounty-rtr.rule=Host(`bookbounty.${DOMAINNAME}`)"
-      ## Middlewares
-      - "traefik.http.routers.bookbounty-rtr.middlewares=chain-oauth@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.bookbounty-rtr.service=bookbounty-svc"
-      - "traefik.http.services.bookbounty-svc.loadbalancer.server.port=5000"
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"

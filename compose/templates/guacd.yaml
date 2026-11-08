@@ -3,7 +3,7 @@ services:
   guacd:
     container_name: guacd.${HOST_NAME}
     image: guacamole/guacd:latest
-    hostname: guacd.${HOST_NAME}.local
+    hostname: guacd.${HOST_NAME}.lan
     networks:
       - mediaserver
     volumes:
