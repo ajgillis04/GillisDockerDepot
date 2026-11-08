@@ -40,6 +40,7 @@ services:
       TRANSMISSION_PEER_LIMIT_PER_TORRENT: 60
       TRANSMISSION_DHT_ENABLED: true
       TRANSMISSION_PEX_ENABLED: true
+      TRANSMISSION_CACHE_SIZE_MB: 128
     networks:
       - mediaserver
     ports:
