@@ -28,6 +28,8 @@
 #   - If Gluetun itself ever restarts, recreate the two apps:
 #       docker compose -p mediaserver -f docker-compose-server1.yaml up -d --force-recreate --no-deps transmission soulseek
 #   - Check the VPN: docker logs gluetun.${HOST_NAME}   (look for "Public IP address is")
+#   - If no server in the region answers ("TLS key negotiation failed"), refresh the list:
+#       docker run --rm -v ${DOCKERDIR}/gluetun:/gluetun qmcgaw/gluetun:v3 update -enduser -providers "private internet access"
 #   - Don't run a test VPN container in the same PIA region at the same time;
 #     on 2026-11-03 that knocked the live connection off.
 #   - Port forwarding is off for now. PIA can forward a port, but Transmission would
@@ -52,6 +54,9 @@ services:
       # Ontario was much faster than Toronto in testing (64-87 MB/s against 2.7 MB/s).
       SERVER_REGIONS: CA Ontario
       VPN_PORT_FORWARDING: "off"
+      # Refresh the VPN server list daily. The built-in list was stale for CA Ontario
+      # on 2026-11-08 (no server answered), so the list is kept in ${DOCKERDIR}/gluetun.
+      UPDATER_PERIOD: 24h
     networks:
       mediaserver:
         aliases:
@@ -64,6 +69,7 @@ services:
       - "${SLSKD_HTTPS_PORT}:5031"    # Soulseek HTTPS web UI
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ${DOCKERDIR}/gluetun:/gluetun   # server list (servers.json), kept across recreates
     secrets:
       - pia_username
       - pia_password
