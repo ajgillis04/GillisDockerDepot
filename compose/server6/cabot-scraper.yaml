@@ -6,9 +6,9 @@
 #   - Runs a headless browser to scrape dynamic RGuest content.
 #   - Scripts stored in ${DOCKERDIR}/cabot-scraper.
 #   - Writes availability data to csv for trend analysis.
-# prerequisite: docker exec -it cabot-scraper.Andy-LaptopT146 pip install playwright
-#               docker exec -it cabot-scraper.Andy-LaptopT146 playwright install chromium
-#               docker exec -it cabot-scraper.Andy-LaptopT146 pip install playwright-stealth
+# prerequisite: docker exec -it cabot-scraper.${HOST_NAME} pip install playwright
+#               docker exec -it cabot-scraper.${HOST_NAME} playwright install chromium
+#               docker exec -it cabot-scraper.${HOST_NAME} pip install playwright-stealth
 # ***********************************************************************************
 services:
   cabot-scraper:
