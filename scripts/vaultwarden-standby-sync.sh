@@ -95,6 +95,18 @@ find "$ARCHIVE_DIR" -maxdepth 1 -name 'vaultwarden-*.tgz' -mtime +"$KEEP_DAYS" -
 "${COMPOSE[@]}" stop "$SERVICE" >/dev/null 2>&1
 rsync -a --delete --exclude 'config.json' --exclude 'icon_cache/' "$STAGE/" "$STANDBY_DATA/" \
   || fail "loading the copy into the standby failed"
+# Give the standby the live mail settings ONLY, so people who use email two-step
+# codes can still log in there. Everything else stays as set in the compose file.
+if [ -s "$STAGE/config.json" ]; then
+  python3 - "$STAGE/config.json" "$STANDBY_DATA/config.json" <<'PY' || fail "writing the standby mail settings failed"
+import json, sys
+live = json.load(open(sys.argv[1]))
+mail = {k: v for k, v in live.items() if k.startswith("smtp_") or k in ("_enable_smtp", "use_sendmail", "helo_name")}
+with open(sys.argv[2], "w") as f:
+    json.dump(mail, f, indent=2)
+PY
+  chmod 600 "$STANDBY_DATA/config.json"
+fi
 "${COMPOSE[@]}" up -d "$SERVICE" >/dev/null 2>&1 || fail "starting the standby failed"
 status=starting
 for _ in $(seq 1 30); do

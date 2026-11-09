@@ -19,8 +19,11 @@
 #   trusting the certificate).
 #
 # Notes:
-#   - Not reachable from the internet, no signups, no invitations, no admin page,
-#     and no email. Its settings come from here, not from the live config.json.
+#   - Not reachable from the internet, no signups, no invitations, no admin page.
+#     Its settings come from here, except mail: the sync copies ONLY the smtp_*
+#     settings from the live config.json into data/config.json, so people who use
+#     email two-step codes can still log in here (it may also send "new device"
+#     login emails).
 #   - Certificate (one time, 10 years):
 #       mkdir -p ${DOCKERDIR}/vaultwarden-standby/ssl && cd ${DOCKERDIR}/vaultwarden-standby/ssl
 #       openssl req -x509 -newkey rsa:2048 -nodes -days 3650 -subj "/CN=vaultwarden-standby" \
