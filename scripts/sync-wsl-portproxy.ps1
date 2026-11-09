@@ -4,9 +4,10 @@
 #      out about 3 seconds after every boot, and a device restart brings it back.
 #   2. Remounts WSL's NAS shares if they failed because the network wasn't up, then restarts the
 #      Tdarr node, which otherwise keeps the empty folder it started with.
-#   3. Keeps the Windows port proxy rule pointed at WSL, whose address can change. Docker in WSL
-#      publishes only on localhost, so the LAN reaches a container through this rule.
-param([int]$Port = 3001, [string[]]$Mounts = @('mnt-m.mount', 'mnt-gillisnas.mount'), [string]$TdarrNode = 'tdarr_node.Forge')
+#   3. Keeps the Windows port proxy rules pointed at WSL, whose address can change. Docker in WSL
+#      publishes only on localhost, so the LAN reaches a container through these rules.
+#      3001 is Open WebUI; 11434 is Ollama, for Home Assistant's camera descriptions.
+param([int[]]$Port = @(3001, 11434), [string[]]$Mounts = @('mnt-m.mount', 'mnt-gillisnas.mount'), [string]$TdarrNode = 'tdarr_node.Forge')
 
 $log = Join-Path $env:LOCALAPPDATA 'sync-wsl-portproxy.log'
 function Write-Log($text) { Add-Content -Path $log -Value "$(Get-Date -Format s) $text" }
@@ -38,30 +39,39 @@ if ($missing) {
     }
 }
 
-# 3. Port proxy. It only updates a rule that already exists.
+# 3. Port proxy. It only updates rules that already exist.
 $address = (wsl.exe -e ip -4 -o addr show eth0 2>$null) -join ' '
 if ($address -notmatch 'inet (\d+\.\d+\.\d+\.\d+)/') { Write-Log 'no WSL address found'; exit 1 }
 $wslAddress = $Matches[1]
 
-$rule = netsh interface portproxy show v4tov4 |
-    ForEach-Object { if ($_ -match '^\s*(\S+)\s+(\d+)\s+(\S+)\s+(\d+)\s*$') { [pscustomobject]@{ Listen = $Matches[1]; Port = [int]$Matches[2]; Target = $Matches[3]; TargetPort = [int]$Matches[4] } } } |
-    Where-Object { $_.Port -eq $Port } | Select-Object -First 1
-if (-not $rule) { exit 0 }
+$rules = netsh interface portproxy show v4tov4 |
+    ForEach-Object { if ($_ -match '^\s*(\S+)\s+(\d+)\s+(\S+)\s+(\d+)\s*$') { [pscustomobject]@{ Listen = $Matches[1]; Port = [int]$Matches[2]; Target = $Matches[3]; TargetPort = [int]$Matches[4] } } }
 
-# Restarting IP Helper can't help if the machine no longer has the rule's LAN address.
-if (-not (Get-NetIPAddress -IPAddress $rule.Listen -ErrorAction SilentlyContinue)) {
-    Write-Log "this machine no longer has $($rule.Listen), rule left alone"
-    exit 1
+$restart = $false
+foreach ($p in $Port) {
+    $rule = $rules | Where-Object { $_.Port -eq $p } | Select-Object -First 1
+    if (-not $rule) { continue }
+
+    # Restarting IP Helper can't help if the machine no longer has the rule's LAN address.
+    if (-not (Get-NetIPAddress -IPAddress $rule.Listen -ErrorAction SilentlyContinue)) {
+        Write-Log "this machine no longer has $($rule.Listen), port $p rule left alone"
+        continue
+    }
+
+    $stale = $rule.Target -ne $wslAddress
+    if ($stale) {
+        netsh interface portproxy set v4tov4 listenaddress=$($rule.Listen) listenport=$p connectaddress=$wslAddress connectport=$($rule.TargetPort) | Out-Null
+        Write-Log "port $p target changed from $($rule.Target) to $wslAddress"
+    }
+
+    $listening = Get-NetTCPConnection -LocalAddress $rule.Listen -LocalPort $p -State Listen -ErrorAction SilentlyContinue
+    if ($stale -or -not $listening) {
+        $restart = $true
+        Write-Log "port $p was stale or not listening (stale target: $stale, was listening: $([bool]$listening))"
+    }
 }
 
-$stale = $rule.Target -ne $wslAddress
-if ($stale) {
-    netsh interface portproxy set v4tov4 listenaddress=$($rule.Listen) listenport=$Port connectaddress=$wslAddress connectport=$($rule.TargetPort) | Out-Null
-    Write-Log "port $Port target changed from $($rule.Target) to $wslAddress"
-}
-
-$listening = Get-NetTCPConnection -LocalAddress $rule.Listen -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
-if ($stale -or -not $listening) {
+if ($restart) {
     Restart-Service iphlpsvc -Force
-    Write-Log "restarted IP Helper (stale target: $stale, was listening: $([bool]$listening))"
+    Write-Log 'restarted IP Helper'
 }
