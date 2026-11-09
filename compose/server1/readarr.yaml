@@ -31,7 +31,7 @@ services:
       - "homepage.group=Media"
       - "homepage.name=Readarr"
       - "homepage.icon=readarr.png"
-      - "homepage.href=https://readarr.gillisonline.com/"
+      - "homepage.href=https://readarr.${DOMAINNAME}/"
       - "homepage.description=Book download manager"
       ## Homepage Widget
       - "homepage.widget.type=readarr"

@@ -64,3 +64,6 @@ services:
     restart: always
     security_opt:
       - no-new-privileges:true
+    labels:
+      ## Watchtower off: the node must stay on the server's Tdarr version
+      - "com.centurylinklabs.watchtower.enable=false"

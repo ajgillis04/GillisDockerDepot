@@ -51,7 +51,7 @@ services:
       VPN_TYPE: openvpn
       OPENVPN_USER_SECRETFILE: /run/secrets/pia_username
       OPENVPN_PASSWORD_SECRETFILE: /run/secrets/pia_password
-      # US Maine: fastest in tests from GillisNAS on 2026-11-08 (4 streams, 15 s each,
+      # US Maine: fastest in tests from server1 on 2026-11-08 (4 streams, 15 s each,
       # no VPN = ~395 MB/s): Maine 64/69/63, Washington DC 62/62/65, New York 50/58/59,
       # US East 49, Toronto 44/36/54, Chicago 36, Massachusetts 31, Montreal 13,
       # Ontario 13 MB/s. The fast ones use ~90% of one CPU core, so OpenVPN on this

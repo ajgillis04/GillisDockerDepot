@@ -4,7 +4,7 @@
 services:
   homepage:
     container_name: homepage.${HOST_NAME}
-    hostname: homepage.${HOST_NAME}.local
+    hostname: homepage.${HOST_NAME}.lan
     image: ghcr.io/gethomepage/homepage:latest
     environment:
       TZ: ${TZ}
@@ -12,6 +12,8 @@ services:
       PGID: 0
       DOMAINNAME: ${DOMAINNAME}
       HOMEPAGE_ALLOWED_HOSTS: homepage.${DOMAINNAME},${SERVER_IP}:3000
+      # App password for the Raspberry Pi Pi-hole widget (services.yaml); set PIHOLE2_TOKEN in .env
+      HOMEPAGE_VAR_PIHOLE2_KEY: ${PIHOLE2_TOKEN}
     networks:
       - mediaserver
     ports:
@@ -23,17 +25,6 @@ services:
     restart: always
     security_opt:
       - no-new-privileges:true    
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.homepage-rtr.entrypoints=https"      
-      - "traefik.http.routers.homepage-rtr.rule=Host(`homepage.${DOMAINNAME}`)"
-      - "traefik.http.routers.homepage-rtr.middlewares=chain-oauth@file"
-      - "traefik.http.routers.homepage-rtr.tls.options=tls-opts@file"
-      ## Docker Network
-      - "traefik.docker.network=mediaserver"
-      ## HTTP Services
-      - "traefik.http.routers.homepage-rtr.service=homepage-svc"
-      - "traefik.http.services.homepage-svc.loadbalancer.server.port=3000"
+    labels:      
       ## Watchtower enabled?
       - "com.centurylinklabs.watchtower.enable=true"
