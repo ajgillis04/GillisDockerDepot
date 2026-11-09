@@ -192,7 +192,6 @@ include:
   - ${COMPOSE_DIR}/tautulli.yaml
   - ${COMPOSE_DIR}/tdarr.yaml
   - ${COMPOSE_DIR}/tdarr_node.yaml
-#  - ${COMPOSE_DIR}/transmission-openvpn.yaml  # replaced by gluetun + transmission on 2026-11-08; kept for rollback
   - ${COMPOSE_DIR}/gluetun.yaml
   - ${COMPOSE_DIR}/transmission.yaml
   - ${COMPOSE_DIR}/vaultwarden.yaml
