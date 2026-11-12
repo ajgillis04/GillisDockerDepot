@@ -1,0 +1,88 @@
+# PhotoPrism - family photo archive with face recognition, places and search.
+#
+# How it is set up:
+#   - Read-only view of the main photo library. Uploads still arrive through Nextcloud
+#     and the photo scripts; PhotoPrism only indexes and displays them.
+#   - Its own login is off (AUTH_MODE public). The login is Cloudflare Access with
+#     Google in front of photos.${DOMAINNAME}, so only people on that list get in.
+#     Never publish the port outside the LAN.
+#   - Index, thumbnails, face names and backups live in ${DOCKERDIR}/photoprism/storage.
+#     Database backups are written to storage/backup daily (PhotoPrism default).
+#   - The library is re-indexed nightly, so new photos show up the next day.
+#   - Skip folders with a .ppignore file in the library root (e.g. @Recently-Snapshot).
+#
+# First-time database setup (run once):
+#   docker exec -it mariadb.${HOST_NAME} mariadb -u root -p
+#   CREATE DATABASE photoprism CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+#   CREATE USER 'photoprism_user'@'%' IDENTIFIED BY '<PHOTOPRISM_DATABASE_PASSWORD>';
+#   GRANT ALL PRIVILEGES ON photoprism.* TO 'photoprism_user'@'%';
+#   FLUSH PRIVILEGES;
+#
+# First full index (or Library > Index in the web UI):
+#   docker exec photoprism.${HOST_NAME} photoprism index
+#
+# Version is pinned on purpose (no Watchtower). To upgrade, read the release notes at
+# https://docs.photoprism.app/release-notes/ and change the tag.
+
+services:
+  photoprism:
+    container_name: photoprism.${HOST_NAME}
+    hostname: photoprism.${HOST_NAME}.lan
+    image: photoprism/photoprism:261029
+    depends_on:
+      - mariadb
+    environment:
+      TZ: ${TZ}
+      PHOTOPRISM_UID: ${PUID}
+      PHOTOPRISM_GID: ${PGID}
+      PHOTOPRISM_SITE_URL: https://photos.${DOMAINNAME}/
+      PHOTOPRISM_SITE_AUTHOR: ${PHOTOPRISM_SITE_AUTHOR}
+      PHOTOPRISM_SITE_CAPTION: ${PHOTOPRISM_SITE_CAPTION}
+      PHOTOPRISM_SITE_DESCRIPTION: ${PHOTOPRISM_SITE_DESCRIPTION}
+      PHOTOPRISM_SITE_TITLE: ${PHOTOPRISM_SITE_TITLE}
+      ## Access: Cloudflare Access does the login
+      PHOTOPRISM_AUTH_MODE: public
+      PHOTOPRISM_ADMIN_PASSWORD: ${PHOTOPRISM_ADMIN_PASSWORD}
+      ## Library is never modified
+      PHOTOPRISM_READONLY: "true"
+      PHOTOPRISM_DISABLE_WEBDAV: "true"
+      PHOTOPRISM_ORIGINALS_LIMIT: -1
+      PHOTOPRISM_INDEX_SCHEDULE: "0 3 * * *"
+      PHOTOPRISM_WORKERS: 2
+      ## Features
+      PHOTOPRISM_DISABLE_TENSORFLOW: "false"
+      PHOTOPRISM_DISABLE_FACES: "false"
+      PHOTOPRISM_DISABLE_CLASSIFICATION: "false"
+      PHOTOPRISM_DISABLE_SETTINGS: "false"
+      PHOTOPRISM_DETECT_NSFW: "false"
+      PHOTOPRISM_EXPERIMENTAL: "false"
+      PHOTOPRISM_DEBUG: "false"
+      PHOTOPRISM_DISABLE_TLS: "true"
+      PHOTOPRISM_HTTP_COMPRESSION: gzip
+      ## Database
+      PHOTOPRISM_DATABASE_DRIVER: mysql
+      PHOTOPRISM_DATABASE_SERVER: mariadb.${HOST_NAME}:3306
+      PHOTOPRISM_DATABASE_NAME: photoprism
+      PHOTOPRISM_DATABASE_USER: photoprism_user
+      PHOTOPRISM_DATABASE_PASSWORD: ${PHOTOPRISM_DATABASE_PASSWORD}
+    networks:
+      - mediaserver
+    ports:
+      - "${PHOTOPRISM_PORT}:2342"
+    volumes:
+      - ${MEDIASHARE}/Photos:/photoprism/originals:ro
+      - ${DOCKERDIR}/photoprism/storage:/photoprism/storage
+    working_dir: /photoprism
+    restart: always
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    labels:
+      ## Pinned version; upgrade by hand
+      - "com.centurylinklabs.watchtower.enable=false"
+      ## Homepage Labels
+      - "homepage.group=Media"
+      - "homepage.name=Photos"
+      - "homepage.icon=photoprism"
+      - "homepage.href=https://photos.${DOMAINNAME}/"
+      - "homepage.description=Family photo archive"

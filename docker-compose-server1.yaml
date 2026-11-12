@@ -165,7 +165,7 @@ include:
   - ${COMPOSE_DIR}/nextcloud.yaml
 #  - ${COMPOSE_DIR}/nzbhydra2.yaml
 #  - ${COMPOSE_DIR}/overseerr.yaml
-#  - ${COMPOSE_DIR}/photoprism.yaml
+  - ${COMPOSE_DIR}/photoprism.yaml
   - ${COMPOSE_DIR}/php-apache-awl.yaml
   - ${COMPOSE_DIR}/php-apache-gillisonline.yaml
 #  - ${COMPOSE_DIR}/picard.yaml
