@@ -108,9 +108,9 @@ sweep() {
   sweep $INPUTS
   [ -n "$EXTRA" ] && sweep -r /extra
   if [ "$MODE" = "run" ]; then
-    # Remove year folders left empty (never the month folders or Photos itself)
-    find "$SRC" -mindepth 1 -maxdepth 1 -type d -empty -exec rmdir {} \; 2>/dev/null
-    [ -n "$EXTRA" ] && find "$EXTRA" -mindepth 1 -type d -empty -exec rmdir {} \; 2>/dev/null
+    # Remove folders left empty. BusyBox find has no -empty; rmdir refuses non-empty ones.
+    find "$SRC" -mindepth 1 -maxdepth 1 -type d -exec rmdir {} \; 2>/dev/null
+    [ -n "$EXTRA" ] && find "$EXTRA" -mindepth 1 -depth -type d -exec rmdir {} \; 2>/dev/null
     # Tell Nextcloud about the moves (user homes are the external mount /Documents)
     for p in Photos Photos-NotCamera; do
       docker exec -u 33 "$NC_CONTAINER" php occ files:scan --quiet \
