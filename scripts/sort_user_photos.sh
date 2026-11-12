@@ -36,6 +36,8 @@ IMAGE="photoprism/photoprism:261029"   # any image with exiftool works
 RUN_UID=1000
 RUN_GID=33                            # www-data, so Nextcloud keeps write access
 TZ_LOCAL="America/Toronto"
+NC_CONTAINER="nextcloud.GillisNAS"
+NC_HOME_MOUNT="Documents"             # Nextcloud external mount that maps /homes/$user
 LOGDIR="/share/homes/GilAdmin/logs"
 LOG="$LOGDIR/sort_photos_${USER_NAME}.log"
 EXTS="-ext jpg -ext jpeg -ext png -ext heic -ext heif -ext gif -ext webp -ext mov -ext mp4 -ext m4v"
@@ -109,6 +111,11 @@ sweep() {
     # Remove year folders left empty (never the month folders or Photos itself)
     find "$SRC" -mindepth 1 -maxdepth 1 -type d -empty -exec rmdir {} \; 2>/dev/null
     [ -n "$EXTRA" ] && find "$EXTRA" -mindepth 1 -type d -empty -exec rmdir {} \; 2>/dev/null
+    # Tell Nextcloud about the moves (user homes are the external mount /Documents)
+    for p in Photos Photos-NotCamera; do
+      docker exec -u 33 "$NC_CONTAINER" php occ files:scan --quiet \
+        --path="/$USER_NAME/files/$NC_HOME_MOUNT/$p" || echo "nextcloud rescan failed for $p"
+    done
   fi
   echo "=== done $(date '+%H:%M:%S')"
 } 2>&1 | tee -a "$LOG"
