@@ -34,7 +34,7 @@ services:
     environment:
       TZ: ${TZ}
       PHOTOPRISM_UID: ${PUID}
-      PHOTOPRISM_GID: ${PGID}
+      PHOTOPRISM_GID: 33 # www-data: much of the library (Nextcloud uploads) is 770 owner:www-data
       PHOTOPRISM_SITE_URL: https://photos.${DOMAINNAME}/
       PHOTOPRISM_SITE_AUTHOR: ${PHOTOPRISM_SITE_AUTHOR}
       PHOTOPRISM_SITE_CAPTION: ${PHOTOPRISM_SITE_CAPTION}
