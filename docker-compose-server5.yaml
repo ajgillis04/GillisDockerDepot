@@ -121,8 +121,9 @@ secrets:
 # *************************** SERVICES ******************************************
 include:
 #  - ${COMPOSE_DIR}/bazarr.yaml
-  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
-  - ${COMPOSE_DIR}/cloudflare-ddns.yaml  
+  - ${COMPOSE_DIR}/cloudflared.yaml   # all outside access; routes are set in Cloudflare (cottage-*.gillisonline.com)
+#  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml   # Traefik is gone; the tunnel replaced it
+#  - ${COMPOSE_DIR}/cloudflare-ddns.yaml        # not needed behind a tunnel
 #  - ${COMPOSE_DIR}/dozzle.yaml
   - ${COMPOSE_DIR}/guacamole.yaml
   - ${COMPOSE_DIR}/guacd.yaml

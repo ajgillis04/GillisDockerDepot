@@ -1,0 +1,33 @@
+# Cloudflare Tunnel for the cottage PC (tunnel "cottage-pc").
+#
+# Remotely managed: the hostnames and where they go are set in Cloudflare
+# (Zero Trust > Networks > Tunnels > cottage-pc), not in a file here, so they can be
+# changed without anyone at the cottage. Current routes:
+#   cottage-homepage.gillisonline.com   -> http://homepage.cottage-pc:3000
+#   cottage-portainer.gillisonline.com  -> http://portainer.cottage-pc:9000
+#   cottage-guac.gillisonline.com       -> http://guacamole.cottage-pc:8080
+# All of them sit behind the Google login (Access app "GillisOnline Prod", *.gillisonline.com).
+#
+# Use one-level names (cottage-xxx.gillisonline.com). Two-level names such as
+# xxx.cottage.gillisonline.com aren't covered by Cloudflare's free certificate.
+#
+# Needs in .env: CLOUDFLARED_TOKEN (from the tunnel's page in Cloudflare: Configure >
+# the install command shows the token after "--token").
+services:
+  cloudflared:
+    container_name: cloudflared.${HOST_NAME}
+    hostname: cloudflared.${HOST_NAME}.lan
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
+    environment:
+      TZ: ${TZ}
+    networks:
+      - mediaserver
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
