@@ -39,7 +39,13 @@
 set -uo pipefail
 
 NAS=GilAdmin@192.168.2.10
-NAS_KEY="$HOME/.ssh/sbs_nas_claude"
+# Key for GillisNAS: ~/.ssh/gillisnas_key, or an older ~/.ssh/sbs_nas_* key if that's what is there.
+NAS_KEY="${NAS_KEY:-$HOME/.ssh/gillisnas_key}"
+if [ ! -f "$NAS_KEY" ]; then
+  for k in "$HOME"/.ssh/sbs_nas_*; do
+    case "$k" in *.pub) ;; *) [ -f "$k" ] && NAS_KEY="$k" && break ;; esac
+  done
+fi
 NAS_DATA=/share/Docker/GillisDockerDepot/appdata/vaultwarden/data
 NAS_ENV='export PATH=$PATH:/share/CACHEDEV1_DATA/.qpkg/container-station/bin DOCKER_CONFIG=/tmp/.none;'
 NAS_CONTAINER=vaultwarden.GillisNAS
