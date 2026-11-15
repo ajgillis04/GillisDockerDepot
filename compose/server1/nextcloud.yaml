@@ -31,7 +31,7 @@ services:
   nextcloud:
     container_name: nextcloud.${HOST_NAME}
     hostname: nextcloud.${HOST_NAME}.lan
-    image: nextcloud:latest    
+    image: nextcloud:34-apache # pinned: upgrade one major version at a time (31 -> 34 done 2026-11-14)
     user: "0:0"
     environment:
       PUID: ${PUID}
