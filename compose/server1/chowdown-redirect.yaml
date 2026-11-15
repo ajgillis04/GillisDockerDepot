@@ -1,0 +1,16 @@
+# Redirects chowdown.<domain> (the old recipe site everyone knows) to Mealie's public recipe page.
+# Cloudflare redirect rules aren't available to the automation token, so this tiny nginx does it.
+services:
+  chowdown-redirect:
+    container_name: chowdown-redirect.${HOST_NAME}
+    hostname: chowdown-redirect.${HOST_NAME}.lan
+    image: nginx:stable-alpine
+    networks:
+      - mediaserver
+    volumes:
+      - ${BASE_DIR}/compose/chowdown-redirect/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
