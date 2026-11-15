@@ -140,7 +140,7 @@ include:
 #  - ${COMPOSE_DIR}/calibre-web.yaml # removed 2026-11 (not used)
 #  - ${COMPOSE_DIR}/calibre.yaml # removed 2026-11 (not used)
   - ${COMPOSE_DIR}/chrome.yaml
-  - ${COMPOSE_DIR}/chowdown.yaml
+#  - ${COMPOSE_DIR}/chowdown.yaml # replaced by Mealie 2026-11; chowdown.<domain> now points at Mealie
   - ${COMPOSE_DIR}/cloudflared.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
 #  - ${COMPOSE_DIR}/ersatztv.yaml
