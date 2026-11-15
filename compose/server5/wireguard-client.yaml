@@ -1,0 +1,23 @@
+# WireGuard client: keeps the cottage PC connected to the home VPN (Forge wg-server) as 10.9.0.11.
+# Backup way in when Cloudflare or Guacamole is down: home VPN -> ssh to 10.9.0.11 (via Forge),
+# then reach cottage devices from the PC (e.g. ssh -D for a SOCKS proxy).
+# Only 10.9.0.0/24 goes over the tunnel, so the cottage LAN and internet are unaffected.
+# Setup (once): put the private config at ${DOCKERDIR}/wireguard-client/config/wg_confs/wg0.conf (never in git).
+services:
+  wireguard-client:
+    container_name: wireguard-client.${HOST_NAME}
+    image: lscr.io/linuxserver/wireguard:latest
+    network_mode: host # the tunnel lives on the PC itself, so ssh/Guacamole on the PC answer on 10.9.0.11
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    volumes:
+      - ${DOCKERDIR}/wireguard-client/config:/config
+      - /lib/modules:/lib/modules:ro
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
