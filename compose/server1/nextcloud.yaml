@@ -31,7 +31,7 @@ services:
   nextcloud:
     container_name: nextcloud.${HOST_NAME}
     hostname: nextcloud.${HOST_NAME}.lan
-    image: nextcloud:34-apache # pinned: upgrade one major version at a time (31 -> 34 done 2026-11-14)
+    image: nextcloud:34-apache # pinned: upgrade one major version at a time (31 -> 34 done 2026-11-14); nextcloud-cron below uses the same tag
     user: "0:0"
     environment:
       PUID: ${PUID}
@@ -53,6 +53,7 @@ services:
       - ${NEXTCLOUD_EXSTORAGE}:/nasshares
       - ${NEXTCLOUD_HOMES}:/homes
       - ${BASE_DIR}/compose/php/security.ini:/usr/local/etc/php/conf.d/zz-security.ini:ro # PHP security overrides
+      - ${BASE_DIR}/compose/nextcloud/hsts.conf:/etc/apache2/conf-enabled/zz-hsts.conf:ro
 
     restart: always
     security_opt:
@@ -66,3 +67,25 @@ services:
       - "homepage.icon=nextcloud.png"
       - "homepage.href=https://nextcloud.${DOMAINNAME}/"
       - "homepage.description=Your private cloud"
+
+  # Runs Nextcloud's background jobs every 5 minutes (clean-up, expired file locks, previews, notifications).
+  # Same image and volumes as nextcloud; keep the tag in step when upgrading.
+  nextcloud-cron:
+    container_name: nextcloud-cron.${HOST_NAME}
+    hostname: nextcloud-cron.${HOST_NAME}.lan
+    image: nextcloud:34-apache
+    entrypoint: /cron.sh
+    environment:
+      TZ: ${TZ}
+    depends_on:
+      - nextcloud
+    networks:
+      - mediaserver
+    volumes:
+      - ${DOCKERDIR}/nextcloud/var/www/html:/var/www/html
+      - ${NEXTCLOUD_EXSTORAGE}:/nasshares
+      - ${NEXTCLOUD_HOMES}:/homes
+      - ${BASE_DIR}/compose/php/security.ini:/usr/local/etc/php/conf.d/zz-security.ini:ro
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false" # upgraded together with nextcloud
