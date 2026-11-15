@@ -77,6 +77,7 @@ services:
     entrypoint: /cron.sh
     environment:
       TZ: ${TZ}
+      PHP_MEMORY_LIMIT: 2G # photo metadata/preview jobs on large images need more than the default 512M
     depends_on:
       - nextcloud
     networks:
