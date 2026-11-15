@@ -137,8 +137,8 @@ secrets:
 include:
   - ${COMPOSE_DIR}/bazarr.yaml
 #  - ${COMPOSE_DIR}/bookbounty.yaml
-  - ${COMPOSE_DIR}/calibre-web.yaml
-  - ${COMPOSE_DIR}/calibre.yaml
+#  - ${COMPOSE_DIR}/calibre-web.yaml # removed 2026-11 (not used)
+#  - ${COMPOSE_DIR}/calibre.yaml # removed 2026-11 (not used)
   - ${COMPOSE_DIR}/chrome.yaml
   - ${COMPOSE_DIR}/chowdown.yaml
   - ${COMPOSE_DIR}/cloudflared.yaml
@@ -157,6 +157,7 @@ include:
   - ${COMPOSE_DIR}/lineup.yaml
 #  - ${COMPOSE_DIR}/lidify.yaml
   - ${COMPOSE_DIR}/maintainerr.yaml
+  - ${COMPOSE_DIR}/mealie.yaml
   - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/matter-server.yaml
   - ${COMPOSE_DIR}/mosquitto.yaml
@@ -177,7 +178,7 @@ include:
   - ${COMPOSE_DIR}/prowlarr.yaml
   - ${COMPOSE_DIR}/profilarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
-  - ${COMPOSE_DIR}/readarr.yaml
+#  - ${COMPOSE_DIR}/readarr.yaml # Readarr was retired upstream; removed 2026-11
   - ${COMPOSE_DIR}/retroassembly.yaml
   - ${COMPOSE_DIR}/sabnzbd.yaml
   - ${COMPOSE_DIR}/sbs-web.yaml

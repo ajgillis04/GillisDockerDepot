@@ -11,7 +11,7 @@ services:
   maintainerr:
     container_name: maintainerr.${HOST_NAME}
     hostname: maintainerr.${HOST_NAME}.lan
-    image: ghcr.io/jorenn92/maintainerr:latest
+    image: ghcr.io/maintainerr/maintainerr:latest # moved from jorenn92 in 2025
     environment:
       PUID: ${PUID}
       PGID: ${PGID}

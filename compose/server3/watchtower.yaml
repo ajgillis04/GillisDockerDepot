@@ -3,7 +3,7 @@ services:
   watchtower:
     container_name: watchtower.${HOST_NAME}
     hostname: watchtower.${HOST_NAME}.lan
-    image: containrrr/watchtower:latest
+    image: nickfedor/watchtower:latest # maintained fork; containrrr/watchtower was archived 2025-12
     environment:
       TZ: ${TZ}
       PGID: ${PGID}

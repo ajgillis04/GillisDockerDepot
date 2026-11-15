@@ -52,6 +52,7 @@ services:
       - ${DOCKERDIR}/logs/nextcloud:/var/log
       - ${NEXTCLOUD_EXSTORAGE}:/nasshares
       - ${NEXTCLOUD_HOMES}:/homes
+      - ${BASE_DIR}/compose/php/security.ini:/usr/local/etc/php/conf.d/zz-security.ini:ro # PHP security overrides
 
     restart: always
     security_opt:

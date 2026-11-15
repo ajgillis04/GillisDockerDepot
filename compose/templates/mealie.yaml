@@ -1,0 +1,36 @@
+# Mealie - Recipe manager: import recipes from a website link, meal plans and shopping lists.
+# Replaced Chowdown (abandoned since 2019). chowdown.<domain> redirects here.
+# First start: open the site, log in as changeme@example.com / MyPassword, then change both straight away.
+services:
+  mealie:
+    container_name: mealie.${HOST_NAME}
+    hostname: mealie.${HOST_NAME}.lan
+    image: ghcr.io/mealie-recipes/mealie:latest
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      ALLOW_SIGNUP: "false"
+      BASE_URL: https://mealie.${DOMAINNAME}
+      MAX_WORKERS: 1
+      WEB_CONCURRENCY: 1
+    networks:
+      - mediaserver
+    ports:
+      - "${MEALIE_PORT}:9000"
+    volumes:
+      - ${DOCKERDIR}/mealie/data:/app/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Other"
+      - "homepage.name=Mealie"
+      - "homepage.icon=mealie.png"
+      - "homepage.href=https://mealie.${DOMAINNAME}/"
+      - "homepage.description=Recipes, meal plans and shopping lists"
