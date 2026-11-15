@@ -150,6 +150,6 @@ include:
   - ${COMPOSE_DIR}/tdarr_node.yaml # Don't run a node on the same server as Tdarr; Tdarr already has a node inside.
 #  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/traefik-cloudflare-companion.yaml
-#  - ${COMPOSE_DIR}/watchtower.yaml
+  - ${COMPOSE_DIR}/watchtower.yaml
 #  - ${COMPOSE_DIR}/wireguard.yaml
-  - ${COMPOSE_DIR}/wud.yaml
+#  - ${COMPOSE_DIR}/wud.yaml # replaced by Watchtower (nickfedor fork works with current Docker) 2026-11

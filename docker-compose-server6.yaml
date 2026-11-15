@@ -126,6 +126,6 @@ include:
 #  - ${COMPOSE_DIR}/traefik.yaml
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
-#  - ${COMPOSE_DIR}/watchtower.yaml
-  - ${COMPOSE_DIR}/wud.yaml
+  - ${COMPOSE_DIR}/watchtower.yaml
+#  - ${COMPOSE_DIR}/wud.yaml # replaced by Watchtower (nickfedor fork works with current Docker) 2026-11
 #  - ${COMPOSE_DIR}/wireguard.yaml
