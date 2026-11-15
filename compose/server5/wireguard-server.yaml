@@ -1,0 +1,28 @@
+# WireGuard server: the cottage's own VPN, independent of home (works even if home internet or Forge is down).
+# Clients connect to cottage-vpn.gillisonline.com:51820 (UDP), get 10.10.0.x, and reach the cottage PC (10.10.0.1)
+# and the cottage LAN. Needs a UDP 51820 port forward on the cottage router to this PC.
+# The server config (private key) goes in ${DOCKERDIR}/wireguard-server/config/wg_confs/wg0.conf; never in git.
+# Client files are kept off the repo too.
+services:
+  wireguard-server:
+    container_name: wireguard-server.${HOST_NAME}
+    hostname: wireguard-server.${HOST_NAME}.lan
+    image: lscr.io/linuxserver/wireguard:latest
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+    ports:
+      - "51820:51820/udp"
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv4.ip_forward=1
+    volumes:
+      - ${DOCKERDIR}/wireguard-server/config:/config
+      - /lib/modules:/lib/modules:ro
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"

@@ -151,4 +151,6 @@ include:
 #  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
 #  - ${COMPOSE_DIR}/wireguard.yaml
+  - ${COMPOSE_DIR}/wireguard-server.yaml # the cottage's own VPN: cottage-vpn.gillisonline.com:51820
+  - ${COMPOSE_DIR}/cottage-ddns.yaml       # keeps cottage-vpn.gillisonline.com on the cottage's IP
   - ${COMPOSE_DIR}/wireguard-client.yaml # backup way in: cottage PC joins the home VPN as 10.9.0.11

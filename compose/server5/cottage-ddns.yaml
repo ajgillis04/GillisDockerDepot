@@ -1,0 +1,20 @@
+# Keeps cottage-vpn.gillisonline.com (DNS only, not proxied: WireGuard is UDP) pointed at the cottage's public IP.
+# Touches only that one record. COTTAGE_DDNS_TOKEN: a Cloudflare API token with Zone:DNS:Edit on gillisonline.com only.
+services:
+  cottage-ddns:
+    container_name: cottage-ddns.${HOST_NAME}
+    image: favonia/cloudflare-ddns:latest
+    environment:
+      CLOUDFLARE_API_TOKEN: ${COTTAGE_DDNS_TOKEN}
+      DOMAINS: cottage-vpn.gillisonline.com
+      PROXIED: "false"
+      IP6_PROVIDER: none
+      TZ: ${TZ}
+    read_only: true
+    cap_drop:
+      - all
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
