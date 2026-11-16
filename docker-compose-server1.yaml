@@ -180,7 +180,7 @@ include:
   - ${COMPOSE_DIR}/profilarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
 #  - ${COMPOSE_DIR}/readarr.yaml # Readarr was retired upstream; removed 2026-11
-  - ${COMPOSE_DIR}/retroassembly.yaml
+#  - ${COMPOSE_DIR}/retroassembly.yaml # removed 2026-11 (not used); settings kept in appdata/retroassembly
   - ${COMPOSE_DIR}/sabnzbd.yaml
   - ${COMPOSE_DIR}/sbs-web.yaml
   - ${COMPOSE_DIR}/sbs-app.yaml

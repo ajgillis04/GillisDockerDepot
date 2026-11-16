@@ -10,6 +10,7 @@ services:
       PUID: ${PUID}
       WATCHTOWER_INCLUDE_RESTARTING: true
       WATCHTOWER_LABEL_ENABLE: true
+      WATCHTOWER_CLEANUP: true # delete the old image after each update, so they don't pile up
       WATCHTOWER_NOTIFICATIONS: shoutrrr
       WATCHTOWER_NOTIFICATION_TEMPLATE: '{{range .}}{{.Time.Format "12-01-2020 15:04:05"}} ({{.Level}}): {{.Message}}{{println}}{{end}}'
       WATCHTOWER_NOTIFICATION_URL: discord://${DISCORD_TOKEN}@${DISCORD_ID}
