@@ -36,8 +36,8 @@ networks:
     driver: bridge
  #   ipam:
  #     config:
- #       - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
- #         gateway: 192.168.2.1        
+ #       - subnet: 192.168.1.0/24  # Ensure this subnet does not overlap with your existing network
+ #         gateway: 192.168.1.1        
     # external: true # use if not managing network with docker-compose.yaml
   pihole_network:
     name: pihole_network
@@ -45,8 +45,8 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
-          gateway: 192.168.2.1    
+        - subnet: ${LAN_SUBNET}   # your home LAN, set in .env
+          gateway: ${LAN_GATEWAY}    
     # external: true # use if not managing network with docker-compose.yaml
   llm_sandbox:
     name: llm_sandbox
