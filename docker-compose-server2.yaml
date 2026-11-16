@@ -131,6 +131,7 @@ include:
 #  - ${COMPOSE_DIR}/grampsweb_celery.yaml
 #  - ${COMPOSE_DIR}/jaegertracing.yaml
   - ${COMPOSE_DIR}/jupyter-sandbox.yaml
+  - ${COMPOSE_DIR}/kometa.yaml # Plex collections; config in appdata/kometa (git-ignored)
   - ${COMPOSE_DIR}/llm-backup.yaml
 #  - ${COMPOSE_DIR}/mariadb.yaml
 #  - ${COMPOSE_DIR}/oauth.yaml
