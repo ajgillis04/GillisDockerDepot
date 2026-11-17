@@ -3,7 +3,7 @@
 # which containers those commits change, and email the list with an Upgrade button.
 # "Changed" = the service's compose settings hash differs between before and after the
 # pull, both computed here by the same Compose, so older drift doesn't count.
-# Run by hand: docker exec repo-updater.<host> sh <BASE_DIR>/scripts/repo-updater/check.sh
+# Run by hand: docker exec repo-updater.<host> sh <BASE_DIR>/scripts/repo-updater/check.sh [--quiet|--resend]
 . "$(dirname "$0")/lib.sh"
 
 # ready_mail INTRO: email the pending containers with the Upgrade button.
@@ -24,6 +24,7 @@ ready_mail() {
   } | mail "$(echo $UP | wc -w | tr -d ' ') container(s) ready to upgrade"
 }
 
+QUIET=""; [ "$1" = --quiet ] && QUIET=1   # from the page's "Check now" button: no email
 if [ "$1" = --resend ]; then
   [ -s "$PENDING" ] || { echo "nothing pending"; exit 0; }
   ready_mail "Reminder: these are still waiting. Nothing has restarted yet."; exit 0
@@ -64,4 +65,4 @@ cat "$STATE_DIR/new-commits.txt" "$COMMITS" > "$STATE_DIR/c.tmp" && mv "$STATE_D
 { cat "$PENDING"; echo "$CHANGED" | tr ' ' '\n'; } | grep -v '^$' | sort -u > "$STATE_DIR/p.tmp" && mv "$STATE_DIR/p.tmp" "$PENDING"
 log "check: pulled $OLD -> $NEW, pending:$(echo $(cat "$PENDING"))"
 
-ready_mail "Pulled <b>$OLD &rarr; $NEW</b>. Nothing has restarted yet."
+[ -n "$QUIET" ] || ready_mail "Pulled <b>$OLD &rarr; $NEW</b>. Nothing has restarted yet."

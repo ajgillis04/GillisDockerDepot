@@ -3,6 +3,8 @@
 PROJECT="${COMPOSE_PROJECT:-mediaserver}"
 COMPOSE_FILE_NAME="docker-compose-${SERVER}.yaml"
 BRANCH="${REPO_BRANCH:-main}"
+# Public repo: fetching needs no login. The push URL (if any) is left alone.
+REPO_URL="${REPO_URL:-https://github.com/ajgillis04/GillisDockerDepot.git}"
 STATE_DIR="${REPO_UPDATE_STATE:-$BASE_DIR/appdata/repo-updater}"
 LOG="$STATE_DIR/updater.log"
 PENDING="$STATE_DIR/pending.txt"   # services changed by pulled commits, not yet upgraded

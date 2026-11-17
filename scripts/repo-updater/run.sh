@@ -5,6 +5,14 @@
 . "$(dirname "$0")/lib.sh"
 : "${CHECK_AT:=0109}"
 log "start: $SERVER, monthly check at $CHECK_AT"
+# Fetch over the plain public URL (replaces old URLs with an embedded token).
+# A separate push URL, where one is set, keeps working.
+if [ "$(git remote get-url origin 2>/dev/null)" != "$REPO_URL" ]; then
+  PUSH=$(git remote get-url --push origin 2>/dev/null)
+  git remote set-url origin "$REPO_URL"
+  case "$PUSH" in git@*|ssh://*) git remote set-url --push origin "$PUSH" ;; esac
+  log "start: origin fetch URL set to $REPO_URL"
+fi
 httpd -p "${HTTP_PORT:-8080}" -h "$BASE_DIR/scripts/repo-updater/www"
 while true; do
   STAMP="$STATE_DIR/checked-$(date +%Y-%m)"

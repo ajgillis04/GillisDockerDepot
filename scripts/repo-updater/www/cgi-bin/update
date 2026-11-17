@@ -14,6 +14,14 @@ if [ -z "$REPO_UPDATE_KEY" ] || [ "$KEY" != "$REPO_UPDATE_KEY" ]; then
   page "Not allowed" "<p>Wrong or missing key.</p>"; exit 0
 fi
 
+ACTION=$(echo "$Q" | tr '&' '\n' | sed -n 's/^action=//p' | head -1)
+if [ "$REQUEST_METHOD" = POST ] && [ "$ACTION" = check ]; then
+  # Pull now (files only) and show what the new commits change.
+  sh "$BASE_DIR/scripts/repo-updater/check.sh" --quiet >/dev/null 2>&1
+  MSG=$(tail -1 "$LOG" | cut -d' ' -f3- | h)
+  echo "<meta http-equiv=refresh content=\"0;url=?key=$KEY&msg=$(echo "$MSG" | sed 's/ /%20/g;s/&/%26/g')\">"
+  exit 0
+fi
 if [ "$REQUEST_METHOD" = POST ]; then
   if [ -d "$STATE_DIR/apply.lock" ]; then
     page "Already running" "<p>An upgrade is already running. The result will arrive by email.</p>"; exit 0
@@ -24,7 +32,9 @@ if [ "$REQUEST_METHOD" = POST ]; then
 fi
 
 classify
+MSG=$(echo "$Q" | tr '&' '\n' | sed -n 's/^msg=//p' | head -1 | sed 's/%20/ /g;s/%26/\&/g')
 BODY=""
+[ -n "$MSG" ] && BODY="<p style=\"background:#f3f4f6;border-radius:8px;padding:8px 12px;font-size:14px\">Last check: $MSG</p>"
 if [ -n "$UP" ]; then
   BODY="$(html_section "Containers to upgrade"; html_chips "$UP" "#dbeafe")
 <form method=post style=\"margin:24px 0 8px\"><input type=hidden name=key value=\"$KEY\">
@@ -36,4 +46,7 @@ fi
 [ -n "$STOP" ] && BODY="$BODY$(html_section "Changed but stopped (left alone)"; html_chips "$STOP" "#e5e7eb")"
 [ -n "$NEWS" ] && BODY="$BODY$(html_section "New, start by hand"; html_chips "$NEWS" "#dcfce7")"
 [ -s "$COMMITS" ] && BODY="$BODY$(html_section "Commits"; html_commits "$COMMITS")"
+BODY="$BODY<form method=post style=\"margin:28px 0 0\"><input type=hidden name=key value=\"$KEY\"><input type=hidden name=action value=check>
+<button style=\"background:#fff;color:#2563eb;border:1px solid #2563eb;padding:10px 18px;border-radius:8px;font-weight:600;font-size:15px\">Check for updates now</button>
+<span style=\"font-size:13px;color:#6b7280;margin-left:8px\">pulls from GitHub; nothing restarts</span></form>"
 page "Updates" "$BODY"
