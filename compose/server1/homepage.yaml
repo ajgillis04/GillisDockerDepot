@@ -14,6 +14,7 @@ services:
       HOMEPAGE_ALLOWED_HOSTS: homepage.${DOMAINNAME},${SERVER_IP}:3000
       # App password for the Raspberry Pi Pi-hole widget (services.yaml); set PIHOLE2_TOKEN in .env
       HOMEPAGE_VAR_PIHOLE2_KEY: ${PIHOLE2_TOKEN}
+      HOMEPAGE_VAR_REPO_UPDATE_KEY: ${REPO_UPDATE_KEY} # links in the Updates group (services.yaml)
     networks:
       - mediaserver
       - ha_bridge  # reaches the Pi-hole by name (its LAN IP is unreachable from containers on this host)
