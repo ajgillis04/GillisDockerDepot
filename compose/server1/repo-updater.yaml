@@ -56,4 +56,6 @@ services:
       - "com.centurylinklabs.watchtower.enable=false" # local build
       - "homepage.group=Infrastructure"
       - "homepage.name=Repo updater"
-      - "homepage.description=Weekly update check for this server"
+      - "homepage.icon=git.png"
+      - "homepage.href=https://deploy.${DOMAINNAME}/cgi-bin/update?key=${REPO_UPDATE_KEY}" # key comes from .env, not the repo
+      - "homepage.description=Check for and apply repo updates"
