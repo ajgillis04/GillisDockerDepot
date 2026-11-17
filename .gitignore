@@ -51,4 +51,4 @@ appdata/
 
 # Aider
 .aider*
-.aider.tags.cache.v4/
+.aider.tags.cache.v4/.env.bak*
