@@ -37,7 +37,7 @@ while read -r svc hash; do
   # shellcheck disable=SC2086
   set -- $line
   [ "$2" = "$hash" ] && continue
-  case "$SKIP" in *" $svc "*) SKIPPED="$SKIPPED $svc"; continue ;; esac
+  if skipped "$svc"; then SKIPPED="$SKIPPED $svc"; continue; fi
   [ "$3" = running ] || { STOPPED="$STOPPED $svc"; continue; }
   RECREATE="$RECREATE $svc"
 done < "$STATE_DIR/after.txt"

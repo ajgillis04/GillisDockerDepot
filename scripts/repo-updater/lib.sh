@@ -5,9 +5,15 @@ COMPOSE_FILE_NAME="docker-compose-${SERVER}.yaml"
 BRANCH="${REPO_BRANCH:-main}"
 STATE_DIR="${REPO_UPDATE_STATE:-$BASE_DIR/appdata/repo-updater}"
 LOG="$STATE_DIR/updater.log"
-# Never recreated from the link: losing these can lock everyone out.
-# Changes to them are listed in the result email for a manual step.
+# Never recreated from the link: losing these can lock everyone out, or they have
+# their own deploy steps. Shell patterns are allowed (e.g. sbs-*). Changes to them
+# are listed in the result email for a manual step.
 SKIP=" ${REPO_UPDATE_SKIP:-cloudflared guacamole guacd repo-updater} "
+skipped() {
+  set -f # patterns, not file names
+  for p in $SKIP; do case "$1" in $p) set +f; return 0 ;; esac; done
+  set +f; return 1
+}
 export HOME=/tmp DOCKER_CONFIG=/tmp/.docker GIT_TERMINAL_PROMPT=0
 mkdir -p "$STATE_DIR"
 cd "$BASE_DIR" || exit 1

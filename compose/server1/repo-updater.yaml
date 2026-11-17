@@ -8,7 +8,8 @@
 # affects this server, the checkout is just fast-forwarded.
 #
 # Never recreated from the link (REPO_UPDATE_SKIP): cloudflared, guacamole, guacd
-# and repo-updater itself, because a bad change there can lock everyone out.
+# and repo-updater itself, because a bad change there can lock everyone out, and
+# here also sbs-*, which have their own deploy steps.
 #
 # Scripts: scripts/repo-updater/ (mounted, so a pull updates them; no rebuild).
 # Needs in .env: REPO_UPDATE_KEY (random), REPO_UPDATE_MAIL_TO, and the Gmail app
@@ -36,6 +37,7 @@ services:
       HOST_NAME: ${HOST_NAME}
       BASE_DIR: ${BASE_DIR}
       CHECK_AT: "709" # Sunday 09:00
+      REPO_UPDATE_SKIP: cloudflared guacamole guacd repo-updater sbs-* # SBS has its own deploy steps (migrations)
       UPDATE_URL: https://deploy.${DOMAINNAME}/cgi-bin/update
       REPO_UPDATE_KEY: ${REPO_UPDATE_KEY}
       MAIL_TO: ${REPO_UPDATE_MAIL_TO}
