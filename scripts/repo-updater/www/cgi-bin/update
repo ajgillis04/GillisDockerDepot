@@ -1,7 +1,8 @@
 #!/bin/sh
 # GET  ?key=...  shows the containers waiting to be upgraded and an "Upgrade" button
 #                (a button, so link scanners opening the email can't trigger it).
-# POST key=...   starts apply.sh in the background; the result arrives by email.
+# POST key=... action=check    pulls now (files only) and shows what changed.
+# POST key=... action=upgrade  starts apply.sh in the background; the result arrives by email.
 . "$BASE_DIR/scripts/repo-updater/lib.sh"
 if [ "$REQUEST_METHOD" = POST ]; then Q=$(head -c "${CONTENT_LENGTH:-0}"); else Q="$QUERY_STRING"; fi
 KEY=$(echo "$Q" | tr '&' '\n' | sed -n 's/^key=//p' | head -1)
@@ -18,8 +19,13 @@ ACTION=$(echo "$Q" | tr '&' '\n' | sed -n 's/^action=//p' | head -1)
 if [ "$REQUEST_METHOD" = POST ] && [ "$ACTION" = check ]; then
   # Pull now (files only) and show what the new commits change.
   sh "$BASE_DIR/scripts/repo-updater/check.sh" --quiet >/dev/null 2>&1
-  MSG=$(tail -1 "$LOG" | cut -d' ' -f3- | h)
-  echo "<meta http-equiv=refresh content=\"0;url=?key=$KEY&msg=$(echo "$MSG" | sed 's/ /%20/g;s/&/%26/g')\">"
+  case "$(tail -1 "$LOG" | cut -d' ' -f3-)" in
+    "check: up to date") MSG=uptodate ;;
+    *"no container changes"*) MSG=nochange ;;
+    *pending*) MSG=changes ;;
+    *) MSG=failed ;;
+  esac
+  echo "<meta http-equiv=refresh content=\"0;url=?key=$KEY&msg=$MSG\">"
   exit 0
 fi
 if [ "$REQUEST_METHOD" = POST ]; then
@@ -32,13 +38,17 @@ if [ "$REQUEST_METHOD" = POST ]; then
 fi
 
 classify
-MSG=$(echo "$Q" | tr '&' '\n' | sed -n 's/^msg=//p' | head -1 | sed 's/%20/ /g;s/%26/\&/g')
+NOTE=""
+case "$(echo "$Q" | tr '&' '\n' | sed -n 's/^msg=//p' | head -1)" in
+  uptodate) NOTE="Already up to date with GitHub." ;;
+  nochange) NOTE="Pulled from GitHub. None of the new commits change this server's containers." ;;
+  changes)  NOTE="Pulled from GitHub. The containers below changed; press Upgrade when ready." ;;
+  failed)   NOTE="The pull failed; see appdata/repo-updater/updater.log on $HOST_NAME." ;;
+esac
 BODY=""
-[ -n "$MSG" ] && BODY="<p style=\"background:#f3f4f6;border-radius:8px;padding:8px 12px;font-size:14px\">Last check: $MSG</p>"
+[ -n "$NOTE" ] && BODY="<p style=\"background:#f3f4f6;border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 12px\">$NOTE</p>"
 if [ -n "$UP" ]; then
-  BODY="$BODY$(html_section "Containers to upgrade"; html_chips "$UP" "#dbeafe")
-<form method=post style=\"margin:24px 0 8px\"><input type=hidden name=key value=\"$KEY\">
-<button style=\"background:#2563eb;color:#fff;border:0;padding:12px 22px;border-radius:8px;font-weight:600;font-size:16px\">Upgrade$( [ "$(echo $UP | wc -w)" -gt 1 ] && echo " these" )</button></form>"
+  BODY="$BODY$(html_section "Containers to upgrade"; html_chips "$UP" "#dbeafe")"
 else
   BODY="$BODY<p>Nothing waiting to be upgraded.</p>"
 fi
@@ -46,7 +56,16 @@ fi
 [ -n "$STOP" ] && BODY="$BODY$(html_section "Changed but stopped (left alone)"; html_chips "$STOP" "#e5e7eb")"
 [ -n "$NEWS" ] && BODY="$BODY$(html_section "New, start by hand"; html_chips "$NEWS" "#dcfce7")"
 [ -s "$COMMITS" ] && BODY="$BODY$(html_section "Commits"; html_commits "$COMMITS")"
-BODY="$BODY<form method=post style=\"margin:28px 0 0\"><input type=hidden name=key value=\"$KEY\"><input type=hidden name=action value=check>
-<button style=\"background:#fff;color:#2563eb;border:1px solid #2563eb;padding:10px 18px;border-radius:8px;font-weight:600;font-size:15px\">Pull from GitHub now</button>
-<span style=\"font-size:13px;color:#6b7280;margin-left:8px\">then shows what changed; nothing restarts until you press Upgrade</span></form>"
+
+# Both buttons side by side. Upgrade is greyed out until a pull finds changed containers.
+BTN="padding:11px 20px;border-radius:8px;font-weight:600;font-size:15px;margin:0 8px 8px 0;cursor:pointer"
+N=$(echo $UP | wc -w)
+if [ "$N" -gt 0 ]; then
+  UPG="<button name=action value=upgrade style=\"$BTN;background:#2563eb;color:#fff;border:1px solid #2563eb\">Upgrade $N container$( [ "$N" -gt 1 ] && echo s)</button>"
+else
+  UPG="<button disabled style=\"$BTN;background:#e5e7eb;color:#9ca3af;border:1px solid #e5e7eb;cursor:default\">Upgrade</button>"
+fi
+BODY="$BODY<form method=post style=\"margin:24px 0 0\"><input type=hidden name=key value=\"$KEY\">
+<button name=action value=check style=\"$BTN;background:#fff;color:#2563eb;border:1px solid #2563eb\">Pull from GitHub now</button>$UPG</form>
+<p style=\"font-size:13px;color:#6b7280;margin:4px 0 0\">Pull only fetches the files and shows what changed. Nothing restarts until you press Upgrade.</p>"
 page "Updates" "$BODY"
