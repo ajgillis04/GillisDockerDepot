@@ -1,6 +1,7 @@
 #!/bin/sh
 # Pull, recreate only the containers whose compose settings changed, then email the result.
 # Run by hand: docker exec repo-updater.<host> sh /share/.../scripts/repo-updater/apply.sh
+# Dry run (pulls, but recreates nothing): docker exec -e DRY_RUN=1 repo-updater.<host> sh .../apply.sh
 . "$(dirname "$0")/lib.sh"
 LOCK="$STATE_DIR/apply.lock"
 mkdir "$LOCK" 2>/dev/null || { log "apply: already running"; exit 0; }
@@ -59,7 +60,9 @@ done
 REMOVED=$(awk '{print $1}' "$STATE_DIR/before.txt" | sort -u | while read -r s; do
   grep -q "^$s " "$STATE_DIR/after.txt" || printf '%s ' "$s"; done)
 
-if [ -n "$RECREATE" ]; then
+if [ -n "$DRY_RUN" ]; then
+  echo "DRY RUN, nothing recreated. Would recreate:${RECREATE:- none}${FOLLOW:+, then$FOLLOW}"
+elif [ -n "$RECREATE" ]; then
   echo "Recreating:$RECREATE"
   # shellcheck disable=SC2086
   dc up -d --no-deps $RECREATE
