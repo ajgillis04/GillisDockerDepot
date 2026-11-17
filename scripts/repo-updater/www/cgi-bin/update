@@ -36,11 +36,11 @@ MSG=$(echo "$Q" | tr '&' '\n' | sed -n 's/^msg=//p' | head -1 | sed 's/%20/ /g;s
 BODY=""
 [ -n "$MSG" ] && BODY="<p style=\"background:#f3f4f6;border-radius:8px;padding:8px 12px;font-size:14px\">Last check: $MSG</p>"
 if [ -n "$UP" ]; then
-  BODY="$(html_section "Containers to upgrade"; html_chips "$UP" "#dbeafe")
+  BODY="$BODY$(html_section "Containers to upgrade"; html_chips "$UP" "#dbeafe")
 <form method=post style=\"margin:24px 0 8px\"><input type=hidden name=key value=\"$KEY\">
 <button style=\"background:#2563eb;color:#fff;border:0;padding:12px 22px;border-radius:8px;font-weight:600;font-size:16px\">Upgrade$( [ "$(echo $UP | wc -w)" -gt 1 ] && echo " these" )</button></form>"
 else
-  BODY="<p>Nothing waiting to be upgraded.</p>"
+  BODY="$BODY<p>Nothing waiting to be upgraded.</p>"
 fi
 [ -n "$PROT" ] && BODY="$BODY$(html_section "Changed, do by hand (protected)"; html_chips "$PROT" "#fde68a")"
 [ -n "$STOP" ] && BODY="$BODY$(html_section "Changed but stopped (left alone)"; html_chips "$STOP" "#e5e7eb")"
