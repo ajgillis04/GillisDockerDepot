@@ -56,11 +56,11 @@ CHANGED=$(awk 'NR==FNR {b[$1]=$2; next} !($1 in b) || b[$1]!=$2 {print $1}' \
 REMOVED=$(awk 'NR==FNR {a[$1]=1; next} !($1 in a) {print $1}' \
   "$STATE_DIR/hash-after.txt" "$STATE_DIR/hash-before.txt")
 
-cat "$STATE_DIR/new-commits.txt" "$COMMITS" > "$STATE_DIR/c.tmp" && mv "$STATE_DIR/c.tmp" "$COMMITS"
 if [ -z "$CHANGED$REMOVED" ]; then
   log "check: pulled $OLD -> $NEW, no container changes"
   exit 0
 fi
+cat "$STATE_DIR/new-commits.txt" "$COMMITS" > "$STATE_DIR/c.tmp" && mv "$STATE_DIR/c.tmp" "$COMMITS"
 { cat "$PENDING"; echo "$CHANGED" | tr ' ' '\n'; } | grep -v '^$' | sort -u > "$STATE_DIR/p.tmp" && mv "$STATE_DIR/p.tmp" "$PENDING"
 log "check: pulled $OLD -> $NEW, pending:$(echo $(cat "$PENDING"))"
 
