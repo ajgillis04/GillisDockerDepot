@@ -1,6 +1,8 @@
 # Shared settings for repo-updater. Sourced by run.sh, check.sh, apply.sh and the CGI page.
 : "${BASE_DIR:?BASE_DIR not set}" "${HOST_NAME:?HOST_NAME not set}" "${SERVER:?SERVER not set (e.g. server1)}"
-PROJECT="${COMPOSE_PROJECT:-mediaserver}"
+# Compose project: as set, else the one this container itself was started under.
+PROJECT="${COMPOSE_PROJECT:-$(docker inspect -f '{{index .Config.Labels "com.docker.compose.project"}}' "repo-updater.$HOST_NAME" 2>/dev/null)}"
+PROJECT="${PROJECT:-mediaserver}"
 COMPOSE_FILE_NAME="docker-compose-${SERVER}.yaml"
 BRANCH="${REPO_BRANCH:-main}"
 # Public repo: fetching needs no login. The push URL (if any) is left alone.

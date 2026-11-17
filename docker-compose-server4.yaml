@@ -121,6 +121,7 @@ secrets:
 # *************************** SERVICES ******************************************
 include:
   - ${COMPOSE_DIR}/bazarr.yaml
+  - ${COMPOSE_DIR}/repo-updater.yaml # monthly update email + upgrade page (setup: see the file)
 #  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml  
 #  - ${COMPOSE_DIR}/dozzle.yaml
