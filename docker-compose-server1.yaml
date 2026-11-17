@@ -181,6 +181,7 @@ include:
   - ${COMPOSE_DIR}/profilarr.yaml
   - ${COMPOSE_DIR}/radarr.yaml
 #  - ${COMPOSE_DIR}/readarr.yaml # Readarr was retired upstream; removed 2026-11
+  - ${COMPOSE_DIR}/repo-updater.yaml # weekly update email + apply link
 #  - ${COMPOSE_DIR}/retroassembly.yaml # removed 2026-11 (not used); settings kept in appdata/retroassembly
   - ${COMPOSE_DIR}/sabnzbd.yaml
   - ${COMPOSE_DIR}/sbs-web.yaml
