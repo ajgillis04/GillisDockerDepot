@@ -58,9 +58,16 @@ REMOVED=$(awk '{print $1}' "$STATE_DIR/before.txt" | sort -u | while read -r s; 
   grep -q "^$s " "$STATE_DIR/after.txt" || printf '%s ' "$s"; done)
 
 if [ -n "$DRY_RUN" ]; then
-  echo "DRY RUN, nothing recreated. Compose would do:"
-  # shellcheck disable=SC2086
-  [ -n "$TARGETS" ] && dc up -d --no-deps --dry-run $TARGETS 2>&1 | grep -viE ' (running|started)$' | sed 's/^/  /'
+  # Compose's own --dry-run over-reports (it lists unchanged containers), so this
+  # only gives the settings-hash hint. The real "up" is what decides.
+  HINT=""
+  for svc in $TARGETS; do
+    h=$(awk -v s="$svc" '$1==s{print $2}' "$STATE_DIR/after.txt")
+    o=$(awk -v s="$svc" '$1==s{print $4}' "$STATE_DIR/before.txt" | head -1)
+    [ "$h" = "$o" ] || HINT="$HINT $svc"
+  done
+  echo "DRY RUN, nothing recreated. Settings hash differs for:${HINT:- none}"
+  echo "(A hint only: Compose may still find some of these unchanged.)"
 elif [ -n "$TARGETS" ]; then
   # shellcheck disable=SC2086
   dc up -d --no-deps $TARGETS 2>&1 | grep -viE ' running$'
