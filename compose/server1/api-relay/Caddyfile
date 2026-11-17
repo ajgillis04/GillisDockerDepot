@@ -1,0 +1,23 @@
+# Keyed HTTPS relay: passes requests on to RELAY_UPSTREAM (a hostname, set in .env).
+# Only requests carrying the right X-Relay-Key header (RELAY_KEY in .env) are passed on;
+# everything else gets 403.
+{
+	admin off
+	auto_https off
+}
+
+:8080 {
+	@authorized header X-Relay-Key {$RELAY_KEY}
+
+	handle @authorized {
+		request_header -X-Relay-Key
+		reverse_proxy https://{$RELAY_UPSTREAM} {
+			header_up Host {$RELAY_UPSTREAM}
+			flush_interval -1 # stream replies as they arrive
+		}
+	}
+
+	handle {
+		respond 403
+	}
+}

@@ -1,0 +1,31 @@
+# ***********************************************************************************
+# Service: api-relay
+# Purpose: Keyed HTTPS relay. Passes requests on to RELAY_UPSTREAM through the
+#          home internet connection. Reached only through the Cloudflare Tunnel (no host port).
+# Notes:
+#   - Requests without the X-Relay-Key header (RELAY_KEY in .env) get 403.
+#   - RELAY_UPSTREAM and RELAY_KEY are set in .env.
+#   - Settings are in ${COMPOSE_DIR}/api-relay/Caddyfile.
+# ***********************************************************************************
+
+services:
+  api-relay:
+    container_name: api-relay.${HOST_NAME}
+    hostname: api-relay.${HOST_NAME}.lan
+    image: caddy:2.10.2-alpine
+    environment:
+      TZ: ${TZ}
+      RELAY_KEY: ${RELAY_KEY}
+      RELAY_UPSTREAM: ${RELAY_UPSTREAM}
+    networks:
+      - mediaserver
+    volumes:
+      - ${COMPOSE_DIR}/api-relay/Caddyfile:/etc/caddy/Caddyfile:ro
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "homepage.group=Infrastructure"
+      - "homepage.name=API relay"
+      - "homepage.description=Keyed HTTPS relay"
