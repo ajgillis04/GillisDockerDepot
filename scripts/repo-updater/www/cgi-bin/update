@@ -1,5 +1,5 @@
 #!/bin/sh
-# GET  ?key=...  shows what is waiting and an "Apply update" button
+# GET  ?key=...  shows the containers waiting to be upgraded and an "Upgrade" button
 #                (a button, so link scanners opening the email can't trigger it).
 # POST key=...   starts apply.sh in the background; the result arrives by email.
 . "$BASE_DIR/scripts/repo-updater/lib.sh"
@@ -8,31 +8,32 @@ KEY=$(echo "$Q" | tr '&' '\n' | sed -n 's/^key=//p' | head -1)
 
 echo "Content-Type: text/html; charset=utf-8"
 echo
-page() {
-  echo "<!doctype html><meta name=viewport content='width=device-width'><title>$HOST_NAME update</title>"
-  echo "<body style='font-family:sans-serif;max-width:40em;margin:1em auto;padding:0 1em'><h2>$HOST_NAME</h2>$1</body>"
-}
+page() { html_head "$1"; echo "$2"; html_foot; }
 
 if [ -z "$REPO_UPDATE_KEY" ] || [ "$KEY" != "$REPO_UPDATE_KEY" ]; then
-  page "<p>Wrong or missing key.</p>"; exit 0
+  page "Not allowed" "<p>Wrong or missing key.</p>"; exit 0
 fi
 
 if [ "$REQUEST_METHOD" = POST ]; then
   if [ -d "$STATE_DIR/apply.lock" ]; then
-    page "<p>An update is already running. The result will arrive by email.</p>"; exit 0
+    page "Already running" "<p>An upgrade is already running. The result will arrive by email.</p>"; exit 0
   fi
   setsid sh "$BASE_DIR/scripts/repo-updater/apply.sh" </dev/null >/dev/null 2>&1 &
-  page "<p><b>Update started.</b> The result will arrive by email in a minute or two.</p>"
+  page "Upgrade started" "<p>The result will arrive by email in a minute or two.</p>"
   exit 0
 fi
 
-git fetch -q origin "$BRANCH" 2>/dev/null
-N=$(git rev-list --count "HEAD..origin/$BRANCH" 2>/dev/null)
-esc() { sed 's/&/\&amp;/g;s/</\&lt;/g;s/>/\&gt;/g' | sed 's|.*|<li>&</li>|'; }
-LIST=$(git log --format='%h %s' "HEAD..origin/$BRANCH" 2>/dev/null | esc)
-FILES=$(relevant_files HEAD "origin/$BRANCH" | esc)
-page "<p><b>${N:-?} commit(s) waiting.</b></p><ul>$LIST</ul>
-<p>Files that affect this server:</p><ul>${FILES:-<li>none</li>}</ul>
-<form method=post><input type=hidden name=key value='$KEY'>
-<button style='font-size:1.2em;padding:.5em 1.5em'>Apply update</button></form>
-<p><small>Only containers whose settings changed are recreated. Never touched:$SKIP</small></p>"
+classify
+BODY=""
+if [ -n "$UP" ]; then
+  BODY="$(html_section "Containers to upgrade"; html_chips "$UP" "#dbeafe")
+<form method=post style=\"margin:24px 0 8px\"><input type=hidden name=key value=\"$KEY\">
+<button style=\"background:#2563eb;color:#fff;border:0;padding:12px 22px;border-radius:8px;font-weight:600;font-size:16px\">Upgrade$( [ "$(echo $UP | wc -w)" -gt 1 ] && echo " these" )</button></form>"
+else
+  BODY="<p>Nothing waiting to be upgraded.</p>"
+fi
+[ -n "$PROT" ] && BODY="$BODY$(html_section "Changed, do by hand (protected)"; html_chips "$PROT" "#fde68a")"
+[ -n "$STOP" ] && BODY="$BODY$(html_section "Changed but stopped (left alone)"; html_chips "$STOP" "#e5e7eb")"
+[ -n "$NEWS" ] && BODY="$BODY$(html_section "New, start by hand"; html_chips "$NEWS" "#dcfce7")"
+[ -s "$COMMITS" ] && BODY="$BODY$(html_section "Commits"; html_commits "$COMMITS")"
+page "Updates" "$BODY"

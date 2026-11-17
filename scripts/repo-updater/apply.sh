@@ -1,132 +1,58 @@
 #!/bin/sh
-# Pull, let Compose recreate whatever's settings changed, then email the result.
-# Only running, unprotected services are passed to "up"; Compose itself decides which
-# of those need recreating (unchanged ones just report "Running"). What actually changed
-# is found by comparing container IDs before and after.
-# Run by hand: docker exec repo-updater.<host> sh /share/.../scripts/repo-updater/apply.sh
-# Dry run (pulls, recreates nothing, lists what Compose would do):
-#   docker exec -e DRY_RUN=1 repo-updater.<host> sh .../apply.sh
+# Upgrade the containers that pulled commits changed (pending.txt, written by check.sh):
+# only running, unprotected ones; nothing else is passed to Compose. Then email the result.
+# Run by hand: docker exec repo-updater.<host> sh <BASE_DIR>/scripts/repo-updater/apply.sh
 . "$(dirname "$0")/lib.sh"
 LOCK="$STATE_DIR/apply.lock"
 mkdir "$LOCK" 2>/dev/null || { log "apply: already running"; exit 0; }
 trap 'rmdir "$LOCK"' EXIT
 OUT="$STATE_DIR/last-apply.txt"
 exec >"$OUT" 2>&1
-log "apply: start"
+classify
+log "apply: start, upgrading:${UP:- none}"
+[ -n "$UP" ] || { log "apply: nothing to do"; exit 0; }
 
-ps_all() {
-  docker ps -a --filter "label=com.docker.compose.project=$PROJECT" \
-    --format '{{.Label "com.docker.compose.service"}} {{.ID}} {{.State}} {{.Label "com.docker.compose.config-hash"}}'
-}
-ps_all > "$STATE_DIR/before.txt"
+ids() { for s in $1; do printf '%s %s\n' "$s" "$(docker ps -aq --filter "label=com.docker.compose.project=$PROJECT" --filter "label=com.docker.compose.service=$s" | head -1)"; done; }
+ids "$UP" > "$STATE_DIR/ids-before.txt"
 
-OLD=$(git rev-parse --short HEAD)
-if ! git pull -q --ff-only origin "$BRANCH"; then
-  echo "git pull --ff-only failed; nothing was changed."
-  git status --short
-  log "apply: pull failed"; mail "Update FAILED (git pull)" < "$OUT"; exit 1
-fi
-NEW=$(git rev-parse --short HEAD)
-echo "Pulled $OLD -> $NEW"
-git log --format='  %h %s' "$OLD..$NEW"
-echo
+# shellcheck disable=SC2086
+dc up -d --no-deps $UP
 
-if ! dc config --hash='*' > "$STATE_DIR/after.txt"; then
-  echo "compose config failed; nothing was recreated."
-  log "apply: compose config failed"; mail "Update FAILED (compose config)" < "$OUT"; exit 1
-fi
-
-TARGETS=""; PROTECTED=""; STOPPED=""; NEWSVC=""
-while read -r svc hash; do
-  line=$(awk -v s="$svc" '$1==s' "$STATE_DIR/before.txt" | head -1)
-  if [ -z "$line" ]; then NEWSVC="$NEWSVC $svc"; continue; fi
-  # shellcheck disable=SC2086
-  set -- $line
-  if skipped "$svc"; then
-    # Can't ask Compose without touching it, so the hash is only a hint here.
-    [ "$4" = "$hash" ] || PROTECTED="$PROTECTED $svc"
-    continue
-  fi
-  if [ "$3" != running ]; then
-    [ "$4" = "$hash" ] || STOPPED="$STOPPED $svc"
-    continue
-  fi
-  TARGETS="$TARGETS $svc"
-done < "$STATE_DIR/after.txt"
-
-REMOVED=$(awk '{print $1}' "$STATE_DIR/before.txt" | sort -u | while read -r s; do
-  grep -q "^$s " "$STATE_DIR/after.txt" || printf '%s ' "$s"; done)
-
-if [ -n "$DRY_RUN" ]; then
-  # Compose's own --dry-run over-reports (it lists unchanged containers), so this
-  # only gives the settings-hash hint. The real "up" is what decides.
-  HINT=""
-  for svc in $TARGETS; do
-    h=$(awk -v s="$svc" '$1==s{print $2}' "$STATE_DIR/after.txt")
-    o=$(awk -v s="$svc" '$1==s{print $4}' "$STATE_DIR/before.txt" | head -1)
-    [ "$h" = "$o" ] || HINT="$HINT $svc"
-  done
-  echo "DRY RUN, nothing recreated. Settings hash differs for:${HINT:- none}"
-  echo "(A hint only: Compose may still find some of these unchanged.)"
-elif [ -n "$TARGETS" ]; then
-  # shellcheck disable=SC2086
-  dc up -d --no-deps $TARGETS 2>&1 | grep -viE ' running$'
-fi
-ps_all > "$STATE_DIR/now.txt"
-
-# Which containers really changed (new container ID).
-CHANGED=""
-for svc in $TARGETS; do
-  a=$(awk -v s="$svc" '$1==s{print $2}' "$STATE_DIR/before.txt" | head -1)
-  b=$(awk -v s="$svc" '$1==s{print $2}' "$STATE_DIR/now.txt" | head -1)
-  [ "$a" = "$b" ] || CHANGED="$CHANGED $svc"
-done
-
-# Containers sharing a recreated container's network (network_mode: service:X) lose
-# that network, so recreate them too.
+# Containers that share an upgraded container's network (network_mode: service:X) lose
+# it when that container is recreated, so they are recreated too.
 FOLLOW=""
-for svc in $CHANGED; do
-  id=$(awk -v s="$svc" '$1==s{print $2}' "$STATE_DIR/before.txt" | head -1)
+while read -r svc id; do
   for c in $(docker ps -aq --filter "label=com.docker.compose.project=$PROJECT"); do
     case "$(docker inspect -f '{{.HostConfig.NetworkMode}}' "$c")" in
       container:"$id"*)
         f=$(docker inspect -f '{{index .Config.Labels "com.docker.compose.service"}}' "$c")
-        case " $CHANGED $FOLLOW " in *" $f "*) ;; *) FOLLOW="$FOLLOW $f" ;; esac ;;
+        case " $UP $FOLLOW " in *" $f "*) ;; *) FOLLOW="$FOLLOW $f" ;; esac ;;
     esac
   done
+done < "$STATE_DIR/ids-before.txt"
+# shellcheck disable=SC2086
+[ -n "$FOLLOW" ] && dc up -d --no-deps --force-recreate $FOLLOW
+
+sleep 60
+OK=""; BAD=""
+for svc in $UP $FOLLOW; do
+  st=$(docker ps -a --filter "label=com.docker.compose.project=$PROJECT" --filter "label=com.docker.compose.service=$svc" --format '{{.Status}}' | head -1)
+  case "$st" in Up*unhealthy*|Exited*|Restarting*|"") BAD="$BAD $svc" ;; *) OK="$OK $svc" ;; esac
 done
-if [ -n "$FOLLOW" ]; then
-  echo "Recreating (shared a recreated container's network):$FOLLOW"
-  # shellcheck disable=SC2086
-  dc up -d --no-deps --force-recreate $FOLLOW 2>&1 | grep -viE ' running$'
-fi
 
-echo
-if [ -z "$DRY_RUN" ]; then
-  if [ -n "$CHANGED$FOLLOW" ]; then
-    echo "Recreated:$CHANGED$FOLLOW"
-    echo "Status after 60 s:"
-    sleep 60
-    for svc in $CHANGED $FOLLOW; do
-      docker ps -a --filter "label=com.docker.compose.project=$PROJECT" \
-        --filter "label=com.docker.compose.service=$svc" --format '  {{.Names}}: {{.Status}}'
-    done
-  else
-    echo "No container needed recreating."
-  fi
-fi
-[ -n "$PROTECTED" ] && { echo; echo "May have changed but NOT applied (protected, do by hand):$PROTECTED"; }
-[ -n "$STOPPED" ]   && { echo; echo "May have changed but stopped, left stopped:$STOPPED"; }
-[ -n "$NEWSVC" ]    && { echo; echo "New in the repo, not started (start by hand):$NEWSVC"; }
-[ -n "$REMOVED" ]   && { echo; echo "No longer in the repo but still exist (remove by hand): $REMOVED"; }
+# Upgraded ones leave the pending list; protected/stopped/new stay until done by hand.
+for s in $UP; do sed -i "/^$s\$/d" "$PENDING"; done
+[ -s "$PENDING" ] || : > "$COMMITS"
+log "apply: upgraded:$UP${FOLLOW:+ +$FOLLOW}; ok:${OK:- none}; problems:${BAD:- none}"
 
-STATUS="done"
-[ -n "$DRY_RUN" ] && STATUS="dry run"
-docker ps -a --filter "label=com.docker.compose.project=$PROJECT" --format '{{.Names}} {{.Status}}' \
-  | grep -E 'Exited|Restarting|unhealthy' > "$STATE_DIR/bad.txt"
-if [ -s "$STATE_DIR/bad.txt" ]; then
-  STATUS="$STATUS, with problems"
-  echo; echo "Containers not running or unhealthy:"; sed 's/^/  /' "$STATE_DIR/bad.txt"
-fi
-log "apply: $OLD -> $NEW, recreated:${CHANGED:- none}${FOLLOW:+ +$FOLLOW}; $STATUS"
-mail "Update $STATUS ($OLD -> $NEW)" < "$OUT"
+TITLE="Upgrade done"; [ -n "$BAD" ] && TITLE="Upgrade done, with problems"
+{
+  html_head "$TITLE"
+  [ -n "$OK" ]  && { html_section "Running"; html_chips "$OK" "#dcfce7"; }
+  [ -n "$BAD" ] && { html_section "Not running or unhealthy"; html_chips "$BAD" "#fee2e2"; }
+  [ -n "$FOLLOW" ] && echo "<p style=\"font-size:14px;color:#6b7280\">Also recreated because they share a network:$FOLLOW</p>"
+  classify
+  [ -n "$PROT$STOP$NEWS" ] && { html_section "Still waiting for you"; html_chips "$PROT $STOP $NEWS" "#fde68a"; }
+  html_section "Details"; html_pre < "$OUT"
+  html_foot
+} | mail "$TITLE"

@@ -1,46 +1,67 @@
 #!/bin/sh
-# Weekly check: fetch, and if this server is behind, email what's new with a link to apply it.
-# If nothing new affects this server, just fast-forward the checkout quietly.
-# Run by hand: docker exec repo-updater.<host> sh /share/.../scripts/repo-updater/check.sh
+# Monthly (see run.sh): if GitHub has new commits, pull them (files only, nothing restarts), work out
+# which containers those commits change, and email the list with an Upgrade button.
+# "Changed" = the service's compose settings hash differs between before and after the
+# pull, both computed here by the same Compose, so older drift doesn't count.
+# Run by hand: docker exec repo-updater.<host> sh <BASE_DIR>/scripts/repo-updater/check.sh
 . "$(dirname "$0")/lib.sh"
 
+# ready_mail INTRO: email the pending containers with the Upgrade button.
+ready_mail() {
+  classify
+  {
+    html_head "Updates ready to apply"
+    echo "<p style=\"margin:0 0 8px\">$1</p>"
+    if [ -n "$UP" ]; then html_section "Containers to upgrade"; html_chips "$UP" "#dbeafe"
+      html_button "${UPDATE_URL:?UPDATE_URL not set}?key=${REPO_UPDATE_KEY:?}" "Review &amp; upgrade"
+    fi
+    [ -n "$PROT" ] && { html_section "Changed, do by hand (protected)"; html_chips "$PROT" "#fde68a"; }
+    [ -n "$STOP" ] && { html_section "Changed but stopped (left alone)"; html_chips "$STOP" "#e5e7eb"; }
+    [ -n "$NEWS" ] && { html_section "New, start by hand"; html_chips "$NEWS" "#dcfce7"; }
+    [ -n "$REMOVED" ] && { html_section "Removed from the repo, still running (remove by hand)"; html_chips "$REMOVED" "#fee2e2"; }
+    [ -s "$COMMITS" ] && { html_section "Commits"; html_commits "$COMMITS"; }
+    html_foot
+  } | mail "$(echo $UP | wc -w | tr -d ' ') container(s) ready to upgrade"
+}
+
+if [ "$1" = --resend ]; then
+  [ -s "$PENDING" ] || { echo "nothing pending"; exit 0; }
+  ready_mail "Reminder: these are still waiting. Nothing has restarted yet."; exit 0
+fi
+
 if ! git fetch -q origin "$BRANCH" 2>>"$LOG"; then
-  log "check: git fetch failed"
-  echo "git fetch failed on $HOST_NAME; see $LOG" | mail "Update check failed"
+  log "check: git fetch failed"; mail_error "Update check failed" "git fetch failed; see $LOG"; exit 1
+fi
+[ "$(git rev-list --count "HEAD..origin/$BRANCH")" -gt 0 ] || { log "check: up to date"; exit 0; }
+
+dc config --hash='*' 2>>"$LOG" | sort > "$STATE_DIR/hash-before.txt"
+OLD=$(git rev-parse --short HEAD)
+if ! OUT=$(git pull -q --ff-only origin "$BRANCH" 2>&1); then
+  log "check: pull failed"
+  mail_error "Update check: git pull failed" "$OUT
+$(git status --short)"
   exit 1
 fi
-BEHIND=$(git rev-list --count "HEAD..origin/$BRANCH")
-[ "$BEHIND" -gt 0 ] || { log "check: up to date"; exit 0; }
-
-FILES=$(relevant_files HEAD "origin/$BRANCH")
-if [ -z "$FILES" ]; then
-  if git merge -q --ff-only "origin/$BRANCH" >>"$LOG" 2>&1; then
-    log "check: $BEHIND commit(s), none for $SERVER; fast-forwarded"
-  else
-    log "check: fast-forward failed"
-    echo "git merge --ff-only failed on $HOST_NAME; see $LOG" | mail "Update check failed"
-  fi
-  exit 0
+NEW=$(git rev-parse --short HEAD)
+git log --format='%h %s' "$OLD..$NEW" > "$STATE_DIR/new-commits.txt"
+if ! dc config --hash='*' 2>"$STATE_DIR/config-error.txt" | sort > "$STATE_DIR/hash-after.txt"; then :; fi
+if [ ! -s "$STATE_DIR/hash-after.txt" ]; then
+  log "check: compose config failed after pull"
+  mail_error "Update check: compose config failed" "$(cat "$STATE_DIR/config-error.txt")"; exit 1
 fi
 
-LOCAL=$(git status --porcelain --untracked-files=no)
-log "check: $BEHIND commit(s) behind, emailing"
-{
-  echo "$HOST_NAME is $BEHIND commit(s) behind $BRANCH."
-  echo
-  echo "Review and apply:"
-  echo "  ${UPDATE_URL:?UPDATE_URL not set}?key=${REPO_UPDATE_KEY:?REPO_UPDATE_KEY not set}"
-  echo
-  echo "New commits:"
-  git log --format='  %h %s' "HEAD..origin/$BRANCH"
-  echo
-  echo "Files that affect this server:"
-  echo "$FILES" | sed 's/^/  /'
-  if [ -n "$LOCAL" ]; then
-    echo
-    echo "WARNING: local changes to tracked files; the pull may refuse to run:"
-    echo "$LOCAL" | sed 's/^/  /'
-  fi
-  echo
-  echo "Applying recreates only containers whose settings changed. Never touched:$SKIP"
-} | mail "$BEHIND update(s) waiting"
+# Services whose settings changed, or that are new, in these commits.
+CHANGED=$(awk 'NR==FNR {b[$1]=$2; next} !($1 in b) || b[$1]!=$2 {print $1}' \
+  "$STATE_DIR/hash-before.txt" "$STATE_DIR/hash-after.txt")
+REMOVED=$(awk 'NR==FNR {a[$1]=1; next} !($1 in a) {print $1}' \
+  "$STATE_DIR/hash-after.txt" "$STATE_DIR/hash-before.txt")
+
+cat "$STATE_DIR/new-commits.txt" "$COMMITS" > "$STATE_DIR/c.tmp" && mv "$STATE_DIR/c.tmp" "$COMMITS"
+if [ -z "$CHANGED$REMOVED" ]; then
+  log "check: pulled $OLD -> $NEW, no container changes"
+  exit 0
+fi
+{ cat "$PENDING"; echo "$CHANGED" | tr ' ' '\n'; } | grep -v '^$' | sort -u > "$STATE_DIR/p.tmp" && mv "$STATE_DIR/p.tmp" "$PENDING"
+log "check: pulled $OLD -> $NEW, pending:$(echo $(cat "$PENDING"))"
+
+ready_mail "Pulled <b>$OLD &rarr; $NEW</b>. Nothing has restarted yet."

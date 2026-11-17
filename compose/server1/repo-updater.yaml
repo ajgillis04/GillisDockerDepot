@@ -1,13 +1,13 @@
 # ------------------------------------------------------------------------------
-# repo-updater - weekly "updates waiting" email, and a link to apply them
+# repo-updater - monthly "updates ready" email, with a button to upgrade them
 # ------------------------------------------------------------------------------
-# Once a week (CHECK_AT) it fetches this repo. If new commits change this server's
-# compose files, it emails the list with a link. The link (behind Cloudflare Access)
-# shows what's waiting and an "Apply update" button, which pulls and recreates only
-# the containers whose settings changed, then emails the result. If nothing new
-# affects this server, the checkout is just fast-forwarded.
+# Once a month (CHECK_AT) it pulls this repo (files only, nothing restarts) and works
+# out which containers the new commits change. If any, it emails the list with a
+# button. The page behind it (Cloudflare Access) shows the list and an "Upgrade"
+# button, which recreates only those containers, then emails the result.
+# Images are not its job; Watchtower handles those.
 #
-# Never recreated from the link (REPO_UPDATE_SKIP): cloudflared, guacamole, guacd
+# Never upgraded from the button (REPO_UPDATE_SKIP): cloudflared, guacamole, guacd
 # and repo-updater itself, because a bad change there can lock everyone out, and
 # here also sbs-*, which have their own deploy steps.
 #
@@ -17,7 +17,8 @@
 # Tunnel: deploy.<domain> -> http://repo-updater.<host>:8080
 #
 # By hand:
-#   docker exec repo-updater.${HOST_NAME} sh ${BASE_DIR}/scripts/repo-updater/check.sh
+#   docker exec repo-updater.${HOST_NAME} sh ${BASE_DIR}/scripts/repo-updater/check.sh            # check now
+#   docker exec repo-updater.${HOST_NAME} sh ${BASE_DIR}/scripts/repo-updater/check.sh --resend   # email what is pending again
 #   docker exec repo-updater.${HOST_NAME} sh ${BASE_DIR}/scripts/repo-updater/apply.sh
 # Log: ${DOCKERDIR}/repo-updater/updater.log, last result in last-apply.txt
 # ------------------------------------------------------------------------------
@@ -36,7 +37,7 @@ services:
       SERVER: server1
       HOST_NAME: ${HOST_NAME}
       BASE_DIR: ${BASE_DIR}
-      CHECK_AT: "709" # Sunday 09:00
+      CHECK_AT: "0109" # the 1st of the month, 09:00
       REPO_UPDATE_SKIP: cloudflared guacamole guacd repo-updater sbs-* # SBS has its own deploy steps (migrations)
       UPDATE_URL: https://deploy.${DOMAINNAME}/cgi-bin/update
       REPO_UPDATE_KEY: ${REPO_UPDATE_KEY}
