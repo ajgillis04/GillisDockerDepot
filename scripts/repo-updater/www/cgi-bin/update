@@ -47,6 +47,6 @@ fi
 [ -n "$NEWS" ] && BODY="$BODY$(html_section "New, start by hand"; html_chips "$NEWS" "#dcfce7")"
 [ -s "$COMMITS" ] && BODY="$BODY$(html_section "Commits"; html_commits "$COMMITS")"
 BODY="$BODY<form method=post style=\"margin:28px 0 0\"><input type=hidden name=key value=\"$KEY\"><input type=hidden name=action value=check>
-<button style=\"background:#fff;color:#2563eb;border:1px solid #2563eb;padding:10px 18px;border-radius:8px;font-weight:600;font-size:15px\">Check for updates now</button>
-<span style=\"font-size:13px;color:#6b7280;margin-left:8px\">pulls from GitHub; nothing restarts</span></form>"
+<button style=\"background:#fff;color:#2563eb;border:1px solid #2563eb;padding:10px 18px;border-radius:8px;font-weight:600;font-size:15px\">Pull from GitHub now</button>
+<span style=\"font-size:13px;color:#6b7280;margin-left:8px\">then shows what changed; nothing restarts until you press Upgrade</span></form>"
 page "Updates" "$BODY"
