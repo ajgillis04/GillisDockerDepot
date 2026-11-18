@@ -21,8 +21,8 @@ services:
       # MYSQL_PASSWORD_FILE: /run/secrets/maria_user_password
     networks:
       - mediaserver
-    ports:
-      - "${DB_PORT}:3306"
+    # No published port: clients reach it over the Docker network.
+    # To connect from a PC, temporarily add: ports: ["${DB_PORT}:3306"]
     volumes:
       - ${DOCKERDIR}/mariadb/config:/config
       - ${DOCKERDIR}/mariadb/data:/var/lib/mysql
