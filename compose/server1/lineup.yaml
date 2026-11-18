@@ -48,6 +48,8 @@ services:
     image: lineup-bridge:local
     environment:
       BRIDGE_TOKEN: ${LINEUP_BRIDGE_TOKEN}
+      # Incoming WhatsApp messages are handed to Lineup here (same token).
+      LINEUP_INBOUND_URL: http://lineup:8000/api/whatsapp/inbound
     networks:
       - mediaserver
     volumes:
