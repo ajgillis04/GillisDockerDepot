@@ -10,9 +10,10 @@ services:
       LINEUP_SECRET_KEY: ${LINEUP_SECRET_KEY}
       LINEUP_COOKIE_SECURE: "true"
       LINEUP_BEHIND_CLOUDFLARE: "true"
-      # These stay false until real sending is approved. Changing them here is deliberate and visible.
+      # Changing these is deliberate and visible. Group stays locked; private messages to players were approved
+      # by Andy on 2026-11-18 (beer reminders, guest questions, waitlist notices).
       LINEUP_ALLOW_GROUP_SEND: "false"
-      LINEUP_ALLOW_PERSON_SEND: "false"
+      LINEUP_ALLOW_PERSON_SEND: "true"
       # WhatsApp bridge below. Group posts go to Andy until the WhatsApp page says otherwise.
       LINEUP_BRIDGE_URL: http://lineup-wa:3000
       LINEUP_BRIDGE_TOKEN: ${LINEUP_BRIDGE_TOKEN}
