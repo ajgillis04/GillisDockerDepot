@@ -25,6 +25,11 @@ services:
       INVITATIONS_ALLOWED: "true"
       INVITATION_ORG_NAME: "Kennedy Vault"
       IP_HEADER: CF-Connecting-IP   # real client IP behind the Cloudflare tunnel
+      # Email 2FA for people who won't use an authenticator app: switched on automatically when
+      # an invited user registers from the invite email, and used instead of removal when the
+      # org's "Require two-step login" policy finds a member without 2FA.
+      EMAIL_2FA_ENFORCE_ON_VERIFIED_INVITE: "true"
+      EMAIL_2FA_AUTO_FALLBACK: "true"
       SMTP_HOST: ${SMTPHOST}
       SMTP_PORT: ${SMTPPORT}
       SMTP_SECURITY: starttls
