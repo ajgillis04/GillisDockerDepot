@@ -1,0 +1,52 @@
+# ------------------------------------------------------------------------------
+# Cleanuparr - removes stalled, slow and malware downloads, then has the arrs
+# blocklist the release and search for another
+# ------------------------------------------------------------------------------
+# Added 2026-11-19. All settings are made in the web UI and stored in
+# ${DOCKERDIR}/cleanuparr/config, not in environment variables.
+#
+# Connections to set in the UI:
+#   Transmission: http://transmission.${HOST_NAME}:9091 (Gluetun alias on the
+#     mediaserver network; login is TRANS_USER / TRANS_PASS in .env)
+#   Sonarr, Radarr, Lidarr: http://<name>.${HOST_NAME}:<port>, API key from each
+#     app's Settings > General
+#
+# First run: turn on Dry Run under General, then read the logs for a few days
+# before letting it remove anything. Few-seed torrents are slow, not dead, so
+# use generous strike counts and a long stall time.
+#
+# /downloads is mounted at the same path Transmission uses, so the Download
+# Cleaner can see the files if it is turned on later.
+# ------------------------------------------------------------------------------
+services:
+  cleanuparr:
+    container_name: cleanuparr.${HOST_NAME}
+    hostname: cleanuparr.${HOST_NAME}.lan
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    environment:
+      PORT: 11011
+      PUID: ${PUID}
+      PGID: ${PGID}
+      UMASK: "002"
+      TZ: ${TZ}
+    networks:
+      - mediaserver
+    ports:
+      - "${CLEANUPARR_PORT}:11011"
+    volumes:
+      - ${DOCKERDIR}/cleanuparr/config:/config
+      - ${USERDOWNLOAD}/Torrents:/downloads
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Media"
+      - "homepage.name=Cleanuparr"
+      - "homepage.icon=cleanuparr.png"
+      - "homepage.href=http://${HOST_NAME}.lan:${CLEANUPARR_PORT}/"
+      - "homepage.description=Removes stalled and bad torrents, triggers a new search"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
