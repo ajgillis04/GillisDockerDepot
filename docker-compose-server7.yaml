@@ -108,6 +108,7 @@ secrets:
 # *************************** SERVICES ******************************************
 include:
   - ${COMPOSE_DIR}/bazarr.yaml
+  - ${COMPOSE_DIR}/cleanuparr.yaml # removes stalled torrents (added 2026-11-19)
 #  - ${COMPOSE_DIR}/cloudflare-ddns.yaml
   - ${COMPOSE_DIR}/cloudflared.yaml
   - ${COMPOSE_DIR}/cloudflare-ddns.yaml
