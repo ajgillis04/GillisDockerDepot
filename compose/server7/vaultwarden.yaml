@@ -17,7 +17,7 @@ services:
       PUID: ${PUID}
       #DOMAIN: ${DOMAINNAME}
       ADMIN_TOKEN_FILE: /run/secrets/vaultwarden_admin_token
-      DATABASE_URL: data/db.sqlite3
+      DATABASE_URL: sqlite:///data/db.sqlite3   # 1.37+ needs the scheme to create a new database
       #DATABASE_URL_FILE: /run/secrets/vaultwarden_db_password # for use in an external database
       DOMAIN: "https://vault.${DOMAINNAME}"
       ORG_ADMIN_RECOVERY_ENABLED: "true"
