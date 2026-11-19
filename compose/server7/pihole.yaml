@@ -1,13 +1,13 @@
 # Pi-hole - A network-wide ad blocker.
 #
-# Notes:
-# - This container is dual-homed:
-#     • pihole_network (macvlan) → gives Pi-hole its own LAN IP (192.168.2.x) for DNS/DHCP.
-#     • ha_bridge (user-defined bridge) → added so host-mode containers (like Home Assistant)
-#       can reach Pi-hole’s API. Without this, the host cannot talk to the macvlan IP due to isolation.
+# Notes (KennedyNAS):
+# - DNS only. The eero keeps DHCP; in the eero app set DNS to this Pi-hole first and
+#   1.1.1.1 second, so the house keeps working if the NAS is down.
+# - pihole_network (macvlan) gives Pi-hole its own LAN IP (${PIHOLE_IP}); its MAC is fixed
+#   so the eero can hold a reservation. mediaserver lets Homepage reach its API
+#   (the NAS host can't talk to its own macvlan IP).
 #
-# - The web UI/API is published on the NAS host at ${PIHOLE_WEB_PORT} (e.g. 8080).
-#   LAN clients continue to use the macvlan IP for DNS/DHCP, while HA uses the host:port for API access.
+# - The web UI/API is published on the NAS host at ${PIHOLE_WEB_PORT}.
 #
 # - Windows users: if running Docker Desktop, you may need to allow the backend through the firewall:
 #   new-NetFirewallRule -DisplayName "Docker Desktop Backend" -Direction Inbound `
@@ -38,20 +38,18 @@ services:
       FTLCONF_dns_listeningMode: all
       #FTLCONF_dns_upstreams: ${PIHOLE_SECONDARY}#5335;${PIHOLE_SECONDARY_V6}#5335
       #FTLCONF_dns_dnssec: true
-      FTLCONF_dns_revServers: true,192.168.4.0/24,192.168.4.1#53,lan
+      FTLCONF_dns_revServers: true,192.168.4.0/22,192.168.4.1#53,lan
       FTLCONF_debug_api: false
       TAIL_FTL_LOG: '1' # or '0' to disable
-      FTLCONF_dhcp_active: true
-      FTLCONF_dhcp_start: 192.168.4.50
-      FTLCONF_dhcp_end: 192.168.4.254
-      FTLCONF_dhcp_router: 192.168.4.1
-      FTLCONF_dhcp_leaseTime: 30d
-      FTLCONF_dns_domain: lan
+      FTLCONF_dhcp_active: false # the eero does DHCP; Pi-hole only answers DNS
+      FTLCONF_dns_domain_name: lan
       FTLCONF_dhcp_ipv6: false
       TEMPERATUREUNIT: c
     networks:
       pihole_network:
         ipv4_address: ${PIHOLE_IP}
+        mac_address: "02:42:c0:a8:04:0c" # fixed, so the eero can keep a reservation for it
+      mediaserver: {}
     ports:
       - "${PIHOLE_WEB_PORT}:80"
     volumes:
