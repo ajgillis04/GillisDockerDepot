@@ -44,7 +44,7 @@ services:
       - "homepage.group=Media"
       - "homepage.name=Cleanuparr"
       - "homepage.icon=cleanuparr.png"
-      - "homepage.href=http://${HOST_NAME}.lan:${CLEANUPARR_PORT}/"
+      - "homepage.href=https://cleanuparr.${DOMAINNAME}/"
       - "homepage.description=Removes stalled and bad torrents, triggers a new search"
     logging:
       driver: json-file
