@@ -102,6 +102,8 @@ secrets:
     file: ${SECRETSDIR}/rpc_creds
   vaultwarden_admin_token:
     file: ${SECRETSDIR}/vaultwarden_admin_token
+  nas_gmail_app_pass:
+    file: ${SECRETSDIR}/nas_gmail_app_pass
 
 # *************************** SERVICES ******************************************
 include:
@@ -132,5 +134,5 @@ include:
 #  - ${COMPOSE_DIR}/transmission-openvpn.yaml  # replaced by gluetun + transmission (prepared 2026-11-08); kept for rollback
   - ${COMPOSE_DIR}/gluetun.yaml       # before the first "up", follow the switch-over steps in gluetun.yaml
   - ${COMPOSE_DIR}/transmission.yaml
-#  - ${COMPOSE_DIR}/vaultwarden.yaml
+  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
