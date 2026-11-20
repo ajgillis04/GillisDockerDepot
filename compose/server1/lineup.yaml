@@ -12,7 +12,7 @@ services:
       LINEUP_BEHIND_CLOUDFLARE: "true"
       # Changing these is deliberate and visible. Group stays locked; private messages to players were approved
       # by Andy on 2026-11-18 (beer reminders, guest questions, waitlist notices).
-      LINEUP_ALLOW_GROUP_SEND: "false"
+      LINEUP_ALLOW_GROUP_SEND: "true"
       LINEUP_ALLOW_PERSON_SEND: "true"
       # WhatsApp bridge below. Group posts go to Andy until the WhatsApp page says otherwise.
       LINEUP_BRIDGE_URL: http://lineup-wa:3000
