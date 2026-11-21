@@ -31,7 +31,10 @@ services:
   repo-updater:
     container_name: repo-updater.${HOST_NAME}
     hostname: repo-updater.${HOST_NAME}.lan
-    build: ${BASE_DIR}/scripts/repo-updater
+    build:
+      context: ${BASE_DIR}/scripts/repo-updater
+      args:
+        COMPOSE_VERSION: "5.5.0" # match the host (docker compose version), or config hashes differ
     image: repo-updater:local
     command: sh ${BASE_DIR}/scripts/repo-updater/run.sh
     user: "${PUID}:${PGID}"
