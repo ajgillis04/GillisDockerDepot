@@ -37,3 +37,7 @@ services:
       - no-new-privileges:true
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Infrastructure"
+      - "homepage.name=MariaDB"
+      - "homepage.icon=mariadb.png"
+      - "homepage.description=Database for Guacamole"

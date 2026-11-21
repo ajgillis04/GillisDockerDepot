@@ -21,3 +21,7 @@ services:
     restart: unless-stopped
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
+      - "homepage.group=Network"
+      - "homepage.name=Home VPN link"
+      - "homepage.icon=wireguard.png"
+      - "homepage.description=Cottage PC on the home VPN as 10.9.0.11"

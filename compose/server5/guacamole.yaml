@@ -8,9 +8,10 @@ services:
       PGID: ${PGID}
       TZ: ${TZ}
       DOMAINNAME: ${DOMAINNAME}
-      GUACD_HOSTNAME: guacd.${HOST_NAME}.lan
+      GUACD_HOSTNAME: guacd.${HOST_NAME}
       MYSQL_DATABASE: guacamole
-      MYSQL_HOSTNAME: mariadb.${HOST_NAME}.lan
+      MYSQL_HOSTNAME: mariadb.${HOST_NAME}
+      WEBAPP_CONTEXT: ROOT # serve at / so cottage-guac.gillisonline.com works without /guacamole/
       MYSQL_PORT: 3306
       #MYSQL_USER_FILE: /run/secrets/guac_mysql_user #stopped working
       #MYSQL_PASSWORD_FILE: /run/secrets/guac_mysql_password #stopped working
@@ -41,5 +42,5 @@ services:
       - "homepage.group=Infrastructure"
       - "homepage.name=Guacamole"
       - "homepage.icon=guacamole.png"
-      - "homepage.href=https://guac.${DOMAINNAME}/guacamole/"
+      - "homepage.href=https://cottage-guac.gillisonline.com/"
       - "homepage.description=Remote desktop gateway"
