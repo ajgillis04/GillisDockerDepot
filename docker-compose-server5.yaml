@@ -136,7 +136,7 @@ include:
 #  - ${COMPOSE_DIR}/oauth.yaml
 #  - ${COMPOSE_DIR}/overseerr.yaml
 #  - ${COMPOSE_DIR}/photoprism.yaml
-  - ${COMPOSE_DIR}/pihole.yaml   # DNS only; the Giga Hub forwards DNS to it (no DHCP)
+  - ${COMPOSE_DIR}/pihole.yaml   # DNS only, not used by the hub yet (see the file)
 #  - ${COMPOSE_DIR}/plex.yaml
   - ${COMPOSE_DIR}/portainer.yaml
 #  - ${COMPOSE_DIR}/prowlarr.yaml

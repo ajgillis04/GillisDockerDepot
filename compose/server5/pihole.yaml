@@ -1,16 +1,15 @@
 # Pi-hole - network-wide ad blocker for the cottage (server5).
 #
-# DNS only, no DHCP: the Bell Giga Hub keeps handing out addresses.
-# The hub's Advanced tools > DNS is set manually to this PC (192.168.3.10), so every
-# device asks the hub and the hub forwards to Pi-hole. Pi-hole therefore sees most
-# queries as coming from 192.168.3.1; that's a Giga Hub limit (its DHCP can't hand out
-# a different DNS server).
+# DNS only, no DHCP. NOT in use yet: the Bell Giga Hub can't hand out another DNS
+# server, and its Advanced tools > DNS "manual" setting never forwards to a LAN address.
+# Worse, naming a LAN IP there got that IP blocked by the hub (ARP and IP ignored, and
+# it stayed blocked after setting DNS back to automatic and restarting). Don't put a LAN
+# IP in the hub's DNS page. Devices can still be pointed at Pi-hole by hand.
 #
-# The PC has a reserved address on the hub (192.168.3.10), set as PIHOLE_IP in .env.
-# Ports are bound to that address only, so they don't clash with systemd-resolved's
-# stub on 127.0.0.53.
+# The cottage PC has a static address (PIHOLE_IP in .env, 192.168.3.250). Ports are
+# bound to that address only, so they don't clash with systemd-resolved on 127.0.0.53.
 #
-# .env: PIHOLE_IP, PIHOLE_WEB_PORT, PIHOLE_WEBPASSWORD, PIHOLE_TOKEN (homepage widget)
+# .env: PIHOLE_IP, PIHOLE_WEB_PORT, PIHOLE_WEBPASSWORD
 
 services:
   pihole:
