@@ -21,6 +21,7 @@ services:
     command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
     environment:
       TZ: ${TZ}
+      TUNNEL_TRANSPORT_PROTOCOL: http2 # the Bell Giga Hub drops QUIC (UDP 7844) after restarts; TCP works
     networks:
       - mediaserver
     dns:
