@@ -30,8 +30,7 @@ services:
       - "homepage.href=https://cottage-portainer.gillisonline.com/"
       - "homepage.description=Manage your Docker containers"
       ## Homepage Widget
-      # widget needs PORTAINER_API_KEY in .env (Portainer > My account > Access tokens); uncomment then
-      #- "homepage.widget.type=portainer"
-      #- "homepage.widget.url=http://portainer.${HOST_NAME}:9000"
-      #- "homepage.widget.env=1"
-      #- "homepage.widget.key=${PORTAINER_API_KEY}"
+      - "homepage.widget.type=portainer"
+      - "homepage.widget.url=http://portainer.${HOST_NAME}:9000"
+      - "homepage.widget.env=1"
+      - "homepage.widget.key=${PORTAINER_API_KEY}"
