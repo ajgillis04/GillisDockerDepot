@@ -47,7 +47,7 @@ include:
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/homepage.yaml
   - ${COMPOSE_DIR}/mariadb.yaml          # Guacamole's database
-  - ${COMPOSE_DIR}/pihole.yaml           # DNS only, not used by the hub (see the file)
+  - ${COMPOSE_DIR}/pihole.yaml           # DNS + DHCP for the main network when PIHOLE_DHCP=true (see the file)
   - ${COMPOSE_DIR}/portainer.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
   - ${COMPOSE_DIR}/wireguard-server.yaml # the cottage's own VPN: cottage-vpn.gillisonline.com:51820
