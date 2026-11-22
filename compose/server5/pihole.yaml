@@ -1,40 +1,54 @@
-# Pi-hole - network-wide ad blocker for the cottage (server5).
+# Pi-hole - ad blocker for the cottage's MAIN network (server5).
 #
-# DNS only, no DHCP. NOT in use yet: the Bell Giga Hub can't hand out another DNS
-# server, and its Advanced tools > DNS "manual" setting never forwards to a LAN address.
-# Worse, naming a LAN IP there got that IP blocked by the hub (ARP and IP ignored, and
-# it stayed blocked after setting DNS back to automatic and restarting). Don't put a LAN
-# IP in the hub's DNS page. Devices can still be pointed at Pi-hole by hand.
+# The Bell Giga Hub can't hand out another DNS server, and its Advanced tools > DNS
+# "manual" setting never forwards to a LAN address. Worse, naming a LAN IP there got that
+# IP blocked by the hub (ARP and IP ignored, and it stayed blocked after setting DNS back
+# to automatic and restarting). Don't put a LAN IP in the hub's DNS page.
 #
-# The cottage PC has a static address (PIHOLE_IP in .env, 192.168.3.250). Ports are
-# bound to that address only, so they don't clash with systemd-resolved on 127.0.0.53.
+# So Pi-hole can be the DHCP server for the main network instead (hub DHCP off). Guests
+# on the guest Wi-Fi are served by the hub and never touch Pi-hole.
+#   - PIHOLE_DHCP in .env: true = Pi-hole hands out addresses, false (default) = off.
+#     Only ONE DHCP server on the main network: turn the hub's DHCP off before setting
+#     true, and back on before setting false.
+#   - 7-day leases, so devices keep working through a PC outage shorter than that.
+#   - DNS handed out is Pi-hole first, then 1.1.1.1: if the PC dies, devices still get
+#     internet (a few ads slip through via the backup). The router is the hub (.1).
+#   - Fixed address: the Lorex DVR at .11 (the cottage PC is static at .250).
 #
-# .env: PIHOLE_IP, PIHOLE_WEB_PORT, PIHOLE_WEBPASSWORD
+# Host network, because DHCP broadcasts can't reach a container on a Docker bridge.
+# DNS binds to eno1's address only (listeningMode bind), so it doesn't clash with
+# systemd-resolved on 127.0.0.53. Web UI on PIHOLE_WEB_PORT.
+#
+# .env: PIHOLE_IP, PIHOLE_WEB_PORT, PIHOLE_WEBPASSWORD, PIHOLE_DHCP
 
 services:
   pihole:
     container_name: pihole.${HOST_NAME}
-    hostname: pihole.${HOST_NAME}.lan
+    hostname: pihole
     image: pihole/pihole:latest
+    network_mode: host
     cap_add:
+      - NET_ADMIN   # DHCP
       - SYS_TIME
       - SYS_NICE
     environment:
       TZ: ${TZ}
       FTLCONF_webserver_api_password: ${PIHOLE_WEBPASSWORD}
+      FTLCONF_webserver_port: "${PIHOLE_WEB_PORT}"
       FTLCONF_dns_upstreams: 1.1.1.1;1.0.0.1
-      FTLCONF_dns_listeningMode: all
-      FTLCONF_dns_revServers: true,192.168.3.0/24,192.168.3.1#53,lan
-      FTLCONF_dns_domain: lan
-      FTLCONF_dhcp_active: false
+      FTLCONF_dns_listeningMode: bind
+      FTLCONF_dns_interface: eno1
+      FTLCONF_dns_domain_name: lan
+      FTLCONF_dhcp_active: ${PIHOLE_DHCP:-false}
+      FTLCONF_dhcp_start: 192.168.3.100
+      FTLCONF_dhcp_end: 192.168.3.200
+      FTLCONF_dhcp_router: 192.168.3.1
+      FTLCONF_dhcp_netmask: 255.255.255.0
+      FTLCONF_dhcp_leaseTime: 7d
+      FTLCONF_dhcp_hosts: 00:1F:54:57:2E:BC,192.168.3.11,lorex-dvr
+      FTLCONF_misc_dnsmasq_lines: dhcp-option=option:dns-server,${PIHOLE_IP},1.1.1.1
       FTLCONF_debug_api: false
       TEMPERATUREUNIT: c
-    networks:
-      - mediaserver
-    ports:
-      - "${PIHOLE_IP}:53:53/tcp"
-      - "${PIHOLE_IP}:53:53/udp"
-      - "${PIHOLE_WEB_PORT}:80"
     volumes:
       - ${DOCKERDIR}/pihole/etc:/etc/pihole
       - ${DOCKERDIR}/logs/pihole:/var/log/pihole
@@ -47,9 +61,9 @@ services:
       - "homepage.name=Pi-hole"
       - "homepage.icon=pi-hole.png"
       - "homepage.href=http://${PIHOLE_IP}:${PIHOLE_WEB_PORT}/admin"
-      - "homepage.description=Network-wide ad blocker"
+      - "homepage.description=Ad blocker for the main network (DHCP when PIHOLE_DHCP=true)"
       ## Homepage Widget
       - "homepage.widget.type=pihole"
-      - "homepage.widget.url=http://pihole.${HOST_NAME}"
+      - "homepage.widget.url=http://${PIHOLE_IP}:${PIHOLE_WEB_PORT}"
       - "homepage.widget.version=6"
       - "homepage.widget.key=${PIHOLE_WEBPASSWORD}"
