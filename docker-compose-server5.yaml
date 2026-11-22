@@ -1,7 +1,7 @@
 # ***********************************************************************************
 # Created: Andy Gillis
 # Date:    Apr 20, 2020
-# Purpose: A Docker Compose file to create containers
+# Purpose: Docker Compose for server5, the cottage PC (Cottage-PC, 192.168.3.250)
 # Clone:   git clone https://github.com/ajgillis04/GillisDockerDepot.git
 # Prereqs: Ensure Docker and Docker Compose are installed
 # Prereqs 2: You need to create a .env in your root folder with all $variables below
@@ -12,12 +12,10 @@
 #          chmod 600 ~/path/to/secrets/*
 #          make sure PUID and PGID match the system you are in with .env
 #          After the services are online, retrieve the API keys and update .env/secrets
-# Usage: docker compose -p mediaserver -f docker-compose-server4.yaml up --detach
+# Usage: docker compose -p mediaserver -f docker-compose-server5.yaml up --detach
 # **********************************************************************************
 
-# *************************** NETWORKS ****************************************** 
-# You may customize the network subnet (172.30.0.0/24) below as you please.
-# Docker Compose version 3.5 or higher required to define networks this way. You no longer have to create them manually.
+# *************************** NETWORKS ******************************************
 networks:
   mediaserver:
     name: mediaserver
@@ -25,133 +23,33 @@ networks:
     ipam:
       config:
         - subnet: 172.30.0.0/24
- #   external: true # use if not managing network with docker-compose.yaml
-  default:
+  default:   # mediaserver_default: wireguard-server and cottage-ddns
     driver: bridge
- #   ipam:
- #     config:
- #       - subnet: 192.168.2.0/24  # Ensure this subnet does not overlap with your existing network
- #         gateway: 192.168.2.1
- #   external: true # use if not managing network with docker-compose.yaml
-  pihole_network:
-    name: pihole_network
-    #driver: bridge
-    driver: macvlan # does not work on Windows
-    driver_opts:
-      parent: eth1  # Replace with your actual network interface
-    ipam:
-      config:
-        - subnet: 192.168.2.0/24
-          gateway: 192.168.2.1
-          ip_range: 192.168.2.0/26
-    external: false # use if not managing network with docker-compose.yaml
-#  nextcloud-aio:
- #   name: nextcloud-aio # This line is not allowed to be changed as otherwise the created network will not be used by the other containers of AIO
- #   driver: bridge
-    #external: true # Use this if you create the network outside the Docker Compose file
 
 # *************************** SECRETS ******************************************
-# Put any secrets used across containers here. All others go in the individual YAML files
+# Only the secrets server5 services use. repo-updater reads secrets/nas_gmail_app_pass as a file.
 secrets:
-  awl_cf_token:
-    file: ${SECRETSDIR}/awl_cf_token
-  basic_auth_credentials:
-    file: ${SECRETSDIR}/basic_auth_credentials
-  cf_dns_api_token:
-    file: ${SECRETSDIR}/cf_dns_api_token
-  cf_email:
-    file: ${SECRETSDIR}/cf_email
-  cf_token:
-    file: ${SECRETSDIR}/cf_token
-  google_client_id:
-    file: ${SECRETSDIR}/google_client_id
-  google_client_secret:
-    file: ${SECRETSDIR}/google_client_secret
   guac_mysql_user:
     file: ${SECRETSDIR}/guac_mysql_user
   guac_mysql_password:
     file: ${SECRETSDIR}/guac_mysql_password
-  htpasswd:
-    file: ${SECRETSDIR}/htpasswd
-  lidarr_api_key:
-    file: ${SECRETSDIR}/lidarr_api_key
   maria_root_password:
     file: ${SECRETSDIR}/maria_root_password
-#  maria_user:
-#    file: ${SECRETSDIR}/maria_user
-#  maria_user_password:
-#    file: ${SECRETSDIR}/maria_user_password
-  nextcloud_mysql_user:
-    file: ${SECRETSDIR}/nextcloud_mysql_user
-  nextcloud_mysql_password:
-    file: ${SECRETSDIR}/nextcloud_mysql_password
-  mineos_password:
-    file: ${SECRETSDIR}/mineos_password
-  oauth_secrets:
-    file: ${SECRETSDIR}/oauth_secrets
-  pia_password:
-    file: ${SECRETSDIR}/pia_password
-  pia_username:
-    file: ${SECRETSDIR}/pia_username
-  pihole_password:
-    file: ${SECRETSDIR}/pihole_password
-  photoprism_admin_password:
-    file: ${SECRETSDIR}/photoprism_admin_password
-  plex_claim:
-    file: ${SECRETSDIR}/plex_claim
-  plextest_claim:
-    file: ${SECRETSDIR}/plextest_claim
-  plex_token:
-    file: ${SECRETSDIR}/plex_token
-  spotify_client_id:
-    file: ${SECRETSDIR}/spotify_client_id
-  spotify_client_secret:
-    file: ${SECRETSDIR}/spotify_client_secret
-  traefik_forward_auth:
-    file: ${SECRETSDIR}/traefik_forward_auth
-  tautulli_user:
-    file: ${SECRETSDIR}/tautulli_user
-  tautulli_user_pass:
-    file: ${SECRETSDIR}/tautulli_user_pass
-  rpc_creds:
-    file: ${SECRETSDIR}/rpc_creds
-  vaultwarden_admin_token:
-    file: ${SECRETSDIR}/vaultwarden_admin_token
 
 # *************************** SERVICES ******************************************
+# No web ports are opened to the internet: outside access is the Cloudflare tunnel
+# (cottage-homepage/-guac/-portainer/-lorex/-deploy.gillisonline.com, routes set in
+# Cloudflare) and the cottage VPN (UDP 51820 forwarded on the Giga Hub).
 include:
-#  - ${COMPOSE_DIR}/bazarr.yaml
-  - ${COMPOSE_DIR}/cloudflared.yaml   # all outside access; routes are set in Cloudflare (cottage-*.gillisonline.com)
-  - ${COMPOSE_DIR}/repo-updater.yaml # monthly update email + upgrade page (setup: see the file)
-#  - ${COMPOSE_DIR}/traefik-certs-dumper.yaml   # Traefik is gone; the tunnel replaced it
-#  - ${COMPOSE_DIR}/cloudflare-ddns.yaml        # not needed behind a tunnel
-#  - ${COMPOSE_DIR}/dozzle.yaml
+  - ${COMPOSE_DIR}/cloudflared.yaml      # tunnel; routes are set in Cloudflare (token mode)
+  - ${COMPOSE_DIR}/repo-updater.yaml     # monthly update email + upgrade page (cottage-deploy)
   - ${COMPOSE_DIR}/guacamole.yaml
   - ${COMPOSE_DIR}/guacd.yaml
   - ${COMPOSE_DIR}/homepage.yaml
-#  - ${COMPOSE_DIR}/lidarr.yaml
-#  - ${COMPOSE_DIR}/lidify.yaml
-  - ${COMPOSE_DIR}/mariadb.yaml
-#  - ${COMPOSE_DIR}/nextcloud.yaml
-#  - ${COMPOSE_DIR}/oauth.yaml
-#  - ${COMPOSE_DIR}/overseerr.yaml
-#  - ${COMPOSE_DIR}/photoprism.yaml
-  - ${COMPOSE_DIR}/pihole.yaml   # DNS only, not used by the hub yet (see the file)
-#  - ${COMPOSE_DIR}/plex.yaml
+  - ${COMPOSE_DIR}/mariadb.yaml          # Guacamole's database
+  - ${COMPOSE_DIR}/pihole.yaml           # DNS only, not used by the hub (see the file)
   - ${COMPOSE_DIR}/portainer.yaml
-#  - ${COMPOSE_DIR}/prowlarr.yaml
-#  - ${COMPOSE_DIR}/profilarr.yaml
-#  - ${COMPOSE_DIR}/radarr.yaml
- # - ${COMPOSE_DIR}/sabnzbd.yaml
-#  - ${COMPOSE_DIR}/sonarr.yaml
-#  - ${COMPOSE_DIR}/tautulli.yaml
-# - ${COMPOSE_DIR}/tdarr.yaml
-# - ${COMPOSE_DIR}/tdarr_node.yaml
-#  - ${COMPOSE_DIR}/traefik.yaml
-#  - ${COMPOSE_DIR}/transmission-openvpn.yaml
-#  - ${COMPOSE_DIR}/vaultwarden.yaml
   - ${COMPOSE_DIR}/watchtower.yaml
-#  - ${COMPOSE_DIR}/wireguard.yaml
   - ${COMPOSE_DIR}/wireguard-server.yaml # the cottage's own VPN: cottage-vpn.gillisonline.com:51820
-  - ${COMPOSE_DIR}/cottage-ddns.yaml       # keeps cottage-vpn.gillisonline.com on the cottage's IP
-  - ${COMPOSE_DIR}/wireguard-client.yaml # backup way in: cottage PC joins the home VPN as 10.9.0.11
+  - ${COMPOSE_DIR}/cottage-ddns.yaml     # keeps cottage-vpn.gillisonline.com on the cottage's IP
+  - ${COMPOSE_DIR}/wireguard-client.yaml # cottage PC joins the home VPN as 10.9.0.11 (alerts, backups, way in)
