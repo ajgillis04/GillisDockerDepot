@@ -60,7 +60,7 @@ services:
       - "homepage.group=Network"
       - "homepage.name=Pi-hole"
       - "homepage.icon=pi-hole.png"
-      - "homepage.href=http://${PIHOLE_IP}:${PIHOLE_WEB_PORT}/admin"
+      - "homepage.href=https://cottage-pihole.gillisonline.com/admin"
       - "homepage.description=Ad blocker for the main network (DHCP when PIHOLE_DHCP=true)"
       ## Homepage Widget
       - "homepage.widget.type=pihole"
